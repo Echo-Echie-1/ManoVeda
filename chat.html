@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manoveda - AI Chat</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="container chat-container">
+    <h2>🧘 Chat with Manoveda</h2>
+    <p class="subtitle">Your companion is listening... speak freely.</p>
+    <div id="chat-box" class="chat-box"></div>
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+  <script>
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('userInput');
+    const mood = localStorage.getItem('userMood') || 'calm';
+
+    function addMessage(sender, text) {
+      const msg = document.createElement('div');
+      msg.className = sender === 'user' ? 'user-msg' : 'bot-msg';
+      msg.innerText = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+      addMessage('user', message);
+      userInput.value = '';
+
+      const prompt = `User is feeling "${mood}". Respond suitably: "${message}"`;
+      addMessage('bot', '⏳ thinking...');
+
+      const response = await getAIResponse(prompt);
+      document.querySelectorAll('.bot-msg').forEach((el, i, list) => {
+        if (i === list.length - 1 && el.innerText === '⏳ thinking...') el.remove();
+      });
+      addMessage('bot', response);
+    }
+
+    async function getAIResponse(prompt) {
+      try {
+        const res = await fetch('http://localhost:3000/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: prompt })
+        });
+        const data = await res.json();
+        return data.reply;
+      } catch (e) {
+        console.error(e);
+        return '😔 Sorry, something went wrong.';
+      }
+    }
+  </script>
+</body>
+</html>

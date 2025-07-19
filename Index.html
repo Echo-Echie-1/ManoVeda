@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manoveda - Inner Peace Through AI</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="background-animation"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">🧘‍♀️ Manoveda</div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">What is Manoveda?</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#login">Login</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="home">
+    <h1>Welcome to <span class="highlight">Manoveda</span></h1>
+    <p class="tagline">Your Personalized Mental Wellness AI</p>
+    <div class="mood-buttons">
+      <button onclick="selectMood('happy')">😊 Happy</button>
+      <button onclick="selectMood('sad')">😔 Sad</button>
+      <button onclick="selectMood('stressed')">😣 Stressed</button>
+      <button onclick="selectMood('angry')">😡 Angry</button>
+      <button onclick="selectMood('calm')">😌 Calm</button>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section class="about" id="about">
+    <h2>What is Manoveda?</h2>
+    <p>
+      <strong>Manoveda</strong> is a futuristic AI-powered wellness platform designed to help you manage your emotions, reduce stress, and feel better — all by simply talking to it. Whether you're happy, sad, stressed, or angry, Manoveda listens and responds to guide you towards peace.
+    </p>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section class="features" id="features">
+    <h2>Features</h2>
+    <ul>
+      <li>🎧 Personalized mood-based chatbot</li>
+      <li>🧘 Guided meditations and calming visuals</li>
+      <li>📊 Mood tracking and emotional journaling (Coming Soon)</li>
+      <li>🎯 Stress relief games and music (Coming Soon)</li>
+    </ul>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section class="contact" id="contact">
+    <h2>Contact Us</h2>
+    <p>Have feedback or ideas? Reach out to us!</p>
+    <form class="contact-form">
+      <input type="text" placeholder="Your Name" />
+      <input type="email" placeholder="Your Email" />
+      <textarea placeholder="Your Message"></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <!-- LOGIN SECTION -->
+  <section class="login" id="login">
+    <h2>Login</h2>
+    <p>Coming soon: Login for personalized mood analytics and progress tracking!</p>
+    <div class="login-form">
+      <input type="text" placeholder="Username" />
+      <input type="password" placeholder="Password" />
+      <button disabled>Login</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Manoveda | Designed with 💜 for your peace</p>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    function selectMood(mood) {
+      localStorage.setItem('userMood', mood);
+      window.location.href = 'chat.html';
+    }
+  </script>
+</body>
+</html>
