@@ -5,8 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manoveda - Inner Peace Through AI</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="chat.html" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    .feature-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .feature-btn {
+      background: #a855f7;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.4s ease;
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+    }
+
+    .feature-btn:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 6px 30px rgba(168, 85, 247, 0.6);
+    }
+
+    .features ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .features li {
+      background: #f3e8ff;
+      margin: 12px 0;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #4b0082;
+      transition: all 0.4s ease;
+    }
+
+    .features li:hover {
+      background: #e9d5ff;
+      transform: scale(1.02);
+    }
+  </style>
 </head>
 <body>
   <div class="background-animation"></div>
@@ -19,7 +68,7 @@
       <li><a href="#about">What is Manoveda?</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li><a href="#login">Login</a></li>
+      <li><a href="login.html">Login</a></li>
     </ul>
   </nav>
 
@@ -27,12 +76,13 @@
   <section class="hero" id="home">
     <h1>Welcome to <span class="highlight">Manoveda</span></h1>
     <p class="tagline">Your Personalized Mental Wellness AI</p>
-    <div class="mood-buttons">
-      <button onclick="selectMood('happy')">😊 Happy</button>
-      <button onclick="selectMood('sad')">😔 Sad</button>
-      <button onclick="selectMood('stressed')">😣 Stressed</button>
-      <button onclick="selectMood('angry')">😡 Angry</button>
-      <button onclick="selectMood('calm')">😌 Calm</button>
+    <div class="feature-buttons">
+      <a href="mood.html" class="feature-btn">💡 Mood Checker</a>
+      <a href="chat.html" class="feature-btn">💬 Talk to AI</a>
+      <a href="meditation.html" class="feature-btn">🧘 Guided Meditations</a>
+      <a href="journal.html" class="feature-btn">📓 Emotional Journal</a>
+      <a href="music.html" class="feature-btn">🎵 Relaxing Music</a>
+      <a href="games.html" class="feature-btn">🎮 Stress Relief Games</a>
     </div>
   </section>
 
@@ -50,8 +100,10 @@
     <ul>
       <li>🎧 Personalized mood-based chatbot</li>
       <li>🧘 Guided meditations and calming visuals</li>
-      <li>📊 Mood tracking and emotional journaling (Coming Soon)</li>
-      <li>🎯 Stress relief games and music (Coming Soon)</li>
+      <li>📊 Mood tracking and emotional journaling</li>
+      <li>🎯 Stress relief games and relaxing music</li>
+      <li>💡 Smart suggestions based on your current mood</li>
+      <li>📈 Weekly wellness summaries and progress charts</li>
     </ul>
   </section>
 
@@ -59,22 +111,22 @@
   <section class="contact" id="contact">
     <h2>Contact Us</h2>
     <p>Have feedback or ideas? Reach out to us!</p>
-    <form class="contact-form">
-      <input type="text" placeholder="Your Name" />
-      <input type="email" placeholder="Your Email" />
-      <textarea placeholder="Your Message"></textarea>
+    <form class="contact-form" name="contact" netlify>
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" placeholder="Your Message" required></textarea>
       <button type="submit">Send Message</button>
     </form>
   </section>
 
-  <!-- LOGIN SECTION -->
+  <!-- LOGIN SECTION (Visual only) -->
   <section class="login" id="login">
     <h2>Login</h2>
-    <p>Coming soon: Login for personalized mood analytics and progress tracking!</p>
+    <p>Coming soon: Personalized analytics and mood progress tracking!</p>
     <div class="login-form">
-      <input type="text" placeholder="Username" />
-      <input type="password" placeholder="Password" />
-      <button disabled>Login</button>
+      <input type="text" placeholder="Username" disabled />
+      <input type="password" placeholder="Password" disabled />
+      <button onclick="window.location.href='login.html'">Login</button>
     </div>
   </section>
 
