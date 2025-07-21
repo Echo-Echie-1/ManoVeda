@@ -1,26 +1,38 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manoveda - Chat with ManoSathi</title>
+  <title>Talk with ManoVeda AI</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Nunito', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #fff3e0);
-      color: #333;
+      background: linear-gradient(to bottom, #2c3e50, #3498db);
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
+    }
+    .waves {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      background: url('https://media.giphy.com/media/3oKIPf3C7HqqYBVcCk/giphy.gif') repeat;
+      background-size: cover;
+      opacity: 0.15;
     }
     .chat-container {
-      max-width: 600px;
-      margin: 40px auto;
-      background: white;
+      max-width: 700px;
+      margin: 60px auto;
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 16px;
       padding: 24px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     }
     .chat-box {
       height: 400px;
@@ -29,17 +41,27 @@
       padding: 12px;
       border-radius: 12px;
       margin-bottom: 16px;
-      background-color: #f9f9f9;
+      background-color: #f4faff;
+    }
+    .user-msg, .bot-msg {
+      max-width: 70%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      margin: 8px 0;
+      display: inline-block;
+      word-wrap: break-word;
     }
     .user-msg {
-      text-align: right;
-      color: #0d47a1;
-      margin: 8px 0;
+      background-color: #d1ecf1;
+      color: #0c5460;
+      float: right;
+      clear: both;
     }
     .bot-msg {
-      text-align: left;
-      color: #1b5e20;
-      margin: 8px 0;
+      background-color: #d4edda;
+      color: #155724;
+      float: left;
+      clear: both;
     }
     .chat-input {
       display: flex;
@@ -62,17 +84,23 @@
     .chat-input button:hover {
       background-color: #004d40;
     }
+    h2 {
+      text-align: center;
+      margin-bottom: 4px;
+    }
     .subtitle {
+      text-align: center;
       font-size: 14px;
-      color: #666;
-      margin-bottom: 10px;
+      color: #555;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
+  <div class="waves"></div>
   <div class="container chat-container">
-    <h2>🧘 Chat with ManoSathi</h2>
-    <p class="subtitle">Your AI companion is listening...</p>
+    <h2>🧘 Talk with ManoVeda AI</h2>
+    <p class="subtitle">Your mental health companion is here for you 💙</p>
     <div id="chat-box" class="chat-box"></div>
     <div class="chat-input">
       <input type="text" id="userInput" placeholder="Type your message..." />
@@ -87,7 +115,7 @@
     function addMessage(sender, text) {
       const msg = document.createElement('div');
       msg.className = sender === 'user' ? 'user-msg' : 'bot-msg';
-      msg.innerText = text;
+      msg.innerHTML = text;
       chatBox.appendChild(msg);
       chatBox.scrollTop = chatBox.scrollHeight;
     }
@@ -102,28 +130,23 @@
         document.querySelectorAll('.bot-msg').forEach((el, i, list) => {
           if (i === list.length - 1 && el.innerText === '⏳ thinking...') el.remove();
         });
-        const reply = getOfflineAIResponse(message.toLowerCase());
+        const reply = getAIResponse(message.toLowerCase());
         addMessage('bot', reply);
-      }, 600);
+      }, 800);
     }
 
-    function getOfflineAIResponse(msg) {
-      const happyKeywords = ["happy", "great", "awesome", "amazing", "joyful", "good", "excited", "fun", "love", "cheerful", "thankful", "blessed", "peaceful", "sunshine", "grateful", "energized", "hopeful", "positive", "smiling", "yay"];
-      const sadKeywords = ["sad", "upset", "bad", "down", "crying", "depressed", "hurt", "hopeless", "disappointed", "lonely", "angry", "tears", "worried", "nervous", "gloomy", "miserable", "failure", "unhappy", "rejected", "worthless"];
-      const anxiousKeywords = ["anxious", "stressed", "nervous", "worried", "afraid", "panic", "scared", "overthinking", "pressure", "tension", "dizzy", "shaky", "tired", "mental", "burnout", "sweaty", "paranoid", "exam", "heartbeat", "breathe"];
-      const relaxedKeywords = ["relaxed", "calm", "peaceful", "free", "zen", "serene", "quiet", "easy", "rest", "relieve", "meditate", "chill", "soothing", "content", "still", "centered", "grounded", "gentle", "mindful", "present"];
-
-      if (happyKeywords.some(word => msg.includes(word))) {
-        return "🌞 I'm so happy you're feeling good! Keep shining and enjoy your day!";
-      } else if (sadKeywords.some(word => msg.includes(word))) {
-        return "💙 I'm here for you. It's okay to feel low. Take a deep breath—this moment will pass.";
-      } else if (anxiousKeywords.some(word => msg.includes(word))) {
-        return "😌 Let's take a slow deep breath together... Inhale... Exhale... You are safe. Everything will be okay.";
-      } else if (relaxedKeywords.some(word => msg.includes(word))) {
-        return "🧘 Wonderful! Cherish this calmness and let it guide you through the day.";
-      } else {
-        return "🤖 I'm listening... tell me more. How are you feeling?";
+    function getAIResponse(msg) {
+      if (msg.includes("anxious") || msg.includes("stressed")) {
+        return `😌 Let's do a breathing exercise together.<br><br>
+        Here's a calming video: <a href='https://www.youtube.com/watch?v=aNXKjGFUlMs' target='_blank'>Guided Breathing</a><br>
+        Remember, it's okay to slow down.`;
       }
+      if (msg.includes("happy") || msg.includes("joy")) {
+        return `🌟 That’s wonderful! Keep that positive energy flowing!<br><br>
+        Here's a joyful tune to vibe with: <a href='https://www.youtube.com/watch?v=d-diB65scQU' target='_blank'>Happy Vibes Music</a>`;
+      }
+      return `🤖 Thank you for sharing. Remember, I'm always here for you.<br><br>
+      You might enjoy this mindfulness session: <a href='https://www.youtube.com/watch?v=inpok4MKVLM' target='_blank'>Mindfulness Meditation</a>`;
     }
   </script>
 </body>
