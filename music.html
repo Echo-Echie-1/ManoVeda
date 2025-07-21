@@ -8,26 +8,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet"/>
   <style>
     body {
-      background-color: #121212;
-      color: #453232;
-      font-family: 'Nunito', sans-serif;
       margin: 0;
       padding: 0;
-      text-align: center;
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(to bottom, #1e1e2f, #121212);
+      color: #f3e8ff;
     }
 
     .navbar {
-      background-color: #1e1e1e;
+      background-color: #1e1e2f;
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
     }
 
     .navbar .logo {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: 800;
-      color: #00f5d4;
+      color: #a855f7;
     }
 
     .nav-links {
@@ -37,38 +37,45 @@
     }
 
     .nav-links a {
-      color: white;
+      color: #ffffff;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #a855f7;
     }
 
     h1 {
-      font-size: 2.5rem;
-      margin-top: 2rem;
-      color: #a855f7;
+      font-size: 2.8rem;
+      margin-top: 2.5rem;
+      color: #fcd34d;
     }
 
     .mood-input {
       margin: 2rem auto;
-      max-width: 400px;
+      max-width: 500px;
       display: flex;
-      gap: 10px;
+      gap: 12px;
       justify-content: center;
     }
 
     input[type="text"] {
-      padding: 10px 20px;
-      border-radius: 25px;
+      padding: 12px 20px;
+      border-radius: 30px;
       border: none;
-      width: 60%;
+      width: 65%;
       font-size: 1rem;
+      background-color: #2e2e3f;
+      color: white;
     }
 
     button {
       background-color: #a855f7;
       border: none;
-      padding: 10px 20px;
-      border-radius: 25px;
+      padding: 12px 24px;
+      border-radius: 30px;
       font-size: 1rem;
       font-weight: bold;
       color: white;
@@ -86,33 +93,41 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 25px;
       margin: 2rem auto;
       max-width: 1200px;
     }
 
     iframe {
       border: none;
-      border-radius: 15px;
-      width: 300px;
-      height: 170px;
+      border-radius: 18px;
+      width: 320px;
+      height: 180px;
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-top: 3rem;
     }
   </style>
 </head>
 <body>
-
   <nav class="navbar">
     <div class="logo">🧘‍♀️ Manoveda</div>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="index.html#about">What is Manoveda?</a></li>
-      <li><a href="index.html#features">Features</a></li>
-      <li><a href="index.html#contact">Contact</a></li>
-      <li><a href="login.html">Login</a></li>
+      <li><a href='/'>Home</a></li>
+      <li><a href='/#about'>What is Manoveda?</a></li>
+      <li><a href='/#features'>Features</a></li>
+      <li><a href='/#contact'>Contact</a></li>
+      <li><a href='/login'>Login</a></li>
     </ul>
   </nav>
 
-  <h1>🎵 Relaxing Music For Your Mood</h1>
+  <h1>🎶 Tune In to Your Mood</h1>
 
   <div class="mood-input">
     <input type="text" id="moodInput" placeholder="Enter your mood (e.g. happy, sad, anxious)..." />
@@ -120,6 +135,10 @@
   </div>
 
   <div class="videos" id="videoContainer"></div>
+
+  <div class="footer">
+    © 2025 Manoveda | Made with mindfulness 💜
+  </div>
 
   <script>
     const musicLibrary = {
@@ -158,7 +177,6 @@
       container.innerHTML = "";
 
       let moodCategory = null;
-
       for (const [mood, keywords] of Object.entries(moodMap)) {
         if (keywords.some(word => input.includes(word))) {
           moodCategory = mood;
@@ -175,7 +193,7 @@
           container.appendChild(iframe);
         });
       } else {
-        container.innerHTML = "<p>😔 Sorry, we couldn't recognize your mood. Try 'happy', 'sad', 'anxious', or 'relaxed'.</p>";
+        container.innerHTML = "<p style='color: #f87171;'>😔 Sorry, we couldn't recognize your mood. Try 'happy', 'sad', 'anxious', or 'relaxed'.</p>";
       }
     }
   </script>
