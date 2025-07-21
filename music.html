@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Relaxing Music - Manoveda</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      background-color: #121212;
+      color: #453232;
+      font-family: 'Nunito', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .navbar {
+      background-color: #1e1e1e;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #00f5d4;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 2rem;
+      color: #a855f7;
+    }
+
+    .mood-input {
+      margin: 2rem auto;
+      max-width: 400px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    input[type="text"] {
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: none;
+      width: 60%;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #a855f7;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 30px rgba(168, 85, 247, 0.6);
+    }
+
+    .videos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin: 2rem auto;
+      max-width: 1200px;
+    }
+
+    iframe {
+      border: none;
+      border-radius: 15px;
+      width: 300px;
+      height: 170px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">🧘‍♀️ Manoveda</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#about">What is Manoveda?</a></li>
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
+
+  <h1>🎵 Relaxing Music For Your Mood</h1>
+
+  <div class="mood-input">
+    <input type="text" id="moodInput" placeholder="Enter your mood (e.g. happy, sad, anxious)..." />
+    <button onclick="playMusic()">Play</button>
+  </div>
+
+  <div class="videos" id="videoContainer"></div>
+
+  <script>
+    const musicLibrary = {
+      happy: [
+        "https://www.youtube.com/embed/ZbZSe6N_BXs",
+        "https://www.youtube.com/embed/y6Sxv-sUYtM",
+        "https://www.youtube.com/embed/cmSbXsFE3l8"
+      ],
+      sad: [
+        "https://www.youtube.com/embed/hLQl3WQQoQ0",
+        "https://www.youtube.com/embed/RB-RcX5DS5A",
+        "https://www.youtube.com/embed/t0mUL6YKmIo"
+      ],
+      anxious: [
+        "https://www.youtube.com/embed/b49fD5XxWwI",
+        "https://www.youtube.com/embed/NmMRZMqkZJc",
+        "https://www.youtube.com/embed/y6hWe6mwf-M"
+      ],
+      relaxed: [
+        "https://www.youtube.com/embed/2OEL4P1Rz04",
+        "https://www.youtube.com/embed/Z5ONxjmHYYE",
+        "https://www.youtube.com/embed/1ZYbU82GVz4"
+      ]
+    };
+
+    const moodMap = {
+      happy: ["happy", "great", "awesome", "amazing", "joyful", "good", "excited", "fun", "love", "cheerful", "thankful", "blessed", "peaceful", "sunshine", "grateful", "energized", "hopeful", "positive", "smiling", "yay"],
+      sad: ["sad", "upset", "bad", "down", "crying", "depressed", "hurt", "hopeless", "disappointed", "lonely", "angry", "tears", "worried", "nervous", "gloomy", "miserable", "failure", "unhappy", "rejected", "worthless"],
+      anxious: ["anxious", "stressed", "nervous", "worried", "afraid", "panic", "scared", "overthinking", "pressure", "tension", "dizzy", "shaky", "tired", "mental", "burnout", "sweaty", "paranoid", "exam", "heartbeat", "breathe"],
+      relaxed: ["relaxed", "calm", "peaceful", "free", "zen", "serene", "quiet", "easy", "rest", "relieve", "meditate", "chill", "soothing", "content", "still", "centered", "grounded", "gentle", "mindful", "present"]
+    };
+
+    function playMusic() {
+      const input = document.getElementById('moodInput').value.toLowerCase();
+      const container = document.getElementById('videoContainer');
+      container.innerHTML = "";
+
+      let moodCategory = null;
+
+      for (const [mood, keywords] of Object.entries(moodMap)) {
+        if (keywords.some(word => input.includes(word))) {
+          moodCategory = mood;
+          break;
+        }
+      }
+
+      if (moodCategory && musicLibrary[moodCategory]) {
+        musicLibrary[moodCategory].forEach(link => {
+          const iframe = document.createElement('iframe');
+          iframe.src = link;
+          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+          iframe.allowFullscreen = true;
+          container.appendChild(iframe);
+        });
+      } else {
+        container.innerHTML = "<p>😔 Sorry, we couldn't recognize your mood. Try 'happy', 'sad', 'anxious', or 'relaxed'.</p>";
+      }
+    }
+  </script>
+</body>
+</html>
