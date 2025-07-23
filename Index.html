@@ -1,17 +1,19 @@
-
+<!-- Save this as index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/x-icon" href="ManoVeda121.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manoveda - Inner Peace Through AI</title>
+  <link rel="icon" href="ManoVeda121.png" />
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="chat.html" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link rel="icon" type="image/x-icon" href="ManoVeda121.png">
   <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+    }
+
     .feature-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -29,7 +31,7 @@
       font-weight: bold;
       text-decoration: none;
       font-size: 1rem;
-      transition: all 0.4s ease;
+      transition: all 0.3s ease;
       box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
     }
 
@@ -38,50 +40,60 @@
       box-shadow: 0 6px 30px rgba(168, 85, 247, 0.6);
     }
 
-    .features ul {
-      list-style: none;
-      padding: 0;
-    }
-    .wave1, .wave2 {
-      position: absolute;
-      width: 200%;
-      height: 300px;
-      bottom: -50px;
-      left: -50%;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 50%;
-      animation: waveMove 10s linear infinite;
-    }
-
     .features li {
       background: #f3e8ff;
-      margin: 12px 0;
+      margin: 12px;
       padding: 15px;
       border-radius: 12px;
       font-size: 1.1rem;
       font-weight: 600;
       color: #4b0082;
-      transition: all 0.4s ease;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
     .features li:hover {
       background: #e9d5ff;
-      transform: scale(1.02);
+      transform: scale(1.03);
+    }
+
+    .extra-content {
+      padding: 40px 20px;
+      background: #f3f4f6;
+      text-align: center;
+    }
+
+    .extra-content h3 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+
+    .extra-content p {
+      max-width: 800px;
+      margin: 0 auto 20px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    footer {
+      background: #1f1f2f;
+      color: #ccc;
+      text-align: center;
+      padding: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="background-animation"></div>
 
   <!-- NAVBAR -->
   <nav class="navbar">
     <div class="logo">🧘‍♀️ Manoveda</div>
     <ul class="nav-links">
       <li><a href="#home">Home</a></li>
-      <li><a href="#about">What is Manoveda?</a></li>
+      <li><a href="#about">About</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li><a href="login.html">Login</a></li>
+      <li><a href="login.html" target="_blank">Login</a></li>
     </ul>
   </nav>
 
@@ -99,32 +111,29 @@
     </div>
   </section>
 
-  <!-- ABOUT SECTION -->
+  <!-- ABOUT -->
   <section class="about" id="about">
     <h2>What is Manoveda?</h2>
-    <p>
-      <strong>Manoveda</strong> is a futuristic AI-powered wellness platform designed to help you manage your emotions, reduce stress, and feel better — all by simply talking to it. Whether you're happy, sad, stressed, or angry, Manoveda listens and responds to guide you towards peace.
-    </p>
+    <p><strong>Manoveda</strong> is an AI-powered emotional wellness platform that listens to your feelings and responds with calming support, meditation, and tailored insights to help you feel better daily.</p>
   </section>
 
-  <!-- FEATURES SECTION -->
+  <!-- FEATURES -->
   <section class="features" id="features">
     <h2>Features</h2>
     <ul>
-      <li>🎧 Personalized mood-based chatbot</li>
-      <li>🧘 Guided meditations and calming visuals</li>
-      <li>📊 Mood tracking and emotional journaling</li>
-      <li>🎯 Stress relief games and relaxing music</li>
-      <li>💡 Smart suggestions based on your current mood</li>
-      <li>📈 Weekly wellness summaries and progress charts</li>
+      <li onclick="location.href='chat.html'">🎧 Talk to a smart mood-based AI chatbot</li>
+      <li onclick="location.href='meditation.html'">🧘 Meditation & Visual Therapy</li>
+      <li onclick="location.href='journal.html'">📓 Private Emotional Journal</li>
+      <li onclick="location.href='music.html'">🎵 Curated Relaxing Music</li>
+      <li onclick="location.href='games.html'">🎯 Interactive Anti-Stress Games</li>
+      <li onclick="location.href='mood.html'">📊 Track Your Mental Progress</li>
     </ul>
   </section>
 
-  <!-- CONTACT SECTION -->
+  <!-- CONTACT -->
   <section class="contact" id="contact">
     <h2>Contact Us</h2>
-    <p>Have feedback or ideas? Reach out to us!</p>
-    <form class="contact-form" name="contact" netlify>
+    <form name="contact" class="contact-form" netlify>
       <input type="text" name="name" placeholder="Your Name" required />
       <input type="email" name="email" placeholder="Your Email" required />
       <textarea name="message" placeholder="Your Message" required></textarea>
@@ -132,19 +141,18 @@
     </form>
   </section>
 
- 
+  <!-- EXTRA BOTTOM CONTENT -->
+  <section class="extra-content">
+    <h3>Why Manoveda is Different</h3>
+    <p>Unlike generic wellness apps, Manoveda deeply analyzes your emotional cues and offers adaptive support using advanced AI. It evolves with you to provide comfort and clarity when you need it most.</p>
+    <p>Explore personalized features designed to foster inner calm, emotional strength, and a balanced lifestyle — all in one place, free of judgment or pressure.</p>
+    <p>Start your mental wellness journey today with a virtual companion that truly understands you.</p>
+  </section>
 
   <!-- FOOTER -->
   <footer>
-    <p>© 2025 Manoveda | Designed with 💜 for your peace</p>
+    <p>© 2025 Manoveda | Built with 💜 using Firebase & Hugging Face</p>
   </footer>
 
-  <!-- JS -->
-  <script>
-    function selectMood(mood) {
-      localStorage.setItem('userMood', mood);
-      window.location.href = 'chat.html';
-    }
-  </script>
 </body>
 </html>
