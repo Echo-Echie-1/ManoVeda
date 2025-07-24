@@ -1,153 +1,124 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Talk with ManoVeda AI</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ManoVeda - Chat</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet" />
   <style>
     body {
+      background-color: #0f0f0f;
+      color: #f3e8ff;
       font-family: 'Nunito', sans-serif;
-      background: linear-gradient(to bottom, #2c3e50, #3498db);
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
+      padding: 2rem;
     }
-    .waves {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      background: url('https://media.giphy.com/media/3oKIPf3C7HqqYBVcCk/giphy.gif') repeat;
-      background-size: cover;
-      opacity: 0.15;
+    h1 {
+      color: #a855f7;
+      text-align: center;
+      margin-bottom: 2rem;
     }
-    .chat-container {
-      max-width: 700px;
-      margin: 60px auto;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-    }
-    .chat-box {
+    #chat-box {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 15px;
       height: 400px;
       overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 12px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-      background-color: #f4faff;
+      box-shadow: 0 0 10px #a855f7;
+      margin-bottom: 1rem;
     }
-    .user-msg, .bot-msg {
-      max-width: 70%;
-      padding: 10px 14px;
-      border-radius: 16px;
-      margin: 8px 0;
-      display: inline-block;
-      word-wrap: break-word;
+    .message {
+      margin: 0.5rem 0;
+      line-height: 1.5;
     }
-    .user-msg {
-      background-color: #d1ecf1;
-      color: #0c5460;
-      float: right;
-      clear: both;
+    .user {
+      color: #f472b6;
+      font-weight: bold;
     }
-    .bot-msg {
-      background-color: #d4edda;
-      color: #155724;
-      float: left;
-      clear: both;
+    .bot {
+      color: #7dd3fc;
     }
-    .chat-input {
-      display: flex;
-      gap: 10px;
+    #user-input {
+      width: 75%;
+      padding: 0.6rem;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      margin-right: 0.5rem;
     }
-    .chat-input input {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    .chat-input button {
-      padding: 12px 20px;
-      background-color: #00796b;
+    #send-btn {
+      padding: 0.6rem 1rem;
+      background: #a855f7;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
+      font-weight: bold;
     }
-    .chat-input button:hover {
-      background-color: #004d40;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 4px;
-    }
-    .subtitle {
-      text-align: center;
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 20px;
+    #send-btn:hover {
+      background: #9333ea;
     }
   </style>
 </head>
 <body>
-  <div class="waves"></div>
-  <div class="container chat-container">
-    <h2>🧘 Talk with ManoVeda AI</h2>
-    <p class="subtitle">Your mental health companion is here for you 💙</p>
-    <div id="chat-box" class="chat-box"></div>
-    <div class="chat-input">
-      <input type="text" id="userInput" placeholder="Type your message..." />
-      <button onclick="sendMessage()">Send</button>
-    </div>
-  </div>
+
+  <h1>🧘 Talk to Manoveda AI</h1>
+  <div id="chat-box"></div>
+  <input type="text" id="user-input" placeholder="Type your message..." />
+  <button id="send-btn">Send</button>
 
   <script>
+    const HF_TOKEN = "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"; // Replace this securely
     const chatBox = document.getElementById('chat-box');
-    const userInput = document.getElementById('userInput');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
 
-    function addMessage(sender, text) {
-      const msg = document.createElement('div');
-      msg.className = sender === 'user' ? 'user-msg' : 'bot-msg';
-      msg.innerHTML = text;
-      chatBox.appendChild(msg);
+    function appendMessage(sender, message) {
+      const div = document.createElement("div");
+      div.classList.add("message");
+      div.innerHTML = `<span class="${sender}">${sender === 'user' ? 'You' : 'Manoveda'}:</span> ${message}`;
+      chatBox.appendChild(div);
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function sendMessage() {
-      const message = userInput.value.trim();
-      if (!message) return;
-      addMessage('user', message);
-      userInput.value = '';
-      addMessage('bot', '⏳ thinking...');
-      setTimeout(() => {
-        document.querySelectorAll('.bot-msg').forEach((el, i, list) => {
-          if (i === list.length - 1 && el.innerText === '⏳ thinking...') el.remove();
-        });
-        const reply = getAIResponse(message.toLowerCase());
-        addMessage('bot', reply);
-      }, 800);
+    async function getAIResponse(message) {
+      const response = await fetch("https://api-inference.huggingface.co/models/meta-llama/Llama-3.1-8B-Instruct", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${HF_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          inputs: {
+            past_user_inputs: [],
+            generated_responses: [],
+            text: message
+          }
+        })
+      });
+
+      const data = await response.json();
+      if (data.generated_text) return data.generated_text;
+      return data.error ? `Error: ${data.error}` : "Sorry, I didn't get that.";
     }
 
-    function getAIResponse(msg) {
-      if (msg.includes("anxious") || msg.includes("stressed")) {
-        return `😌 Let's do a breathing exercise together.<br><br>
-        Here's a calming video: <a href='https://www.youtube.com/watch?v=aNXKjGFUlMs' target='_blank'>Guided Breathing</a><br>
-        Remember, it's okay to slow down.`;
-      }
-      if (msg.includes("happy") || msg.includes("joy")) {
-        return `🌟 That’s wonderful! Keep that positive energy flowing!<br><br>
-        Here's a joyful tune to vibe with: <a href='https://www.youtube.com/watch?v=d-diB65scQU' target='_blank'>Happy Vibes Music</a>`;
-      }
-      return `🤖 Thank you for sharing. Remember, I'm always here for you.<br><br>
-      You might enjoy this mindfulness session: <a href='https://www.youtube.com/watch?v=inpok4MKVLM' target='_blank'>Mindfulness Meditation</a>`;
-    }
+    sendBtn.addEventListener("click", async () => {
+      const message = userInput.value.trim();
+      if (!message) return;
+      appendMessage("user", message);
+      userInput.value = "";
+
+      appendMessage("bot", "Typing...");
+      const botMessages = document.querySelectorAll(".bot");
+      const loadingMessage = botMessages[botMessages.length - 1];
+
+      const reply = await getAIResponse(message);
+      loadingMessage.textContent = `Manoveda: ${reply}`;
+    });
+
+    userInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendBtn.click();
+    });
   </script>
 </body>
 </html>
