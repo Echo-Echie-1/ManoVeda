@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login | ManoVeda</title>
-<link rel="icon" href="bingo.png" />
 
   <!-- reCAPTCHA v3 -->
   <script src="https://www.google.com/recaptcha/api.js?render=6Lem3I0rAAAAAHAQ5RmknQsmGMSBNjv69_qw4mK8"></script>
@@ -161,9 +160,13 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    onAuthStateChanged(auth, user => {
-  // Only redirect if we're NOT on the login page
-  if (user && !window.location.pathname.includes("login.html")) {
+  onAuthStateChanged(auth, user => {
+  // Stay on login page if already here
+  if (user && window.location.pathname.includes("login.html")) {
+    console.log("Already signed in, but staying on login page");
+    return;
+  }
+  if (user) {
     window.location.href = "index.html";
   }
 });
@@ -194,4 +197,3 @@
 
 </body>
 </html>
-
