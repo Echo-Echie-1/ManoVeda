@@ -1,124 +1,31 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ManoVeda - Chat</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      background-color: #0f0f0f;
-      color: #f3e8ff;
-      font-family: 'Nunito', sans-serif;
-      padding: 2rem;
-    }
-    h1 {
-      color: #a855f7;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    #chat-box {
-      background: #1a1a1a;
-      padding: 1rem;
-      border-radius: 15px;
-      height: 400px;
-      overflow-y: auto;
-      box-shadow: 0 0 10px #a855f7;
-      margin-bottom: 1rem;
-    }
-    .message {
-      margin: 0.5rem 0;
-      line-height: 1.5;
-    }
-    .user {
-      color: #f472b6;
-      font-weight: bold;
-    }
-    .bot {
-      color: #7dd3fc;
-    }
-    #user-input {
-      width: 75%;
-      padding: 0.6rem;
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      margin-right: 0.5rem;
-    }
-    #send-btn {
-      padding: 0.6rem 1rem;
-      background: #a855f7;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    #send-btn:hover {
-      background: #9333ea;
-    }
-  </style>
+  <title>Chat with ManoSathi</title>
+  <link rel="stylesheet" href="chat.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="L-ManoSathi.png">
 </head>
 <body>
+  <div class="chat-container">
+    <nav>
+      <div class="brand">Mano<span>Veda AI</span></div>
+      <a class='back' href='Index.html'>← Dashboard</a>
+    </nav>
 
-  <h1>🧘 Talk to Manoveda AI</h1>
-  <div id="chat-box"></div>
-  <input type="text" id="user-input" placeholder="Type your message..." />
-  <button id="send-btn">Send</button>
+    <div class="chat-box" id="chatBox">
+      <!-- Chat messages appear here -->
+    </div>
 
-  <script>
-    const HF_TOKEN = "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"; // Replace this securely
-    const chatBox = document.getElementById('chat-box');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
+    <div class="chat-input-area">
+      <input type="text" id="userInput" placeholder="Type your thoughts here..." />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
 
-    function appendMessage(sender, message) {
-      const div = document.createElement("div");
-      div.classList.add("message");
-      div.innerHTML = `<span class="${sender}">${sender === 'user' ? 'You' : 'Manoveda'}:</span> ${message}`;
-      chatBox.appendChild(div);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    async function getAIResponse(message) {
-      const response = await fetch("https://api-inference.huggingface.co/models/meta-llama/Llama-3.1-8B-Instruct", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${HF_TOKEN}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          inputs: {
-            past_user_inputs: [],
-            generated_responses: [],
-            text: message
-          }
-        })
-      });
-
-      const data = await response.json();
-      if (data.generated_text) return data.generated_text;
-      return data.error ? `Error: ${data.error}` : "Sorry, I didn't get that.";
-    }
-
-    sendBtn.addEventListener("click", async () => {
-      const message = userInput.value.trim();
-      if (!message) return;
-      appendMessage("user", message);
-      userInput.value = "";
-
-      appendMessage("bot", "Typing...");
-      const botMessages = document.querySelectorAll(".bot");
-      const loadingMessage = botMessages[botMessages.length - 1];
-
-      const reply = await getAIResponse(message);
-      loadingMessage.textContent = `Manoveda: ${reply}`;
-    });
-
-    userInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") sendBtn.click();
-    });
-  </script>
+  <script src="chat.js"></script>
 </body>
 </html>
