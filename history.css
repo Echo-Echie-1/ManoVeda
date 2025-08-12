@@ -1,0 +1,207 @@
+/* Importing Nunito font to match main page */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap');
+
+:root {
+  --lux-color-1: rgba(255, 215, 80, 1); /* Gold-ish for luxury borders */
+  --lux-color-2: rgba(255, 200, 120, 0.8);
+  --lux-speed: 6000ms;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(145deg, #3b0764, #9333ea); /* Matches main page background */
+  color: #fff;
+  min-height: 100vh;
+  margin: 0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Frosted glass navbar matching main page */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: rgba(34, 34, 34, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 80;
+}
+
+/* Logo with gradient split to match ManoVeda */
+.brand {
+  font-size: 1.6rem;
+  font-weight: 800;
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.brand span {
+  font-weight: 800;
+  background: linear-gradient(90deg, #00bfff, #1e90ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand::before {
+  content: 'Mano';
+  font-weight: 800;
+  background: linear-gradient(90deg, #00f0da, #00d2ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Back to Dashboard link */
+.back {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.back:hover {
+  color: #00d2ff; /* Matches main page nav hover */
+}
+
+/* Mandala corners matching main page */
+.mandala-corner {
+  position: fixed;
+  width: 110px;
+  height: 110px;
+  opacity: 0.15;
+  z-index: 30;
+  pointer-events: none;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 1.2;
+}
+
+.mandala-top-left { top: 14px; left: 14px; transform: scale(0.9); }
+.mandala-top-right { top: 14px; right: 14px; transform: rotate(90deg) scale(0.9); }
+.mandala-bottom-left { bottom: 14px; left: 14px; transform: rotate(-90deg) scale(0.9); }
+.mandala-bottom-right { bottom: 14px; right: 14px; transform: rotate(180deg) scale(0.9); }
+
+/* Luxury animated borders matching main page */
+.luxury-frame {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+}
+
+.lux-seg {
+  position: absolute;
+  background: linear-gradient(90deg, var(--lux-color-1), transparent 40%, var(--lux-color-2));
+  background-size: 200% 100%;
+  filter: drop-shadow(0 6px 16px rgba(255, 200, 120, 0.08));
+  opacity: 0.9;
+  will-change: transform, background-position;
+}
+
+.lux-top { top: 2px; left: 0; right: 0; height: 4px; }
+.lux-right { top: 0; right: 2px; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--lux-color-1), transparent 40%, var(--lux-color-2)); background-size: 100% 200%; }
+.lux-bottom { left: 0; right: 0; bottom: 2px; height: 4px; transform-origin: center; }
+.lux-left { top: 0; left: 2px; bottom: 0; width: 4px; transform-origin: center; background: linear-gradient(180deg, var(--lux-color-1), transparent 40%, var(--lux-color-2)); background-size: 100% 200%; }
+
+@keyframes shimmerX {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes shimmerY {
+  0% { background-position: 0 0%; }
+  100% { background-position: 0 200%; }
+}
+
+.lux-top, .lux-bottom { animation: shimmerX var(--lux-speed) linear infinite; }
+.lux-left, .lux-right { animation: shimmerY var(--lux-speed) linear infinite; }
+
+/* Content section */
+.content {
+  padding: 60px 20px;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.content h2 {
+  font-size: 2.3rem;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, #00f0da, #00bfff); /* Matches main page article heading */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Filter container */
+.filter-container {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.filter-container label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #cfcfcf; /* Matches main page tagline */
+}
+
+.filter-container select {
+  background: rgba(255, 255, 255, 0.1); /* Matches login page form inputs */
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  color: #c51f1f;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.filter-container select:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.filter-container select:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); /* Matches feature-btn shadow */
+}
+
+/* History list */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.history-list .history-item {
+  background: rgba(255, 255, 255, 0.05); /* Matches login page card */
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f1f1f1; /* Matches article section text */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.history-list .history-item:hover {
+  transform: scale(1.03); /* Matches features li hover */
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4); /* Matches feature-btn shadow */
+}
+
+/* Footer to match main page */
+footer {
+  background: #1f1f2f;
+  color: #ccc;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}
