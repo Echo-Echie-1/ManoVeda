@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detect Your Mood | ManoVeda</title>
+  <link rel="stylesheet" href="mood.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="L-ManoSathi.png">
+</head>
+<body>
+
+  <!-- 🔹 Top Navbar -->
+  <nav>
+    <div class="brand">Mano<span>Veda</span></div>
+    <a class='back' href='index.html'>← Back</a>
+  </nav>
+
+  <!-- 🔹 Main Mood Detection Area -->
+  <div class="mood-container">
+    <h1>Hi, <span id="username">Friend</span> 👋</h1>
+    <p class="intro">How are you feeling today? Type a sentence below, and ManoSathi will try to understand your mood.</p>
+
+    <textarea id="userInput" rows="4" placeholder="Type your thoughts here..."></textarea>
+    <button id="analyzeBtn">Analyze Mood</button>
+
+    <div class="result hidden" id="resultBox">
+      <h2>Mood: <span id="detectedMood">...</span> <span id="moodIcon"></span></h2>
+      <p id="quote"></p>
+
+      <audio id="moodAudio" controls class="hidden"></audio>
+    </div>
+  </div>
+
+  <!-- ✅ Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <!-- ✅ Firebase Config -->
+  <script>
+   const firebaseConfig = {
+      apiKey: "AIzaSyBbdvpfhWlwIk3YcAisb2QFD_Zg3n7u5Rs",
+      authDomain: "manoveda1.firebaseapp.com",
+      projectId: "manoveda1",
+      storageBucket: "manoveda1.appspot.com",
+      messagingSenderId: "948717454300",
+      appId: "1:948717454300:web:10a7d0cdb934dff952c519"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
+  <!-- ✅ Mood Detection Logic -->
+  <script src="mood.js"></script>
+</body>
+</html>
