@@ -1,11 +1,12 @@
+// ✅ Show user’s name
 window.onload = () => {
   const user = JSON.parse(localStorage.getItem("manoveda_current"));
   if (user) {
-    document.getElementById("username").textContent = user.name || "Guest";
+    document.getElementById("username").textContent = user.name;
   }
 };
 
-// Mood map for icons & quotes
+// ✅ Mood map for icons & quotes
 const moodMap = {
   happy: { icon: "😊", quote: "Happiness is a warm smile." },
   sad: { icon: "😔", quote: "It’s okay to feel sad. This too shall pass." },
@@ -13,11 +14,10 @@ const moodMap = {
   angry: { icon: "😡", quote: "Let it out. Then breathe in calm." },
   excited: { icon: "🤩", quote: "Energy is contagious. Spread the joy!" },
   fear: { icon: "😨", quote: "Fear is natural. Let courage rise." },
-  neutral: { icon: "😐", quote: "Everything feels balanced right now." },
-  unknown: { icon: "❓", quote: "Hmm... we couldn’t detect your mood. Try another sentence?" }
+  neutral: { icon: "😐", quote: "Everything feels balanced right now." }
 };
 
-// Emotion → Mood mapping
+// ✅ Emotion → Mood mapping
 const emotionToMood = {
   joy: "happy", amusement: "happy", gratitude: "happy",
   pride: "happy", relief: "happy", love: "happy", approval: "happy",
@@ -29,66 +29,37 @@ const emotionToMood = {
   realization: "neutral", neutral: "neutral"
 };
 
-// HuggingFace AI call for mood detection
+// ✅ HuggingFace AI call
 async function detectMoodFromAI(text) {
-  try {
-    const response = await fetch(
-      "https://api-inference.huggingface.co/models/SamLowe/roberta-base-go_emotions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer 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",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ inputs: text })
-      }
-    );
-
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-    const result = await response.json();
-    if (!Array.isArray(result) || result.length === 0) return "unknown";
-
-    let topEmotion = "unknown";
-    let maxScore = 0;
-
-    for (let e of result[0]) {
-      if (e.score > maxScore) {
-        topEmotion = e.label;
-        maxScore = e.score;
-      }
-    }
-
-    return emotionToMood[topEmotion] || "unknown";
-  } catch (error) {
-    console.error("❌ Error detecting mood:", error);
-    return "unknown";
-  }
-}
-
-// xAI API call for conversational responses
-async function getConversationalResponse(text) {
-  try {
-    const response = await fetch("https://api.x.ai/grok/converse", {
+  const response = await fetch(
+    "https://api-inference.huggingface.co/models/SamLowe/roberta-base-go_emotions",
+    {
       method: "POST",
       headers: {
-        Authorization: "Bearer xai_dummy_token", // Replace with actual xAI API token
+        Authorization: "Bearer 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",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ query: text })
-    });
+      body: JSON.stringify({ inputs: text })
+    }
+  );
 
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+  const result = await response.json();
+  if (!Array.isArray(result) || result.length === 0) return "unknown";
 
-    const data = await response.json();
-    return data.response || "I couldn't find an answer to that. Try something else?";
-  } catch (error) {
-    console.error("❌ Error fetching conversational response:", error);
-    return "Sorry, I couldn't process your query right now. Please try again.";
+  let topEmotion = "unknown";
+  let maxScore = 0;
+
+  for (let e of result[0]) {
+    if (e.score > maxScore) {
+      topEmotion = e.label;
+      maxScore = e.score;
+    }
   }
+
+  return emotionToMood[topEmotion] || "unknown";
 }
 
-// Analyze button
+// ✅ Analyze button
 document.getElementById("analyzeBtn").addEventListener("click", async () => {
   const text = document.getElementById("userInput").value.trim();
   const resultBox = document.getElementById("resultBox");
@@ -96,7 +67,6 @@ document.getElementById("analyzeBtn").addEventListener("click", async () => {
   const moodIcon = document.getElementById("moodIcon");
   const quote = document.getElementById("quote");
   const audio = document.getElementById("moodAudio");
-  const responseText = document.getElementById("responseText") || createResponseTextElement();
 
   if (text === "") {
     alert("Please type something first.");
@@ -108,84 +78,51 @@ document.getElementById("analyzeBtn").addEventListener("click", async () => {
   moodSpan.textContent = "Detecting...";
   moodIcon.textContent = "🔍";
   quote.textContent = "";
-  responseText.textContent = "Processing your query...";
   audio.style.display = "none";
 
-  // Detect mood and get conversational response concurrently
-  const [mood, aiResponse] = await Promise.all([
-    detectMoodFromAI(text),
-    getConversationalResponse(text)
-  ]);
+  // ✅ Detect Mood
+  const mood = await detectMoodFromAI(text);
 
-  // Update UI with mood
-  const moodData = moodMap[mood] || moodMap["unknown"];
-  moodSpan.textContent = capitalize(mood);
-  moodIcon.textContent = moodData.icon;
-  quote.textContent = moodData.quote;
-
-  // Play audio if mood is detected
   if (mood !== "unknown") {
+    const moodData = moodMap[mood];
+    moodSpan.textContent = capitalize(mood);
+    moodIcon.textContent = moodData.icon;
+    quote.textContent = moodData.quote;
+
     audio.src = `assets/audio/${mood}.mp3`;
     audio.style.display = "block";
-    audio.play().catch(err => console.error("❌ Audio playback error:", err));
-  } else {
-    audio.style.display = "none";
-  }
+    audio.play();
 
-  // Display conversational response
-  responseText.textContent = aiResponse;
-
-  // Store in Firebase if mood is detected
-  if (mood !== "unknown") {
-    saveMoodToFirebase(text, mood, aiResponse);
+    // ✅ Store in Firebase
+    saveMoodToFirebase(text, mood);
     localStorage.setItem("latestMood", mood);
+  } else {
+    moodSpan.textContent = "Unknown";
+    moodIcon.textContent = "❓";
+    quote.textContent = "Hmm... we couldn’t detect your mood. Try another sentence?";
+    audio.style.display = "none";
   }
 });
 
-// Create response text element if it doesn't exist
-function createResponseTextElement() {
-  const responseText = document.createElement("p");
-  responseText.id = "responseText";
-  responseText.className = "mt-4 text-gray-700";
-  document.getElementById("resultBox").appendChild(responseText);
-  return responseText;
-}
-
-// Save mood and response to Firestore
-function saveMoodToFirebase(input, mood, aiResponse) {
+// ✅ Save mood to Firestore
+function saveMoodToFirebase(input, mood) {
   const user = JSON.parse(localStorage.getItem("manoveda_current")) || { name: "guest" };
 
   const moodEntry = {
     userId: user.name,
-    date: new Date().toISOString().split("T")[0],
-    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    date: new Date().toISOString().split("T")[0], // for calendar
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(), // ✅ real timestamp for sorting
     input: input,
     mood: mood,
-    quote: moodMap[mood]?.quote || "No quote available",
-    aiResponse: aiResponse
+    quote: moodMap[mood].quote
   };
 
   db.collection("ManoVedaMoods").add(moodEntry)
-    .then(() => console.log("✅ Mood and response saved to Firebase!"))
-    .catch(err => console.error("❌ Error saving to Firebase:", err));
+    .then(() => console.log("✅ Mood saved to Firebase!"))
+    .catch(err => console.error("❌ Error saving mood:", err));
 }
 
-// Utility
+// ✅ Utility
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
-
-// Handle specific sensitive inputs
-function isSensitiveInput(text) {
-  const sensitivePhrases = ["i want to die", "suicide", "kill myself"];
-  return sensitivePhrases.some(phrase => text.toLowerCase().includes(phrase));
-}
-
-document.getElementById("userInput").addEventListener("input", (event) => {
-  const text = event.target.value.trim();
-  if (isSensitiveInput(text)) {
-    const responseText = document.getElementById("responseText") || createResponseTextElement();
-    responseText.textContent = "I'm really sorry you're feeling this way. You're not alone, and help is available. Please consider reaching out to a trusted friend or a professional at a helpline like 988 (US) or a local support service.";
-    document.getElementById("resultBox").classList.remove("hidden");
-  }
-});
