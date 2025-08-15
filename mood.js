@@ -31,25 +31,13 @@ const emotionToMood = {
 
 // ✅ HuggingFace AI call
 async function detectMoodFromAI(text) {
-  const response = await fetch(
-    "https://api-inference.huggingface.co/models/SamLowe/roberta-base-go_emotions",
-    {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer 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",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ inputs: text })
-    }
-  );
-
-  const result = await response.json();
-  if (!Array.isArray(result) || result.length === 0) return "unknown";
+  const response = await query({ inputs: text });
+  if (!Array.isArray(response) || response.length === 0) return "unknown";
 
   let topEmotion = "unknown";
   let maxScore = 0;
 
-  for (let e of result[0]) {
+  for (let e of response[0]) {
     if (e.score > maxScore) {
       topEmotion = e.label;
       maxScore = e.score;
@@ -57,6 +45,23 @@ async function detectMoodFromAI(text) {
   }
 
   return emotionToMood[topEmotion] || "unknown";
+}
+
+// ✅ Integrated query function
+async function query(data) {
+  const response = await fetch(
+    "https://router.huggingface.co/hf-inference/models/SamLowe/roberta-base-go_emotions",
+    {
+      headers: {
+        Authorization: "Bearer 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",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
+  const result = await response.json();
+  return result;
 }
 
 // ✅ Analyze button
