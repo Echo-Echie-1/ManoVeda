@@ -25,7 +25,7 @@ export async function handler(event) {
         "X-Title": "ManoVeda"
       },
       body: JSON.stringify({
-        model: "qwen/qwen3-next-80b-a3b-instruct:free",
+        model: "meta-llama/llama-3.1-8b-instruct:free",
         messages
       })
     });
