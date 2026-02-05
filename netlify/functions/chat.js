@@ -1,20 +1,18 @@
 export async function handler(event) {
-  // Only allow POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: "Method Not Allowed" }),
+      body: JSON.stringify({ error: "Method Not Allowed" })
     };
   }
 
   try {
-    const body = JSON.parse(event.body || "{}");
-    const messages = body.messages;
+    const { messages } = JSON.parse(event.body || "{}");
 
     if (!Array.isArray(messages)) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "Invalid messages format" }),
+        body: JSON.stringify({ error: "Invalid messages format" })
       };
     }
 
@@ -24,22 +22,31 @@ export async function handler(event) {
         "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
         "HTTP-Referer": "https://manoveda.netlify.app",
-        "X-Title": "ManoVeda",
+        "X-Title": "ManoVeda"
       },
       body: JSON.stringify({
         model: "qwen/qwen3-next-80b-a3b-instruct:free",
-        messages,
-      }),
+        messages
+      })
     });
 
     const data = await response.json();
 
+    // 👇 IMPORTANT: surface OpenRouter errors
+    if (!response.ok) {
+      return {
+        statusCode: response.status,
+        body: JSON.stringify({
+          error: "OpenRouter error",
+          details: data
+        })
+      };
+    }
+
     return {
       statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
     };
 
   } catch (err) {
@@ -47,8 +54,8 @@ export async function handler(event) {
       statusCode: 500,
       body: JSON.stringify({
         error: "Server error",
-        details: err.message,
-      }),
+        details: err.message
+      })
     };
   }
 }
