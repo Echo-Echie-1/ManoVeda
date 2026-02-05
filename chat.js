@@ -1,0 +1,56 @@
+const chatBox = document.getElementById("chat-box");
+const input = document.getElementById("userInput");
+const sendBtn = document.getElementById("sendBtn");
+
+function addMessage(role, text) {
+  const msg = document.createElement("div");
+  msg.className = role === "user" ? "user-message" : "ai-message";
+  msg.textContent = text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+async function sendMessageToAI(userMessage) {
+  try {
+    const response = await fetch("/.netlify/functions/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        messages: [
+          { role: "user", content: userMessage }
+        ]
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error(data);
+      return "Server error.";
+    }
+
+    return data.choices?.[0]?.message?.content || "No reply from AI.";
+  } catch (err) {
+    console.error(err);
+    return "Network error.";
+  }
+}
+
+sendBtn.addEventListener("click", async () => {
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage("user", text);
+  input.value = "";
+
+  const reply = await sendMessageToAI(text);
+  addMessage("assistant", reply);
+});
+
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    sendBtn.click();
+  }
+});
