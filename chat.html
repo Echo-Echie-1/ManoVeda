@@ -1,32 +1,44 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chat with ManoSathi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat with ManoVeda</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="chat.css" />
+  <link rel="icon" type="image/png" href="bingo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="bingo.png">
 </head>
+
 <body>
   <div class="chat-container">
+
+    <!-- Top Navigation -->
     <nav>
       <div class="brand">Mano<span>Veda AI</span></div>
-      <a class='back' href='Index.html'>← Dashboard</a>
+      <a class="back" href="Index.html">← Dashboard</a>
     </nav>
 
+    <!-- Chat Messages -->
     <div class="chat-box" id="chatBox">
-      <!-- Chat messages appear here -->
+      <!-- Messages injected by chat.js -->
     </div>
 
+    <!-- Input Area -->
     <div class="chat-input-area">
-      <input type="text" id="userInput" placeholder="Type your thoughts here..." />
+      <input
+        type="text"
+        id="userInput"
+        placeholder="Type your thoughts here..."
+        autocomplete="off"
+      />
       <button id="sendBtn">Send</button>
     </div>
+
   </div>
 
+  <!-- Frontend Chat Logic -->
   <script src="chat.js"></script>
 </body>
 </html>
-
