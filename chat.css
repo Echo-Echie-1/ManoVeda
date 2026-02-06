@@ -198,4 +198,46 @@ nav {
   background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
+
+}
+.chat-box {
+  display: flex;
+  flex-direction: column; /* Stack messages vertically for better flow */
+  gap: 10px; /* Space between messages */
+}
+
+.chat-bubble {
+  max-width: 80%; /* Prevent full-width walls of text */
+  word-break: break-word; /* Wrap long words */
+  padding: 10px 15px;
+  border-radius: 20px;
+  margin-bottom: 10px; /* Extra spacing between bubbles */
+  position: relative; /* For timestamp positioning */
+}
+
+.chat-bubble p { /* From Marked.js paragraphs */
+  margin: 0 0 10px 0; /* Space between paragraphs in messages */
+}
+
+.timestamp {
+  display: block;
+  font-size: 0.75rem;
+  color: gray;
+  text-align: right;
+  margin-top: 5px;
+}
+
+.typing {
+  background-color: #f0f0f0;
+  color: #888;
+  font-style: italic;
+}
+
+/* Float adjustments remain as-is, but flex on .chat-box helps with accumulation */
+.float-left {
+  align-self: flex-start;
+}
+
+.float-right {
+  align-self: flex-end;
 }
