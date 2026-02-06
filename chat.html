@@ -1,43 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chat with ManoVeda</title>
-  <!-- Use your external chat.css -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ManoVeda — Chat</title>
+
+  <!-- Use your external chat.css (keep your file as provided) -->
   <link rel="stylesheet" href="chat.css" />
-  <link rel="icon" type="image/png" href="bingo.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <!-- Add Marked.js from CDN for Markdown rendering -->
-  <script src="https://cdn.jsdelivr.net/npm/marked@4.0.0/marked.min.js"></script>
+
+  <!-- Fonts / icons already used in your project -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
+
+  <!-- Markdown parser and sanitizer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+
+  <!-- Small additions to complement your chat.css for readable paragraphs & code -->
+  <style>
+    /* make sure rendered markdown inside bot bubbles looks good */
+    .bot-message p { margin: 0 0 0.75rem; }
+    .bot-message ul, .bot-message ol { margin: 0.4rem 0 0.8rem 1.1rem; }
+    .bot-message code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 6px; font-family: monospace; }
+    .message time { display:block; font-size: 11px; opacity: 0.6; margin-top: 6px; }
+    /* ensure chat box has comfortable bottom padding so last message not hidden under input */
+    .chat-box { padding-bottom: 24px; }
+    /* typing bubble small animation tweak */
+    .bot-message.typing { opacity: 0.9; }
+    .typing-dots span { display:inline-block; width:6px; height:6px; margin-left:4px; border-radius:50%; background:#fff; opacity:.25; animation: blink 1s infinite; }
+    .typing-dots span:nth-child(2){ animation-delay: .15s }
+    .typing-dots span:nth-child(3){ animation-delay: .30s }
+    @keyframes blink { 0%{opacity:.2}50%{opacity:1}100%{opacity:.2} }
+  </style>
 </head>
 <body>
   <div class="chat-container">
+    <!-- optional luxury frame if you use it in markup -->
+    <div class="luxury-frame" aria-hidden="true">
+      <div class="lux-seg lux-top"></div>
+      <div class="lux-seg lux-right"></div>
+      <div class="lux-seg lux-bottom"></div>
+      <div class="lux-seg lux-left"></div>
+    </div>
+
     <!-- Top Navigation -->
     <nav id="navbar">
       <div class="glass">
-        <div class="brand">Mano<span>Veda AI</span></div>
+        <div class="brand"><span class="mano">Mano</span><span class="veda">Veda AI</span></div>
         <a class="back" href="Index.html">← Dashboard</a>
-        <!-- optional mobile menu toggle if present in your layout -->
-        <button id="mobile-menu-toggle" aria-label="Toggle menu" style="display:none;">☰</button>
       </div>
     </nav>
+
     <!-- Chat Messages -->
-    <div class="chat-box" id="chatBox">
-      <!-- Messages injected by the inline script -->
-    </div>
+    <div class="chat-box" id="chatBox" role="log" aria-live="polite"></div>
+
     <!-- Input Area -->
-    <div class="chat-input-area">
-      <input
-        type="text"
-        id="userInput"
-        placeholder="Type your thoughts here..."
-        autocomplete="off"
-      />
+    <div class="chat-input-area" role="form">
+      <input type="text" id="userInput" placeholder="Type your thoughts here..." autocomplete="off" />
       <button id="sendBtn">Send</button>
     </div>
   </div>
-  <!-- JS FOR NAV, SCROLL, AND CHAT (inline, like your friend's file) -->
   <script>
     // DOM ready
     document.addEventListener("DOMContentLoaded", () => {
@@ -168,3 +189,4 @@
   </script>
 </body>
 </html>
+
