@@ -142,15 +142,15 @@
         chatBox.scrollTop = chatBox.scrollHeight;
 
         try {
-          // CALL your Supabase Edge Function for Manoveda AI
-          const response = await fetch("https://vxknarwomlejxksmjinx.supabase.co/functions/v1/manoveda-ai", {
+         const response = await fetch("https://vxknarwomlejxksmjinx.supabase.co/functions/v1/manoveda-ai", {
             method: "POST",
             headers: {
-              "Content-Type": "application/json"
-              // no Authorization header here — keep HF_TOKEN secret server-side
+              "Content-Type": "application/json",
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4"
             },
             body: JSON.stringify({ userMsg })
           });
+
 
           // Remove typing indicator (if still present)
           const typingEl = document.getElementById(typingId);
@@ -191,3 +191,4 @@
 
 </body>
 </html>
+
