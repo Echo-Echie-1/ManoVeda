@@ -18,17 +18,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function sendMessageToAI(userMessage) {
     try {
-      const response = await fetch("/.netlify/functions/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          messages: [
-            { role: "user", content: userMessage }
-          ]
-        })
-      });
+      const response = await fetch(
+        "https://vxknarwomlejxksmjinx.supabase.co/functions/v1/manoveda-ai",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userMsg: userMessage }),
+        }
+      );
 
       const data = await response.json();
 
@@ -37,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return "Server error.";
       }
 
-      return data.choices?.[0]?.message?.content || "No reply from AI.";
+      return data.reply || "No reply from AI.";
     } catch (err) {
       console.error("Network error:", err);
       return "Network error.";
