@@ -59,134 +59,159 @@
       <button id="sendBtn">Send</button>
     </div>
   </div>
+
   <script>
-    // DOM ready
-    document.addEventListener("DOMContentLoaded", () => {
-      // Mobile menu toggle (if you actually have a mobile menu)
-      const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-      const mobileMenu = document.getElementById('mobile-menu');
-      if (mobileMenuToggle && mobileMenu) {
-        mobileMenuToggle.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-        mobileMenu.addEventListener('click', (e) => {
-          if (e.target.tagName === 'A') mobileMenu.classList.add('hidden');
+  (function(){
+    // ========== CONFIG ==========
+    // Replace with your Supabase function URL and ANON key
+    const FUNCTION_URL = "https://vxknarwomlejxksmjinx.supabase.co/functions/v1/manoveda-ai";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4"; // <-- replace with your anon key
+
+    // DOM
+    const chatBox = document.getElementById('chatBox');
+    const inputEl = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    // Helper: create message element
+    function createMessageEl({ role, htmlContent, textContent }) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'message ' + (role === 'user' ? 'user-message' : 'bot-message');
+
+      // content container
+      const content = document.createElement('div');
+      content.className = 'message-content';
+      // For user plain text: escape and wrap in <div>
+      if (role === 'user') {
+        content.textContent = textContent;
+      } else {
+        // bot: html content (already sanitized)
+        content.innerHTML = htmlContent;
+      }
+
+      wrapper.appendChild(content);
+
+      // timestamp
+      const timeEl = document.createElement('time');
+      const d = new Date();
+      timeEl.textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      wrapper.appendChild(timeEl);
+
+      return wrapper;
+    }
+
+    // Append user message
+    function appendUserMessage(text) {
+      const el = createMessageEl({ role: 'user', textContent: text });
+      chatBox.appendChild(el);
+      scrollToBottom();
+    }
+
+    // Append AI message (markdown -> HTML -> sanitized)
+    function appendAIMessage(markdown) {
+      const rawHtml = marked.parse(typeof markdown === 'string' ? markdown : String(markdown));
+      const safe = DOMPurify.sanitize(rawHtml, {ALLOWED_ATTR: ['href','target','rel']});
+      const el = createMessageEl({ role: 'bot', htmlContent: safe });
+      chatBox.appendChild(el);
+      scrollToBottom();
+    }
+
+    // Typing indicator
+    function showTyping() {
+      removeTyping();
+      const wrapper = document.createElement('div');
+      wrapper.className = 'message bot-message typing';
+      wrapper.id = '__typing';
+
+      const content = document.createElement('div');
+      content.className = 'message-content';
+      content.innerHTML = `<span>ManoVeda is typing</span> <span class="typing-dots"><span></span><span></span><span></span></span>`;
+      wrapper.appendChild(content);
+
+      const timeEl = document.createElement('time');
+      timeEl.textContent = '';
+      wrapper.appendChild(timeEl);
+
+      chatBox.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    function removeTyping() {
+      const t = document.getElementById('__typing');
+      if (t) t.remove();
+    }
+
+    function scrollToBottom() {
+      chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Sanity: disable send when empty
+    function setSendingState(sending) {
+      sendBtn.disabled = sending;
+      if (sending) sendBtn.style.opacity = 0.7; else sendBtn.style.opacity = 1;
+    }
+
+    // Main send
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      appendUserMessage(text);
+      inputEl.value = '';
+      setSendingState(true);
+      showTyping();
+
+      try {
+        const res = await fetch(FUNCTION_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': SUPABASE_ANON_KEY ? `Bearer ${SUPABASE_ANON_KEY}` : ''
+          },
+          body: JSON.stringify({ userMsg: text })
         });
-      }
-      // Smooth scrolling for internal anchor links
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href');
-          const targetElement = document.querySelector(targetId);
-          if (targetElement) {
-            window.scrollTo({
-              top: targetElement.offsetTop - 100,
-              behavior: 'smooth'
-            });
-          }
-        });
-      });
-      // Navbar background change on scroll (if navbar exists)
-      const navbar = document.getElementById('navbar');
-      if (navbar) {
-        window.addEventListener('scroll', () => {
-          try {
-            const glass = navbar.querySelector('.glass');
-            if (!glass) return;
-            if (window.scrollY > 100) {
-              glass.style.background = 'rgba(255, 255, 255, 0.95)';
-            } else {
-              glass.style.background = 'rgba(255, 255, 255, 0.85)';
-            }
-          } catch (e) { /* ignore */ }
-        });
-      }
-      // Fade-in observer (if you use .fade-in elements)
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) entry.target.classList.add("visible");
-        });
-      });
-      document.querySelectorAll(".fade-in").forEach(el => observer.observe(el));
-      // Chatbot logic
-      const sendBtn = document.getElementById("sendBtn");
-      const inputEl = document.getElementById("userInput");
-      const chatBox = document.getElementById("chatBox");
-      if (!sendBtn || !inputEl || !chatBox) {
-        console.error("Chat UI elements missing (sendBtn, userInput or chatBox).");
-        return;
-      }
-      // Helper to append bubbles -- keeping the style your friend used
-      function appendUserMessage(text) {
-        const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        chatBox.innerHTML += `<div class='chat-bubble bg-green-100 text-green-800 self-end float-right'><b>You:</b> ${escapeHtml(text)} <span class="timestamp">${timestamp}</span></div><div class='clear-both'></div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
-      function appendAIMessage(text) {
-        const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const renderedText = marked.parse(text); // Render Markdown to HTML
-        chatBox.innerHTML += `<div class='chat-bubble bg-gray-100 text-gray-800 float-left'><b>Manoveda:</b> ${renderedText} <span class="timestamp">${timestamp}</span></div><div class='clear-both'></div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
-      // Basic HTML escaping to prevent injection
-      function escapeHtml(unsafe) {
-        return unsafe
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
-      }
-      // Main send function
-      async function sendMessage() {
-        const userMsg = inputEl.value.trim();
-        if (!userMsg) return;
-        // Add user message immediately
-        appendUserMessage(userMsg);
-        inputEl.value = "";
-        // Add typing indicator
-        const typingId = "typing-indicator";
-        chatBox.innerHTML += `<div id="${typingId}" class="chat-bubble typing">Manoveda is typing...</div><div class='clear-both'></div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // remove typing regardless
+        removeTyping();
+
+        // Try parse JSON; if not JSON, throw useful error
+        let data;
         try {
-         const response = await fetch("https://vxknarwomlejxksmjinx.supabase.co/functions/v1/manoveda-ai", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4"
-            },
-            body: JSON.stringify({ userMsg })
-          });
-          // Remove typing indicator (if still present)
-          const typingEl = document.getElementById(typingId);
-          if (typingEl) typingEl.remove();
-          // Parse and handle response
-          const data = await response.json();
-          if (!response.ok) {
-            console.error("Backend error:", data);
-            appendAIMessage("Server error. Check your backend (401 means token missing).");
-            return;
-          }
-          const reply = data?.reply || "Sorry, I couldn’t answer that.";
-          appendAIMessage(reply);
+          data = await res.json();
         } catch (err) {
-          // Remove typing indicator (if still present)
-          const typingEl = document.getElementById(typingId);
-          if (typingEl) typingEl.remove();
-          console.error("Network error:", err);
-          chatBox.innerHTML += `<div class='text-red-500 mt-2'>⚠️ Error: ${escapeHtml(err.message || String(err))}</div>`;
-          chatBox.scrollTop = chatBox.scrollHeight;
+          throw new Error('Invalid JSON response from server');
         }
+
+        if (!res.ok) {
+          // show server message if provided
+          const serverMsg = data?.error || data?.message || 'Server error';
+          appendAIMessage(`⚠️ ${serverMsg}`);
+        } else {
+          const reply = data?.reply || data?.message || "Sorry, I couldn't answer that.";
+          appendAIMessage(reply);
+        }
+      } catch (err) {
+        removeTyping();
+        appendAIMessage(`⚠️ Network / server error: ${err.message}`);
+      } finally {
+        setSendingState(false);
       }
-      // Button + Enter key binding
-      sendBtn.addEventListener("click", sendMessage);
-      inputEl.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          sendMessage();
-        }
-      });
+    }
+
+    // Bind events
+    sendBtn.addEventListener('click', sendMessage);
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
     });
+
+    // Optional: welcome message
+    (function welcome() {
+      const welcome = `Hello — I'm **ManoVeda**, here to listen and support you. Type anything whenever you're ready. If you're in crisis, please contact local emergency services or a trusted person right away.`;
+      appendAIMessage(welcome);
+    })();
+
+  })();
   </script>
 </body>
 </html>
-
