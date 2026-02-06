@@ -241,3 +241,80 @@ nav {
 .float-right {
   align-self: flex-end;
 }
+/* ===== FULL SCREEN LAYOUT OVERRIDE ===== */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main container fills entire viewport */
+.chat-container {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar stays fixed height */
+#navbar {
+  flex-shrink: 0;
+}
+
+/* Chat box expands both horizontally & vertically */
+.chat-box {
+  flex: 1;
+  width: 100%;
+  max-width: none;
+  overflow-y: auto;
+  padding-left: clamp(16px, 6vw, 160px);
+  padding-right: clamp(16px, 6vw, 160px);
+}
+
+/* Input area spans full width */
+.chat-input-area {
+  width: 100%;
+  max-width: none;
+  padding-left: clamp(16px, 6vw, 160px);
+  padding-right: clamp(16px, 6vw, 160px);
+}
+
+/* Message width optimized for large screens */
+.message {
+  max-width: 72ch;   /* readable line length */
+}
+
+/* User messages stay right-aligned */
+.user-message {
+  margin-left: auto;
+}
+
+/* Bot messages stay left-aligned */
+.bot-message {
+  margin-right: auto;
+}
+
+/* Luxury frame adapts to fullscreen */
+.luxury-frame {
+  inset: 0;
+  border-radius: 0;
+}
+
+/* Mobile safety */
+@media (max-width: 768px) {
+  .chat-box,
+  .chat-input-area {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .message {
+    max-width: 100%;
+  }
+}
+
