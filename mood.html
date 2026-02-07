@@ -27,32 +27,12 @@
       -webkit-font-smoothing:antialiased;
       padding: 28px;
     }
-
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items:center;
-      padding: 12px 20px;
-      margin-bottom: 18px;
-      background: rgba(6,10,16,0.45);
-      border-radius: 12px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-    }
+    nav { display:flex; justify-content:space-between; align-items:center; padding:12px 20px; margin-bottom:18px; background: rgba(6,10,16,0.45); border-radius:12px; }
     .brand { font-weight:800; font-size:1.15rem; }
     .brand span { color: var(--accent-2); margin-left:4px; font-weight:900; }
-
     .back { color: var(--muted); text-decoration: none; font-weight:600; }
 
-    .mood-container {
-      max-width: 880px;
-      margin: 18px auto;
-      padding: 28px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), var(--card));
-      border-radius: 14px;
-      box-shadow: 0 20px 40px rgba(3,7,18,0.7);
-      border: 1px solid rgba(255,255,255,0.03);
-    }
+    .mood-container { max-width: 880px; margin: 18px auto; padding: 28px; background: linear-gradient(180deg, rgba(255,255,255,0.02), var(--card)); border-radius: 14px; }
 
     .header-row { display:flex; justify-content:space-between; align-items:center; gap:12px; }
     h1 { margin: 6px 0 2px; font-weight:800; font-size:1.6rem; }
@@ -60,100 +40,38 @@
 
     form { display:block; margin-top:10px; }
 
-    label {
-      display: block;
-      margin-top: 16px;
-      font-weight:700;
-      color: #cfe7ff;
-    }
+    .two-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    .full { grid-column: 1 / -1; }
 
-    select, .select {
-      width: 100%;
-      padding: 12px 14px;
-      margin-top: 8px;
-      background: var(--glass);
-      color: var(--text);
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.04);
+    label { display:block; margin-top: 12px; font-weight:700; color: #cfe7ff; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, .select {
+      width: 100%; padding: 10px 12px; margin-top:8px; background: var(--glass); color: var(--text); border-radius:10px; border:1px solid rgba(255,255,255,0.04);
       font-weight:600;
-      outline: none;
-      appearance: none;
     }
 
     .controls { display:flex; gap:12px; margin-top:20px; }
-    button.primary {
-      flex:1;
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: none;
-      background: linear-gradient(90deg, var(--accent), #7c3aed);
-      color: white;
-      font-weight:800;
-      cursor: pointer;
-      box-shadow: 0 12px 34px rgba(168,85,247,0.16);
-    }
-    button.ghost {
-      padding: 12px 14px;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.04);
-      color: var(--muted);
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight:700;
-    }
+    button.primary { flex:1; padding: 12px 16px; border-radius: 12px; border: none; background: linear-gradient(90deg, var(--accent), #7c3aed); color: white; font-weight:800; cursor: pointer; }
+    button.ghost { padding: 12px 14px; background: transparent; border: 1px solid rgba(255,255,255,0.04); color: var(--muted); border-radius: 12px; cursor: pointer; font-weight:700; }
 
-    .result {
-      margin-top: 22px;
-      padding: 20px;
-      border-radius: 12px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.03);
-    }
-
-    .mood-badge {
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      background: linear-gradient(90deg,#07142a, rgba(255,255,255,0.02));
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-weight:800;
-      color:var(--accent-2);
-      border:1px solid rgba(0,210,255,0.05);
-    }
-
+    .result { margin-top: 22px; padding: 20px; border-radius: 12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02)); }
+    .mood-badge { display:inline-flex; align-items:center; gap:10px; padding: 8px 12px; border-radius: 999px; font-weight:800; color:var(--accent-2); }
     .advice { margin-top:12px; color:#cfe7ff; line-height:1.6; }
 
     .resources-list { margin-top:12px; display:grid; gap:12px; }
-    .resource-site, .resource-yt {
-      display:flex;
-      gap:12px;
-      align-items:center;
-      background: rgba(255,255,255,0.02);
-      padding:10px;
-      border-radius:10px;
-      border: 1px solid rgba(255,255,255,0.02);
-    }
-    .resource-site a, .resource-yt a { color: var(--accent-2); font-weight:700; text-decoration:none; }
-
+    .resource-site, .resource-yt { display:flex; gap:12px; align-items:center; background: rgba(255,255,255,0.02); padding:10px; border-radius:10px; }
+    .resource-site a, .resource-yt a { color: var(--accent-2); text-decoration:none; font-weight:700; }
     .site-domain { color: var(--muted); font-size:0.95rem; }
     .yt-thumb { width:120px; height:72px; object-fit:cover; border-radius:8px; }
 
-    /* crisis banner */
-    .crisis-banner {
-      margin-top: 12px;
-      padding: 12px;
-      background: linear-gradient(90deg, rgba(255,60,80,0.08), rgba(255,100,120,0.03));
-      border-radius: 10px;
-      border: 1px solid rgba(255,60,80,0.12);
-      color: #ffd6d6;
-      font-weight:700;
-    }
-
     .muted-small { color: var(--muted); font-size:0.92rem; margin-top:6px; }
-    @media (max-width:720px){
-      .yt-thumb { width:90px; height:56px; }
-    }
+    .consent-row { display:flex; gap:8px; align-items:center; margin-top:8px; color:var(--muted); font-size:0.95rem; }
+
+    .privacy-link { color: var(--accent-2); text-decoration: underline; }
+
+    /* crisis banner */
+    .crisis-banner { margin-top: 12px; padding: 12px; background: linear-gradient(90deg, rgba(255,60,80,0.08), rgba(255,100,120,0.03)); border-radius: 10px; color: #ffd6d6; font-weight:700; }
+
+    @media (max-width:720px){ .two-grid { grid-template-columns: 1fr; } .yt-thumb{ width:90px; height:56px; } }
 
   </style>
 </head>
@@ -173,6 +91,48 @@
     </div>
 
     <form id="moodForm">
+      <!-- PERSONAL INFO -->
+      <div class="two-grid">
+        <div>
+          <label for="fullName">Full Name</label>
+          <input id="fullName" name="fullName" type="text" placeholder="Your full name" />
+        </div>
+
+        <div>
+          <label for="age">Age</label>
+          <input id="age" name="age" type="number" min="8" max="120" placeholder="Your age" />
+        </div>
+
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" />
+        </div>
+
+        <div>
+          <label for="phone">Phone (with country code)</label>
+          <input id="phone" name="phone" type="tel" placeholder="+91xxxxxxxxxx" />
+        </div>
+
+        <div>
+          <label for="state">State</label>
+          <input id="state" name="state" type="text" placeholder="e.g. Maharashtra" />
+        </div>
+
+        <div>
+          <label for="district">District / City</label>
+          <input id="district" name="district" type="text" placeholder="e.g. Mumbai" />
+        </div>
+
+        <div class="full">
+          <label for="whyLink">Why we ask this</label>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <a class="privacy-link" id="whyLink" href="privacy-policy.html" target="_blank" rel="noopener">Privacy & Why we ask</a>
+            <div class="muted-small">We ask these to suggest local help and personalize support.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
       <label>1️⃣ How is your energy level today?</label>
       <select class="select" name="energy" required>
         <option>Very Low</option>
@@ -212,6 +172,11 @@
         <option>A little</option>
         <option>Yes</option>
       </select>
+
+      <div class="consent-row">
+        <input type="checkbox" id="consent" name="consent" />
+        <label for="consent" style="margin:0">I consent to storing my details locally and using them to personalize help.</label>
+      </div>
 
       <div class="controls">
         <button class="primary" type="submit">Analyze My Mood</button>
