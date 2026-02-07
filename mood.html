@@ -1,57 +1,147 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Detect Your Mood | ManoVeda</title>
-  <link rel="stylesheet" href="mood.css" />
+  <title>Mood Guide | ManoVeda</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="bingo.png">
+
+  <style>
+    body {
+      font-family: Poppins, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: #020617;
+    }
+
+    .brand span { color: #38bdf8; }
+
+    .back { color: #94a3b8; text-decoration: none; }
+
+    .mood-container {
+      max-width: 720px;
+      margin: auto;
+      padding: 32px;
+    }
+
+    h1 { margin-bottom: 8px; }
+
+    form label {
+      display: block;
+      margin-top: 18px;
+      font-weight: 600;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      background: #020617;
+      color: #e5e7eb;
+      border-radius: 6px;
+      border: 1px solid #334155;
+    }
+
+    button {
+      margin-top: 28px;
+      padding: 14px;
+      width: 100%;
+      background: #38bdf8;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .hidden { display: none; }
+
+    .result {
+      margin-top: 32px;
+      background: #020617;
+      padding: 24px;
+      border-radius: 10px;
+    }
+
+    ul { padding-left: 18px; }
+    a { color: #38bdf8; }
+  </style>
 </head>
+
 <body>
 
-  <!-- 🔹 Top Navbar -->
-  <nav>
-    <div class="brand">Mano<span>Veda</span></div>
-    <a class='back' href='index.html'>← Back</a>
-  </nav>
+<nav>
+  <div class="brand">Mano<span>Veda</span></div>
+  <a class="back" href="index.html">← Back</a>
+</nav>
 
-  <!-- 🔹 Main Mood Detection Area -->
-  <div class="mood-container">
-    <h1>Hi, <span id="username">Friend</span> 👋</h1>
-    <p class="intro">How are you feeling today? Type a sentence below, and ManoSathi will try to understand your mood.</p>
+<div class="mood-container">
+  <h1>Hello, <span id="username">Friend</span> 👋</h1>
+  <p>Answer honestly — ManoSathi will guide you.</p>
 
-    <textarea id="userInput" rows="4" placeholder="Type your thoughts here..."></textarea>
-    <button id="analyzeBtn">Analyze Mood</button>
+  <form id="moodForm">
 
-    <div class="result hidden" id="resultBox">
-      <h2>Mood: <span id="detectedMood">...</span> <span id="moodIcon"></span></h2>
-      <p id="quote"></p>
+    <label>1️⃣ How is your energy level today?</label>
+    <select name="energy" required>
+      <option>Very Low</option>
+      <option>Low</option>
+      <option>Moderate</option>
+      <option>High</option>
+    </select>
 
-      <audio id="moodAudio" controls class="hidden"></audio>
-    </div>
+    <label>2️⃣ What best describes your thoughts?</label>
+    <select name="thoughts" required>
+      <option>Calm and clear</option>
+      <option>Overthinking</option>
+      <option>Racing thoughts</option>
+      <option>Empty or numb</option>
+    </select>
+
+    <label>3️⃣ Which emotion feels strongest right now?</label>
+    <select name="emotion" required>
+      <option>Sadness</option>
+      <option>Anxiety</option>
+      <option>Anger</option>
+      <option>Happiness</option>
+      <option>Confusion</option>
+    </select>
+
+    <label>4️⃣ How stressed do you feel?</label>
+    <select name="stress" required>
+      <option>Not stressed</option>
+      <option>Slightly stressed</option>
+      <option>Very stressed</option>
+      <option>Overwhelmed</option>
+    </select>
+
+    <label>5️⃣ Do you feel like avoiding people today?</label>
+    <select name="social" required>
+      <option>No</option>
+      <option>A little</option>
+      <option>Yes</option>
+    </select>
+
+    <button type="submit">Analyze My Mood</button>
+  </form>
+
+  <div id="resultBox" class="result hidden">
+    <h2>Mood Detected: <span id="detectedMood"></span></h2>
+    <p id="advice"></p>
+
+    <h3>Helpful Resources</h3>
+    <ul id="resources"></ul>
   </div>
+</div>
 
-  <!-- ✅ Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
-  <!-- ✅ Firebase Config -->
-  <script>
-   const firebaseConfig = {
-      apiKey: "AIzaSyBbdvpfhWlwIk3YcAisb2QFD_Zg3n7u5Rs",
-      authDomain: "manoveda1.firebaseapp.com",
-      projectId: "manoveda1",
-      storageBucket: "manoveda1.appspot.com",
-      messagingSenderId: "948717454300",
-      appId: "1:948717454300:web:10a7d0cdb934dff952c519"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
-
-  <!-- ✅ Mood Detection Logic -->
-  <script src="mood.js"></script>
+<script src="mood.js"></script>
 </body>
 </html>
