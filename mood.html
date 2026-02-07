@@ -5,145 +5,238 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mood Guide | ManoVeda</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- use your site's Nunito font so mood page matches index.html -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
 
   <style>
+    :root{
+      --bg: #0f172a;
+      --card: #0b1220;
+      --muted: #94a3b8;
+      --accent: #a855f7;
+      --accent-2: #00d2ff;
+      --text: #e6eef8;
+      --glass: rgba(255,255,255,0.03);
+    }
+
+    html,body{height:100%;margin:0;}
     body {
-      font-family: Poppins, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      margin: 0;
-      padding: 0;
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(180deg, #071026 0%, var(--bg) 100%);
+      color: var(--text);
+      -webkit-font-smoothing:antialiased;
+      padding: 28px;
     }
 
     nav {
       display: flex;
       justify-content: space-between;
-      padding: 16px 24px;
-      background: #020617;
+      align-items:center;
+      padding: 12px 20px;
+      margin-bottom: 18px;
+      background: rgba(6,10,16,0.45);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
     }
+    .brand { font-weight:800; font-size:1.15rem; }
+    .brand span { color: var(--accent-2); margin-left:4px; font-weight:900; }
 
-    .brand span { color: #38bdf8; }
-
-    .back { color: #94a3b8; text-decoration: none; }
+    .back { color: var(--muted); text-decoration: none; font-weight:600; }
 
     .mood-container {
-      max-width: 720px;
-      margin: auto;
-      padding: 32px;
+      max-width: 880px;
+      margin: 18px auto;
+      padding: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), var(--card));
+      border-radius: 14px;
+      box-shadow: 0 20px 40px rgba(3,7,18,0.7);
+      border: 1px solid rgba(255,255,255,0.03);
     }
 
-    h1 { margin-bottom: 8px; }
+    .header-row { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    h1 { margin: 6px 0 2px; font-weight:800; font-size:1.6rem; }
+    p.lead { margin: 0 0 14px; color: var(--muted); }
 
-    form label {
+    form { display:block; margin-top:10px; }
+
+    label {
       display: block;
-      margin-top: 18px;
-      font-weight: 600;
+      margin-top: 16px;
+      font-weight:700;
+      color: #cfe7ff;
     }
 
-    select {
+    select, .select {
       width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      background: #020617;
-      color: #e5e7eb;
-      border-radius: 6px;
-      border: 1px solid #334155;
+      padding: 12px 14px;
+      margin-top: 8px;
+      background: var(--glass);
+      color: var(--text);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.04);
+      font-weight:600;
+      outline: none;
+      appearance: none;
     }
 
-    button {
-      margin-top: 28px;
-      padding: 14px;
-      width: 100%;
-      background: #38bdf8;
+    .controls { display:flex; gap:12px; margin-top:20px; }
+    button.primary {
+      flex:1;
+      padding: 12px 16px;
+      border-radius: 12px;
       border: none;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 8px;
+      background: linear-gradient(90deg, var(--accent), #7c3aed);
+      color: white;
+      font-weight:800;
       cursor: pointer;
+      box-shadow: 0 12px 34px rgba(168,85,247,0.16);
     }
-
-    .hidden { display: none; }
+    button.ghost {
+      padding: 12px 14px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.04);
+      color: var(--muted);
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight:700;
+    }
 
     .result {
-      margin-top: 32px;
-      background: #020617;
-      padding: 24px;
-      border-radius: 10px;
+      margin-top: 22px;
+      padding: 20px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.03);
     }
 
-    ul { padding-left: 18px; }
-    a { color: #38bdf8; }
+    .mood-badge {
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      background: linear-gradient(90deg,#07142a, rgba(255,255,255,0.02));
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight:800;
+      color:var(--accent-2);
+      border:1px solid rgba(0,210,255,0.05);
+    }
+
+    .advice { margin-top:12px; color:#cfe7ff; line-height:1.6; }
+
+    .resources-list { margin-top:12px; display:grid; gap:12px; }
+    .resource-site, .resource-yt {
+      display:flex;
+      gap:12px;
+      align-items:center;
+      background: rgba(255,255,255,0.02);
+      padding:10px;
+      border-radius:10px;
+      border: 1px solid rgba(255,255,255,0.02);
+    }
+    .resource-site a, .resource-yt a { color: var(--accent-2); font-weight:700; text-decoration:none; }
+
+    .site-domain { color: var(--muted); font-size:0.95rem; }
+    .yt-thumb { width:120px; height:72px; object-fit:cover; border-radius:8px; }
+
+    /* crisis banner */
+    .crisis-banner {
+      margin-top: 12px;
+      padding: 12px;
+      background: linear-gradient(90deg, rgba(255,60,80,0.08), rgba(255,100,120,0.03));
+      border-radius: 10px;
+      border: 1px solid rgba(255,60,80,0.12);
+      color: #ffd6d6;
+      font-weight:700;
+    }
+
+    .muted-small { color: var(--muted); font-size:0.92rem; margin-top:6px; }
+    @media (max-width:720px){
+      .yt-thumb { width:90px; height:56px; }
+    }
+
   </style>
 </head>
 
 <body>
+  <nav>
+    <div class="brand">Mano<span>Veda</span></div>
+    <a class="back" href="index.html">← Back</a>
+  </nav>
 
-<nav>
-  <div class="brand">Mano<span>Veda</span></div>
-  <a class="back" href="index.html">← Back</a>
-</nav>
+  <div class="mood-container">
+    <div class="header-row">
+      <div>
+        <h1>Hello, <span id="username">Friend</span> 👋</h1>
+        <p class="lead">Answer honestly — ManoSathi will guide you.</p>
+      </div>
+    </div>
 
-<div class="mood-container">
-  <h1>Hello, <span id="username">Friend</span> 👋</h1>
-  <p>Answer honestly — ManoSathi will guide you.</p>
+    <form id="moodForm">
+      <label>1️⃣ How is your energy level today?</label>
+      <select class="select" name="energy" required>
+        <option>Very Low</option>
+        <option>Low</option>
+        <option>Moderate</option>
+        <option>High</option>
+      </select>
 
-  <form id="moodForm">
+      <label>2️⃣ What best describes your thoughts?</label>
+      <select class="select" name="thoughts" required>
+        <option>Calm and clear</option>
+        <option>Overthinking</option>
+        <option>Racing thoughts</option>
+        <option>Empty or numb</option>
+      </select>
 
-    <label>1️⃣ How is your energy level today?</label>
-    <select name="energy" required>
-      <option>Very Low</option>
-      <option>Low</option>
-      <option>Moderate</option>
-      <option>High</option>
-    </select>
+      <label>3️⃣ Which emotion feels strongest right now?</label>
+      <select class="select" name="emotion" required>
+        <option>Sadness</option>
+        <option>Anxiety</option>
+        <option>Anger</option>
+        <option>Happiness</option>
+        <option>Confusion</option>
+      </select>
 
-    <label>2️⃣ What best describes your thoughts?</label>
-    <select name="thoughts" required>
-      <option>Calm and clear</option>
-      <option>Overthinking</option>
-      <option>Racing thoughts</option>
-      <option>Empty or numb</option>
-    </select>
+      <label>4️⃣ How stressed do you feel?</label>
+      <select class="select" name="stress" required>
+        <option>Not stressed</option>
+        <option>Slightly stressed</option>
+        <option>Very stressed</option>
+        <option>Overwhelmed</option>
+      </select>
 
-    <label>3️⃣ Which emotion feels strongest right now?</label>
-    <select name="emotion" required>
-      <option>Sadness</option>
-      <option>Anxiety</option>
-      <option>Anger</option>
-      <option>Happiness</option>
-      <option>Confusion</option>
-    </select>
+      <label>5️⃣ Do you feel like avoiding people today?</label>
+      <select class="select" name="social" required>
+        <option>No</option>
+        <option>A little</option>
+        <option>Yes</option>
+      </select>
 
-    <label>4️⃣ How stressed do you feel?</label>
-    <select name="stress" required>
-      <option>Not stressed</option>
-      <option>Slightly stressed</option>
-      <option>Very stressed</option>
-      <option>Overwhelmed</option>
-    </select>
+      <div class="controls">
+        <button class="primary" type="submit">Analyze My Mood</button>
+        <button class="ghost" type="button" id="clearBtn">Clear</button>
+      </div>
+    </form>
 
-    <label>5️⃣ Do you feel like avoiding people today?</label>
-    <select name="social" required>
-      <option>No</option>
-      <option>A little</option>
-      <option>Yes</option>
-    </select>
+    <div id="resultBox" class="result hidden" aria-live="polite">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div>
+          <div class="mood-badge">Mood: <span id="detectedMood" style="margin-left:10px;color:#fff;"></span></div>
+          <div class="muted-small" id="detectedTime"></div>
+        </div>
+      </div>
 
-    <button type="submit">Analyze My Mood</button>
-  </form>
+      <p class="advice" id="advice"></p>
 
-  <div id="resultBox" class="result hidden">
-    <h2>Mood Detected: <span id="detectedMood"></span></h2>
-    <p id="advice"></p>
+      <div id="crisisBanner" class="crisis-banner hidden"></div>
 
-    <h3>Helpful Resources</h3>
-    <ul id="resources"></ul>
+      <h3 style="margin-top:14px;">Helpful Resources</h3>
+      <div id="resources" class="resources-list"></div>
+    </div>
+
   </div>
-</div>
 
-<script type="module" src="mood.js"></script>
-
+  <script type="module" src="mood.js"></script>
 </body>
 </html>
-
