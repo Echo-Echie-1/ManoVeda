@@ -19,13 +19,16 @@ const detectedTimeEl = document.getElementById("detectedTime");
 
 const EDGE_URL = `${SUPABASE_URL}/functions/v1/moodguesser-ai`;
 
-/* load username */
-const user = JSON.parse(localStorage.getItem("manoveda_current")) || { name: "Guest" };
-usernameEl.textContent = user.name || "Guest";
+/* load username from localStorage if exists */
+const saved = JSON.parse(localStorage.getItem("manoveda_current")) || null;
+if (saved?.name) {
+  usernameEl.textContent = saved.name;
+} else {
+  usernameEl.textContent = "Friend";
+}
 
-/* helpers */
+/* helpers (same as before) */
 
-// ensure website has protocol
 function normalizeUrl(url) {
   if (!url) return null;
   url = url.trim();
@@ -35,7 +38,6 @@ function normalizeUrl(url) {
   return url;
 }
 
-// extract YouTube video id from many possible forms
 function extractYouTubeId(url) {
   if (!url) return null;
   const patterns = [
@@ -46,7 +48,6 @@ function extractYouTubeId(url) {
     const m = url.match(p);
     if (m && m[1]) return m[1];
   }
-  // fallback: last path segment if looks like id
   try {
     const u = new URL(url);
     const last = u.pathname.split("/").filter(Boolean).pop();
@@ -69,26 +70,28 @@ function domainFromUrl(url) {
   } catch { return url; }
 }
 
-/* basic crisis detection heuristic using checklist */
-function detectCrisis(answers, aiMood) {
+/* detect crisis (now considers age too) */
+function detectCrisis(answers, aiMood, userInfo = {}) {
   const emotion = (answers.emotion || "").toLowerCase();
   const stress = (answers.stress || "").toLowerCase();
   const social = (answers.social || "").toLowerCase();
+  const age = Number(userInfo.age) || 0;
 
-  // heuristic: high risk if overwhelmed + sadness or anxiety + social withdrawal
+  // heuristic: high risk if overwhelmed + sadness/anxiety + social withdrawal
+  let risk = false;
   if ((emotion.includes("sad") || emotion.includes("anx") || aiMood?.toLowerCase?.()?.includes("suicidal")) &&
-      (stress.includes("overwhelm") || stress.includes("very")) &&
-      (social.includes("yes") || social.includes("a little"))) {
-    return true;
+      (stress.includes("overwhelm") || stress.includes("very"))) {
+    if (social.includes("yes") || social.includes("a little")) risk = true;
+    // younger people with high stress are higher priority
+    if (age > 0 && age <= 25 && stress.includes("very")) risk = true;
   }
-  return false;
+  return risk;
 }
 
-/* render resources to UI */
+/* render resources */
 function renderResources(resources) {
   resourcesEl.innerHTML = "";
 
-  // websites
   (resources?.websites || []).forEach(raw => {
     const url = normalizeUrl(raw);
     if (!url) return;
@@ -99,14 +102,11 @@ function renderResources(resources) {
         <a href="${url}" target="_blank" rel="noopener noreferrer">${domainFromUrl(url)}</a>
         <div class="site-domain">${url}</div>
       </div>
-      <div style="opacity:0.9; font-size:0.9rem; color:var(--muted)"></div>
     `;
     resourcesEl.appendChild(el);
   });
 
-  // youtube
   (resources?.youtube || []).forEach(y => {
-    // accept either string url or object {id,url}
     let url = (typeof y === "string") ? y : (y?.url || "");
     url = url?.trim();
     const id = extractYouTubeId(url);
@@ -125,29 +125,26 @@ function renderResources(resources) {
     resourcesEl.appendChild(el);
   });
 
-  // fallback if nothing
   if ((resources?.websites || []).length === 0 && (resources?.youtube || []).length === 0) {
     const el = document.createElement("div");
     el.className = "resource-site";
-    el.innerHTML = `<div style="flex:1"><strong>No links returned.</strong><div class="muted-small">We tried — but no links were available. Try again or contact support.</div></div>`;
+    el.innerHTML = `<div style="flex:1"><strong>No links returned.</strong><div class="muted-small">Try again or check the privacy link.</div></div>`;
     resourcesEl.appendChild(el);
   }
 }
 
-/* safe fetch to Edge function */
-async function callEdge(answers) {
-  const body = { user_id: user.name || "guest", answers };
+/* call Edge */
+async function callEdge(user_info, answers) {
+  const body = { user_info, answers };
   const res = await fetch(EDGE_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // keep anon key so Supabase accepts the function call (your project uses RLS)
       "apikey": SUPABASE_ANON_KEY,
       "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
     },
     body: JSON.stringify(body)
   });
-
   const data = await res.json();
   return { ok: res.ok, data };
 }
@@ -155,6 +152,8 @@ async function callEdge(answers) {
 /* submit handler */
 document.getElementById("moodForm").addEventListener("submit", async (ev) => {
   ev.preventDefault();
+
+  // hide old result
   resultBox.classList.add("hidden");
   detectedMoodEl.textContent = "";
   adviceEl.textContent = "";
@@ -164,7 +163,43 @@ document.getElementById("moodForm").addEventListener("submit", async (ev) => {
   const formData = new FormData(form);
   const answers = Object.fromEntries(formData.entries());
 
-  // show a small loading state
+  // separate user info fields (names used in HTML)
+  const user_info = {
+    name: answers.fullName || saved?.name || "Guest",
+    email: answers.email || saved?.email || null,
+    phone: answers.phone || saved?.phone || null,
+    age: answers.age || saved?.age || null,
+    state: answers.state || saved?.state || null,
+    district: answers.district || saved?.district || null,
+    city: answers.city || saved?.city || null,
+    consent: !!formData.get("consent")
+  };
+
+  // remove personal items from answers so only checklist remains in answers object
+  const checklist = {
+    energy: answers.energy,
+    thoughts: answers.thoughts,
+    emotion: answers.emotion,
+    stress: answers.stress,
+    social: answers.social
+  };
+
+  // save to localStorage only if consent given
+  if (user_info.consent) {
+    const store = {
+      name: user_info.name,
+      email: user_info.email,
+      phone: user_info.phone,
+      age: user_info.age,
+      state: user_info.state,
+      district: user_info.district,
+      city: user_info.city
+    };
+    localStorage.setItem("manoveda_current", JSON.stringify(store));
+    usernameEl.textContent = store.name || "Friend";
+  }
+
+  // loading state
   const submitBtn = form.querySelector("button.primary");
   const prevText = submitBtn.textContent;
   submitBtn.textContent = "Analyzing...";
@@ -172,7 +207,7 @@ document.getElementById("moodForm").addEventListener("submit", async (ev) => {
 
   let edgeResp;
   try {
-    edgeResp = await callEdge(answers);
+    edgeResp = await callEdge(user_info, checklist);
   } catch (err) {
     console.error("Edge call failed", err);
     alert("Analysis failed — network error. Try again.");
@@ -182,7 +217,6 @@ document.getElementById("moodForm").addEventListener("submit", async (ev) => {
   }
 
   const { ok, data } = edgeResp;
-
   if (!ok || !data) {
     console.error("Edge function error", data);
     alert("Analysis failed. Please try again.");
@@ -191,7 +225,7 @@ document.getElementById("moodForm").addEventListener("submit", async (ev) => {
     return;
   }
 
-  // data contains mood/advice/resources or error wrapper
+  // get results (safe defaults)
   const mood = data?.mood || "Unknown";
   const advice = data?.advice || "Take a few slow deep breaths. You’re not alone.";
   const rawResources = data?.resources || { websites: [], youtube: [] };
@@ -201,7 +235,7 @@ document.getElementById("moodForm").addEventListener("submit", async (ev) => {
   adviceEl.textContent = advice;
   detectedTimeEl.textContent = `Analyzed at ${new Date().toLocaleString()}`;
 
-  // normalize & create simplified resources structure for storage
+  // normalize resources for display and storage
   const normalizedWebsites = (rawResources.websites || []).map(normalizeUrl).filter(Boolean);
   const normalizedYt = (rawResources.youtube || []).map(y => {
     const asUrl = (typeof y === "string") ? y : (y?.url || "");
@@ -215,16 +249,23 @@ document.getElementById("moodForm").addEventListener("submit", async (ev) => {
     youtube: normalizedYt
   };
 
-  // show crisis banner if heuristic matches
-  const crisis = detectCrisis(answers, mood);
+  // crisis heuristic (also ask Edge for support if provided)
+  const crisisLocal = detectCrisis(checklist, mood, user_info);
+  const crisisFromEdge = data?.support?.level === "crisis";
+  const crisis = crisisLocal || crisisFromEdge;
+
   if (crisis) {
     crisisBanner.classList.remove("hidden");
-    crisisBanner.innerHTML = `
-      If you feel you might harm yourself or are in immediate danger, please contact local emergency services right away.
-      <div style="margin-top:8px;font-weight:600;">
-        India: <a href="tel:9152290000" style="color:#fff;text-decoration:underline">91522-90000</a> |
-        International: <a href="https://www.opencounseling.com/suicide-hotlines" target="_blank" style="color:#fff;text-decoration:underline">Find help</a>
-      </div>`;
+    // If Edge returned helplines, show them — otherwise show local emergency
+    const helplines = (data?.support?.helplines && data.support.helplines.length) ? data.support.helplines : [
+      { name: "KIRAN (Govt of India)", phone: "1800-599-0019", website: "https://kiran.gov.in" }
+    ];
+
+    let html = `<div style="font-weight:700">If you feel you might harm yourself or are in immediate danger, please contact local emergency services right away.</div>`;
+    helplines.forEach(h => {
+      html += `<div style="margin-top:8px"><strong>${h.name}</strong> — <a href="tel:${h.phone.replace(/\s+/g,'')}" style="color:#fff;text-decoration:underline">${h.phone}</a> ${h.website ? `| <a href="${h.website}" target="_blank" style="color:#fff;text-decoration:underline">${h.website}</a>` : ''}</div>`;
+    });
+    crisisBanner.innerHTML = html;
   } else {
     crisisBanner.classList.add("hidden");
     crisisBanner.innerHTML = "";
@@ -234,19 +275,19 @@ document.getElementById("moodForm").addEventListener("submit", async (ev) => {
 
   resultBox.classList.remove("hidden");
 
-  // store into Supabase mood_logs table (clean shape)
+  // store into Supabase (clean shape)
   try {
     await supabase.from("mood_logs").insert({
-      user_id: user.name,
+      user_id: user_info.email || user_info.name || "guest",
       mood,
-      answers,
+      answers: checklist,
       advice,
+      user_info,
       resources: simplifiedResources,
-      crisis: crisis,
+      crisis,
       created_at: new Date().toISOString()
     });
   } catch (err) {
-    // don't block UX on DB failure - log for debugging
     console.error("Supabase insert failed", err);
   }
 
