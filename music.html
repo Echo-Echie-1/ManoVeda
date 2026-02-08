@@ -1,230 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Music Therapy — Manoveda</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Music Therapy — Manoveda</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(180deg, #0f0f1a, #121212);
+            color: #f3e8ff;
+            text-align: center;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet"/>
+        /* NAV */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 32px;
+            background: rgba(30, 30, 47, .85);
+            box-shadow: 0 8px 24px rgba(168, 85, 247, .25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-<style>
-body{
-  margin:0;
-  font-family:'Nunito',sans-serif;
-  background:linear-gradient(180deg,#0f0f1a,#121212);
-  color:#f3e8ff;
-  text-align:center;
-}
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #a855f7;
+        }
 
-/* NAV */
-.navbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:16px 32px;
-  background:rgba(30,30,47,.85);
-  box-shadow:0 8px 24px rgba(168,85,247,.25);
-}
-.logo{
-  font-size:1.8rem;
-  font-weight:800;
-  color:#a855f7;
-}
-.nav-links{
-  display:flex;
-  gap:20px;
-  list-style:none;
-}
-.nav-links a{
-  color:#fff;
-  text-decoration:none;
-  font-weight:600;
-}
-.nav-links a:hover{color:#a855f7}
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
 
-/* INPUT */
-h1{
-  margin-top:40px;
-  font-size:2.6rem;
-  color:#fcd34d;
-}
-.mood-input{
-  margin:30px auto;
-  display:flex;
-  gap:12px;
-  justify-content:center;
-}
-input{
-  padding:14px 22px;
-  border-radius:30px;
-  width:320px;
-  border:none;
-  background:#2a2a3d;
-  color:#fff;
-  font-size:1rem;
-}
-button{
-  padding:14px 26px;
-  border-radius:30px;
-  border:none;
-  background:#a855f7;
-  color:white;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow:0 6px 24px rgba(168,85,247,.5);
-}
-button:hover{transform:translateY(-3px)}
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
 
-/* MUSIC GRID */
-.music-grid{
-  max-width:1200px;
-  margin:40px auto;
-  display:flex;
-  flex-wrap:wrap;
-  gap:24px;
-  justify-content:center;
-}
-.card{
-  width:340px;
-  padding:14px;
-  background:#1c1c2b;
-  border-radius:18px;
-  box-shadow:0 10px 28px rgba(0,0,0,.4);
-}
-.card.gold{
-  border:2px solid gold;
-  box-shadow:0 0 18px rgba(255,215,0,.6);
-}
-.card span{
-  display:block;
-  margin-bottom:8px;
-  font-weight:700;
-}
-iframe{
-  width:100%;
-  height:190px;
-  border-radius:14px;
-  border:none;
-}
+        .nav-links a:hover {
+            color: #a855f7;
+        }
 
-.footer{
-  margin:50px 0 20px;
-  color:#aaa;
-  font-size:.9rem;
-}
-</style>
+        /* HEADER */
+        h1 {
+            margin-top: 40px;
+            font-size: 2.6rem;
+            color: #fcd34d;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* INPUT SECTION */
+        .mood-input {
+            margin: 30px auto;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input {
+            padding: 14px 22px;
+            border-radius: 30px;
+            width: 320px;
+            border: none;
+            background: #2a2a3d;
+            color: #fff;
+            font-size: 1rem;
+            transition: box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+            outline: none;
+        }
+
+        button {
+            padding: 14px 26px;
+            border-radius: 30px;
+            border: none;
+            background: #a855f7;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 24px rgba(168, 85, 247, .5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(168, 85, 247, .7);
+        }
+
+        /* MOOD SELECTOR */
+        select {
+            padding: 14px 22px;
+            border-radius: 30px;
+            background: #2a2a3d;
+            color: #fff;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease;
+        }
+
+        select:focus {
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+            outline: none;
+        }
+
+        /* MUSIC GRID */
+        .music-grid {
+            max-width: 1200px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+            justify-content: center;
+        }
+
+        .card {
+            padding: 14px;
+            background: #1c1c2b;
+            border-radius: 18px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, .4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(168, 85, 247, .3);
+        }
+
+        .card.gold {
+            border: 2px solid gold;
+            box-shadow: 0 0 18px rgba(255, 215, 0, .6);
+        }
+
+        .card span {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        iframe {
+            width: 100%;
+            height: 190px;
+            border-radius: 14px;
+            border: none;
+        }
+
+        /* FOOTER */
+        .footer {
+            margin: 50px 0 20px;
+            color: #aaa;
+            font-size: .9rem;
+        }
+
+        /* ADDITIONAL FEATURES */
+        .random-button {
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            background: #fcd34d;
+            color: #0f0f1a;
+            font-weight: 700;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .random-button:hover {
+            transform: translateY(-3px);
+        }
+    </style>
 </head>
-
 <body>
+    <nav class="navbar">
+        <div class="logo">🎧 Manoveda</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+    <h1>🎶 Music That Understands You</h1>
+    <div class="mood-input">
+        <input id="moodInput" placeholder="How are you feeling right now?" />
+        <select id="moodSelect">
+            <option value="">Select a mood</option>
+            <option value="happy">Happy</option>
+            <option value="sad">Sad</option>
+            <option value="anxious">Anxious</option>
+            <option value="relaxed">Relaxed</option>
+            <option value="focus">Focus</option>
+            <option value="sleep">Sleep</option>
+            <option value="energetic">Energetic</option>
+            <option value="romantic">Romantic</option>
+            <option value="lonely">Lonely</option>
+            <option value="ambient">Ambient</option>
+        </select>
+        <button onclick="loadMusic()">Play</button>
+        <button class="random-button" onclick="playRandom()">Random Track</button>
+    </div>
+    <div id="musicGrid" class="music-grid"></div>
+    <div class="footer">© 2026 Manoveda • Music Therapy Mode 💜 • Upgraded by Grok</div>
+    <script>
+        /* ======================= EXPANDED MUSIC LIBRARY (MORE MOODS, MORE TRACKS) ======================= */
+        const library = {
+            happy: [
+                {title: "Happy – Pharrell", url: "https://www.youtube.com/embed/ZbZSe6N_BXs"},
+                {title: "Can't Stop the Feeling - Justin Timberlake", url: "https://www.youtube.com/embed/ru0K8uYEZWw"},
+                {title: "Uptown Funk - Mark Ronson ft. Bruno Mars", url: "https://www.youtube.com/embed/OPf0YbXqDm0"},
+                {title: "Walking on Sunshine - Katrina & The Waves", url: "https://www.youtube.com/embed/iPUmE-tne5u"},
+                {title: "Happy Hits! (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC", premium: true},
+                {title: "100 Uplifting Songs (Spotify)", url: "https://open.spotify.com/embed/playlist/6Qf2sXTjlH3HH30Ijo6AUp", premium: true}
+            ],
+            sad: [
+                {title: "Someone Like You - Adele", url: "https://www.youtube.com/embed/hLQl3WQQoQ0"},
+                {title: "Fix You - Coldplay", url: "https://www.youtube.com/embed/k4V3Mo61fJM"},
+                {title: "The Night We Met - Lord Huron", url: "https://www.youtube.com/embed/KtlgYxa6BMU"},
+                {title: "All I Want - Kodaline", url: "https://www.youtube.com/embed/mtf7h3XmBvA"},
+                {title: "Sad Songs (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX7qK8ma5wgG1", premium: true},
+                {title: "Saddest Songs of All Time (Spotify)", url: "https://open.spotify.com/embed/playlist/2ywYRVyFElXbtCqqgIWMVG", premium: true}
+            ],
+            anxious: [
+                {title: "Anxiety Relief Music", url: "https://www.youtube.com/embed/b49fD5XxWwI"},
+                {title: "Weightless - Marconi Union", url: "https://www.youtube.com/embed/UfcAVejslrU"},
+                {title: "Breathe Me - Sia", url: "https://www.youtube.com/embed/SFGvmrJ5jRU"},
+                {title: "Calm Mind", url: "https://www.youtube.com/embed/NmMRZMqkZJc"},
+                {title: "Stress Relief (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DWXe9gFZP0gtP", premium: true},
+                {title: "Anxiety Stress Free (Spotify)", url: "https://open.spotify.com/embed/album/5vhoQXvQRwOrFnnraKzfDt", premium: true}
+            ],
+            relaxed: [
+                {title: "Peaceful Piano", url: "https://www.youtube.com/embed/2OEL4P1Rz04"},
+                {title: "Nuvole Bianche - Ludovico Einaudi", url: "https://www.youtube.com/embed/Pp9oxX0DwiE"},
+                {title: "Clair de Lune - Debussy", url: "https://www.youtube.com/embed/CvFH_6DNRCY"},
+                {title: "Lofi Chill", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdbXrPNafg9d", premium: true},
+                {title: "100 Most Relaxing Songs (Spotify)", url: "https://open.spotify.com/embed/playlist/6EIVswdPfoE9Wac7tB6FNg", premium: true},
+                {title: "The Most Relaxing Playlist (Spotify)", url: "https://open.spotify.com/embed/playlist/6gCC8kozvUlLGTzl2YO2MR", premium: true}
+            ],
+            focus: [
+                {title: "Deep Focus", url: "https://www.youtube.com/embed/5qap5aO4i9A"},
+                {title: "Brain Food (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DWXLeA8Omikj7", premium: true},
+                {title: "Focus Flow (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX8NTLI2TtZa6", premium: true},
+                {title: "Deep Focus (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DWZeKCadgRdKQ", premium: true},
+                {title: "Focus Music - Work | Studying", url: "https://open.spotify.com/embed/playlist/7xmpNYZ15D6b43BHzYQCLt", premium: true},
+                {title: "Instrumental Study (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX9sIqqvKsjG8", premium: true}
+            ],
+            sleep: [
+                {title: "Sleep Music", url: "https://www.youtube.com/embed/1ZYbU82GVz4"},
+                {title: "Gymnopédie No.1 - Erik Satie", url: "https://www.youtube.com/embed/S-Xm7s9eGxU"},
+                {title: "Nocturne in E-flat major - Chopin", url: "https://www.youtube.com/embed/9E6b3gTW2mA"},
+                {title: "Sleep Deep (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DWZd79rJ6a7lp", premium: true},
+                {title: "Songs for Sleep (Spotify)", url: "https://open.spotify.com/embed/playlist/5TVcT42NzSetGcRfQtF73A", premium: true},
+                {title: "Deep Sleep (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DWYcDQ1hSjOpY", premium: true}
+            ],
+            energetic: [
+                {title: "Workout Mix", url: "https://www.youtube.com/embed/y6Sxv-sUYtM"},
+                {title: "Eye of the Tiger - Survivor", url: "https://www.youtube.com/embed/btPJPFnesV4"},
+                {title: "Lose Yourself - Eminem", url: "https://www.youtube.com/embed/_Yhyp-_hX2s"},
+                {title: "Beast Mode (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX76Wlfdnj7AP", premium: true},
+                {title: "Energy Booster: Pop (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX0vHZ8elq0UK", premium: true},
+                {title: "GYM & Workout Energy (Spotify)", url: "https://open.spotify.com/embed/playlist/6qyddMIaCG8LTLce04fcR3", premium: true}
+            ],
+            romantic: [
+                {title: "Perfect – Ed Sheeran", url: "https://www.youtube.com/embed/2Vv-BfVoq4g"},
+                {title: "Thinking Out Loud - Ed Sheeran", url: "https://www.youtube.com/embed/lp-EO5I60KA"},
+                {title: "All of Me - John Legend", url: "https://www.youtube.com/embed/450p7goxZqg"},
+                {title: "Love Songs (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX50QitC6Oqtn", premium: true},
+                {title: "Timeless Love Songs (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX7rOY2tZUw1k", premium: true},
+                {title: "Love Songs 2026 (Spotify)", url: "https://open.spotify.com/embed/playlist/3RozoH545R2YH6rOWb81lR", premium: true}
+            ],
+            lonely: [
+                {title: "Lonely Music", url: "https://www.youtube.com/embed/t0mUL6YKmIo"},
+                {title: "Dancing On My Own - Robyn", url: "https://www.youtube.com/embed/CcNo07Xp8aQ"},
+                {title: "Eleanor Rigby - The Beatles", url: "https://www.youtube.com/embed/HuS5NuXRb5Y"},
+                {title: "Healing Hearts", url: "https://www.youtube.com/embed/RB-RcX5DS5A"},
+                {title: "Lonely Songs for Lonely People (Spotify)", url: "https://open.spotify.com/embed/playlist/4lZqt2PiSHAeGtmN0IyAhM", premium: true},
+                {title: "Top Songs That Make You Feel Lonely (Spotify)", url: "https://open.spotify.com/embed/playlist/1gJIyvFHLM9CdB062LOdgP", premium: true}
+            ],
+            ambient: [
+                {title: "Nature Sounds", url: "https://www.youtube.com/embed/eKFTSSKCzWA"},
+                {title: "Music for Airports - Brian Eno", url: "https://www.youtube.com/embed/vNwYtllytOE"},
+                {title: "An Ending (Ascent) - Brian Eno", url: "https://www.youtube.com/embed/iiuIqwC64cQ"},
+                {title: "Ambient Focus (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DWZqd5JICZI0u", premium: true},
+                {title: "Pure Ambient (Spotify)", url: "https://open.spotify.com/embed/playlist/6NXv1wqHlUUV8qChdDNTuR", premium: true},
+                {title: "Ambient Relaxation (Spotify)", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX3Ogo9pFvBkY", premium: true}
+            ]
+        };
 
-<nav class="navbar">
-  <div class="logo">🎧 Manoveda</div>
-  <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/login">Login</a></li>
-  </ul>
-</nav>
+        /* EXPANDED KEYWORDS */
+        const keywords = {
+            happy: ["happy", "joy", "great", "awesome", "excited", "cheerful", "joyful", "upbeat", "positive", "fun"],
+            sad: ["sad", "cry", "depressed", "hurt", "down", "blue", "melancholy", "heartbroken", "sorrow", "gloomy"],
+            anxious: ["anxious", "panic", "stress", "nervous", "overthinking", "worried", "tense", "restless", "fearful", "uneasy"],
+            relaxed: ["calm", "relaxed", "peace", "chill", "meditate", "serene", "tranquil", "soothe", "unwind", "mellow"],
+            focus: ["focus", "study", "work", "exam", "concentrate", "productivity", "attention", "motivate", "deep work", "zone"],
+            sleep: ["sleep", "tired", "insomnia", "night", "rest", "dream", "slumber", "doze", "nap", "bedtime"],
+            energetic: ["energy", "gym", "workout", "motivation", "pump", "hype", "vitality", "boost", "active", "lively"],
+            romantic: ["love", "romantic", "crush", "heart", "affection", "passion", "intimate", "tender", "sweetheart", "adoration"],
+            lonely: ["lonely", "alone", "isolated", "solitude", "lonesome", "desolate", "forlorn", "abandoned", "empty", "secluded"],
+            ambient: ["nature", "ambient", "background", "sound", "atmosphere", "drone", "ethereal", "space", "minimal", "texture"]
+        };
 
-<h1>🎶 Music That Understands You</h1>
+        function loadMusic() {
+            const input = document.getElementById("moodInput").value.toLowerCase();
+            const select = document.getElementById("moodSelect").value;
+            const grid = document.getElementById("musicGrid");
+            grid.innerHTML = "";
+            let mood = select || null;
 
-<div class="mood-input">
-  <input id="moodInput" placeholder="How are you feeling right now?" />
-  <button onclick="loadMusic()">Play</button>
-</div>
+            if (!mood) {
+                for (let m in keywords) {
+                    if (keywords[m].some(k => input.includes(k))) {
+                        mood = m;
+                        break;
+                    }
+                }
+            }
 
-<div id="musicGrid" class="music-grid"></div>
+            if (!mood) {
+                grid.innerHTML = "<p style='color:#f87171'>😔 Couldn't understand. Try: happy, sad, stressed, sleep… or select from dropdown.</p>";
+                return;
+            }
 
-<div class="footer">© 2025 Manoveda • Music Therapy Mode 💜</div>
+            library[mood].forEach(item => {
+                const card = document.createElement("div");
+                card.className = "card" + (item.premium ? " gold" : "");
+                card.innerHTML = `
+                    <span>${item.title} ${item.premium ? "✨ PREMIUM" : ""}</span>
+                    <iframe src="${item.url}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                `;
+                grid.appendChild(card);
+            });
+        }
 
-<script>
-/* =======================
-   MUSIC LIBRARY (10 MOODS)
-======================= */
-const library = {
-  happy: [
-    {title:"Happy – Pharrell", url:"https://www.youtube.com/embed/ZbZSe6N_BXs"},
-    {title:"Good Vibes (Spotify)", url:"https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC", premium:true}
-  ],
-  sad: [
-    {title:"Someone Like You", url:"https://www.youtube.com/embed/hLQl3WQQoQ0"},
-    {title:"Sad Songs (Spotify)", url:"https://open.spotify.com/embed/playlist/37i9dQZF1DX7qK8ma5wgG1", premium:true}
-  ],
-  anxious: [
-    {title:"Anxiety Relief Music", url:"https://www.youtube.com/embed/b49fD5XxWwI"},
-    {title:"Calm Mind", url:"https://www.youtube.com/embed/NmMRZMqkZJc"}
-  ],
-  relaxed: [
-    {title:"Peaceful Piano", url:"https://www.youtube.com/embed/2OEL4P1Rz04"},
-    {title:"Lofi Chill", url:"https://open.spotify.com/embed/playlist/37i9dQZF1DXdbXrPNafg9d", premium:true}
-  ],
-  focus: [
-    {title:"Deep Focus", url:"https://www.youtube.com/embed/5qap5aO4i9A"},
-    {title:"Focus Flow", url:"https://open.spotify.com/embed/playlist/37i9dQZF1DX8NTLI2TtZa6", premium:true}
-  ],
-  sleep: [
-    {title:"Sleep Music", url:"https://www.youtube.com/embed/1ZYbU82GVz4"},
-    {title:"Sleep Deep (Spotify)", url:"https://open.spotify.com/embed/playlist/37i9dQZF1DWZd79rJ6a7lp", premium:true}
-  ],
-  energetic: [
-    {title:"Workout Mix", url:"https://www.youtube.com/embed/y6Sxv-sUYtM"},
-    {title:"Beast Mode", url:"https://open.spotify.com/embed/playlist/37i9dQZF1DX76Wlfdnj7AP", premium:true}
-  ],
-  romantic: [
-    {title:"Perfect – Ed Sheeran", url:"https://www.youtube.com/embed/2Vv-BfVoq4g"},
-    {title:"Love Songs", url:"https://open.spotify.com/embed/playlist/37i9dQZF1DX50QitC6Oqtn", premium:true}
-  ],
-  lonely: [
-    {title:"Lonely Music", url:"https://www.youtube.com/embed/t0mUL6YKmIo"},
-    {title:"Healing Hearts", url:"https://www.youtube.com/embed/RB-RcX5DS5A"}
-  ],
-  ambient: [
-    {title:"Nature Sounds", url:"https://www.youtube.com/embed/eKFTSSKCzWA"},
-    {title:"Ambient Focus", url:"https://open.spotify.com/embed/playlist/37i9dQZF1DWZqd5JICZI0u", premium:true}
-  ]
-};
-
-/* KEYWORDS */
-const keywords = {
-  happy:["happy","joy","great","awesome","excited"],
-  sad:["sad","cry","depressed","hurt","down"],
-  anxious:["anxious","panic","stress","nervous","overthinking"],
-  relaxed:["calm","relaxed","peace","chill","meditate"],
-  focus:["focus","study","work","exam","concentrate"],
-  sleep:["sleep","tired","insomnia","night","rest"],
-  energetic:["energy","gym","workout","motivation"],
-  romantic:["love","romantic","crush","heart"],
-  lonely:["lonely","alone","isolated"],
-  ambient:["nature","ambient","background","sound"]
-};
-
-function loadMusic(){
-  const input=document.getElementById("moodInput").value.toLowerCase();
-  const grid=document.getElementById("musicGrid");
-  grid.innerHTML="";
-
-  let mood=null;
-  for(let m in keywords){
-    if(keywords[m].some(k=>input.includes(k))){
-      mood=m; break;
-    }
-  }
-
-  if(!mood){
-    grid.innerHTML="<p style='color:#f87171'>😔 Couldn't understand. Try: happy, sad, stressed, sleep…</p>";
-    return;
-  }
-
-  library[mood].forEach(item=>{
-    const card=document.createElement("div");
-    card.className="card"+(item.premium?" gold":"");
-    card.innerHTML=`
-      <span>${item.title} ${item.premium?"✨ PREMIUM":""}</span>
-      <iframe src="${item.url}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    `;
-    grid.appendChild(card);
-  });
-}
-</script>
-
+        function playRandom() {
+            const moods = Object.keys(library);
+            const randomMood = moods[Math.floor(Math.random() * moods.length)];
+            document.getElementById("moodSelect").value = randomMood;
+            loadMusic();
+        }
+    </script>
 </body>
 </html>
