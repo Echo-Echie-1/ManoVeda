@@ -59,159 +59,182 @@
       <button id="sendBtn">Send</button>
     </div>
   </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-  (function(){
-    // ========== CONFIG ==========
-    // Replace with your Supabase function URL and ANON key
-    const FUNCTION_URL = "https://vxknarwomlejxksmjinx.supabase.co/functions/v1/manoveda-ai";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4"; // <-- replace with your anon key
+(function () {
+  /* =========================
+     CONFIG
+  ========================= */
+  const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
+  const SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
 
-    // DOM
-    const chatBox = document.getElementById('chatBox');
-    const inputEl = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
+  const FUNCTION_URL =
+    "https://vxknarwomlejxksmjinx.supabase.co/functions/v1/manoveda-ai";
 
-    // Helper: create message element
-    function createMessageEl({ role, htmlContent, textContent }) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'message ' + (role === 'user' ? 'user-message' : 'bot-message');
+  /* =========================
+     LOAD SUPABASE (UMD)
+  ========================= */
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
-      // content container
-      const content = document.createElement('div');
-      content.className = 'message-content';
-      // For user plain text: escape and wrap in <div>
-      if (role === 'user') {
-        content.textContent = textContent;
-      } else {
-        // bot: html content (already sanitized)
-        content.innerHTML = htmlContent;
-      }
+  /* =========================
+     SESSION ID (CRITICAL)
+  ========================= */
+  let sessionId = localStorage.getItem("manoveda_chat_session");
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    localStorage.setItem("manoveda_chat_session", sessionId);
+  }
 
-      wrapper.appendChild(content);
+  /* =========================
+     DOM
+  ========================= */
+  const chatBox = document.getElementById("chatBox");
+  const inputEl = document.getElementById("userInput");
+  const sendBtn = document.getElementById("sendBtn");
 
-      // timestamp
-      const timeEl = document.createElement('time');
-      const d = new Date();
-      timeEl.textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      wrapper.appendChild(timeEl);
+  /* =========================
+     UI HELPERS
+  ========================= */
+  function createMessageEl({ role, htmlContent, textContent }) {
+    const wrapper = document.createElement("div");
+    wrapper.className =
+      "message " + (role === "user" ? "user-message" : "bot-message");
 
-      return wrapper;
+    const content = document.createElement("div");
+    content.className = "message-content";
+
+    if (role === "user") {
+      content.textContent = textContent;
+    } else {
+      content.innerHTML = htmlContent;
     }
 
-    // Append user message
-    function appendUserMessage(text) {
-      const el = createMessageEl({ role: 'user', textContent: text });
-      chatBox.appendChild(el);
-      scrollToBottom();
-    }
+    wrapper.appendChild(content);
 
-    // Append AI message (markdown -> HTML -> sanitized)
-    function appendAIMessage(markdown) {
-      const rawHtml = marked.parse(typeof markdown === 'string' ? markdown : String(markdown));
-      const safe = DOMPurify.sanitize(rawHtml, {ALLOWED_ATTR: ['href','target','rel']});
-      const el = createMessageEl({ role: 'bot', htmlContent: safe });
-      chatBox.appendChild(el);
-      scrollToBottom();
-    }
-
-    // Typing indicator
-    function showTyping() {
-      removeTyping();
-      const wrapper = document.createElement('div');
-      wrapper.className = 'message bot-message typing';
-      wrapper.id = '__typing';
-
-      const content = document.createElement('div');
-      content.className = 'message-content';
-      content.innerHTML = `<span>ManoVeda is typing</span> <span class="typing-dots"><span></span><span></span><span></span></span>`;
-      wrapper.appendChild(content);
-
-      const timeEl = document.createElement('time');
-      timeEl.textContent = '';
-      wrapper.appendChild(timeEl);
-
-      chatBox.appendChild(wrapper);
-      scrollToBottom();
-    }
-
-    function removeTyping() {
-      const t = document.getElementById('__typing');
-      if (t) t.remove();
-    }
-
-    function scrollToBottom() {
-      chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
-    }
-
-    // Sanity: disable send when empty
-    function setSendingState(sending) {
-      sendBtn.disabled = sending;
-      if (sending) sendBtn.style.opacity = 0.7; else sendBtn.style.opacity = 1;
-    }
-
-    // Main send
-    async function sendMessage() {
-      const text = inputEl.value.trim();
-      if (!text) return;
-      appendUserMessage(text);
-      inputEl.value = '';
-      setSendingState(true);
-      showTyping();
-
-      try {
-        const res = await fetch(FUNCTION_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': SUPABASE_ANON_KEY ? `Bearer ${SUPABASE_ANON_KEY}` : ''
-          },
-          body: JSON.stringify({ userMsg: text })
-        });
-
-        // remove typing regardless
-        removeTyping();
-
-        // Try parse JSON; if not JSON, throw useful error
-        let data;
-        try {
-          data = await res.json();
-        } catch (err) {
-          throw new Error('Invalid JSON response from server');
-        }
-
-        if (!res.ok) {
-          // show server message if provided
-          const serverMsg = data?.error || data?.message || 'Server error';
-          appendAIMessage(`⚠️ ${serverMsg}`);
-        } else {
-          const reply = data?.reply || data?.message || "Sorry, I couldn't answer that.";
-          appendAIMessage(reply);
-        }
-      } catch (err) {
-        removeTyping();
-        appendAIMessage(`⚠️ Network / server error: ${err.message}`);
-      } finally {
-        setSendingState(false);
-      }
-    }
-
-    // Bind events
-    sendBtn.addEventListener('click', sendMessage);
-    inputEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
+    const timeEl = document.createElement("time");
+    timeEl.textContent = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
     });
+    wrapper.appendChild(timeEl);
 
-    // Optional: welcome message
-    (function welcome() {
-      const welcome = `Hello — I'm **ManoVeda**, here to listen and support you. Type anything whenever you're ready. If you're in crisis, please contact local emergency services or a trusted person right away.`;
-      appendAIMessage(welcome);
-    })();
+    return wrapper;
+  }
 
-  })();
-  </script>
+  function appendUserMessage(text) {
+    chatBox.appendChild(
+      createMessageEl({ role: "user", textContent: text })
+    );
+    scrollToBottom();
+  }
+
+  function appendAIMessage(markdown) {
+    const rawHtml = marked.parse(String(markdown));
+    const safe = DOMPurify.sanitize(rawHtml, {
+      ALLOWED_ATTR: ["href", "target", "rel"],
+    });
+    chatBox.appendChild(
+      createMessageEl({ role: "bot", htmlContent: safe })
+    );
+    scrollToBottom();
+  }
+
+  function scrollToBottom() {
+    chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
+  }
+
+  function setSending(sending) {
+    sendBtn.disabled = sending;
+    sendBtn.style.opacity = sending ? 0.7 : 1;
+  }
+
+  /* =========================
+     SUPABASE INSERT (FIX)
+  ========================= */
+  async function storeMessage(role, message) {
+    try {
+      await supabase.from("chat_messages").insert({
+        session_id: sessionId,
+        role: role,              // 'user' | 'assistant'
+        message: message
+      });
+    } catch (e) {
+      console.error("Supabase insert failed", e);
+    }
+  }
+
+  /* =========================
+     SEND MESSAGE
+  ========================= */
+  async function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text) return;
+
+    appendUserMessage(text);
+    inputEl.value = "";
+    setSending(true);
+
+    // ✅ store USER message
+    storeMessage("user", text);
+
+    try {
+      const res = await fetch(FUNCTION_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({ userMsg: text }),
+      });
+
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("Invalid JSON from server");
+      }
+
+      const reply =
+        data?.reply || data?.message || "Sorry, I couldn't answer that.";
+
+      appendAIMessage(reply);
+
+      // ✅ store ASSISTANT message
+      storeMessage("assistant", reply);
+
+    } catch (err) {
+      appendAIMessage(`⚠️ ${err.message}`);
+    } finally {
+      setSending(false);
+    }
+  }
+
+  /* =========================
+     EVENTS
+  ========================= */
+  sendBtn.addEventListener("click", sendMessage);
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  /* =========================
+     WELCOME (UI ONLY)
+  ========================= */
+  appendAIMessage(
+    "Hello — I'm **ManoVeda**, here to listen and support you. Type anything whenever you're ready."
+  );
+
+})();
+</script>
+
 </body>
 </html>
+
