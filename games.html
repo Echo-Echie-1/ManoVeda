@@ -6,198 +6,6 @@
   <title>Manoveda - Stress Relief Games</title>
   <link rel="icon" href="bingo.png" />
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet" />
-
-  <style>
-    body {
-      font-family: 'Nunito', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #050505;
-      color: #f1f1f1;
-      overflow-x: hidden;
-    }
-
-    /* Navbar (Frosted Backdrop) */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background: rgba(34, 34, 34, 0.45);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      position: sticky;
-      top: 0;
-      z-index: 80;
-    }
-    .logo {
-      font-size: 1.6rem;
-      font-weight: 800;
-      display: inline-flex;
-      gap: 4px;
-      align-items: center;
-    }
-    .logo .mano {
-      font-weight: 800;
-      background: linear-gradient(90deg, #00f0da, #00d2ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .logo .veda {
-      font-weight: 800;
-      background: linear-gradient(90deg, #00bfff, #1e90ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      margin: 0;
-      padding: 0;
-    }
-    .nav-links li a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s ease;
-    }
-    .nav-links li a:hover { color: #00d2ff; }
-
-    /* Login Button */
-    .login-container {
-      display: flex;
-      justify-content: flex-end;
-      padding: 10px 30px 0 30px;
-    }
-    .login-btn {
-      background: #a855f7;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 28px;
-      font-weight: 700;
-      text-decoration: none;
-      box-shadow: 0 8px 28px rgba(168, 85, 247, 0.25);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-    }
-    .login-btn:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 18px 48px rgba(168, 85, 247, 0.32);
-      filter: saturate(1.05);
-    }
-
-    /* Hero Section */
-    .hero {
-      text-align: center;
-      padding: 48px 16px 6px 16px;
-    }
-    .hero h1 {
-      font-size: 2.3rem;
-      margin-bottom: 10px;
-      background: linear-gradient(90deg, #00f0da, #00bfff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero p {
-      color: #cfcfcf;
-      margin-bottom: 18px;
-      font-size: 1.1rem;
-    }
-
-    /* Button Grid */
-    .button-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 0 20px;
-    }
-    .btn {
-      background: #a855f7;
-      color: white;
-      border: none;
-      padding: 14px 24px;
-      border-radius: 30px;
-      font-weight: bold;
-      text-decoration: none;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-    .btn:hover {
-      transform: translateY(-5px) scale(1.03);
-      box-shadow: 0 6px 30px rgba(168, 85, 247, 0.6);
-    }
-
-    /* Mandala Corners */
-    .mandala-corner {
-      position: fixed;
-      width: 110px;
-      height: 110px;
-      opacity: 0.15;
-      z-index: 30;
-      pointer-events: none;
-      fill: none;
-      stroke: rgba(255, 255, 255, 0.9);
-      stroke-width: 1.2;
-    }
-    .mandala-top-left { top: 14px; left: 14px; transform: scale(0.9); }
-    .mandala-top-right { top: 14px; right: 14px; transform: rotate(90deg) scale(0.9); }
-    .mandala-bottom-left { bottom: 14px; left: 14px; transform: rotate(-90deg) scale(0.9); }
-    .mandala-bottom-right { bottom: 14px; right: 14px; transform: rotate(180deg) scale(0.9); }
-
-    /* Luxury Animated Borders */
-    :root {
-      --lux-color-1: rgba(255, 215, 80, 1);
-      --lux-color-2: rgba(255, 200, 120, 0.8);
-      --lux-speed: 6000ms;
-    }
-    .luxury-frame {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 60;
-    }
-    .lux-seg {
-      position: absolute;
-      background: linear-gradient(90deg, var(--lux-color-1), transparent 40%, var(--lux-color-2));
-      background-size: 200% 100%;
-      filter: drop-shadow(0 6px 16px rgba(255, 200, 120, 0.08));
-      opacity: 0.9;
-      will-change: transform, background-position;
-    }
-    .lux-top { top: 2px; left: 0; right: 0; height: 4px; }
-    .lux-right { top: 0; right: 2px; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--lux-color-1), transparent 40%, var(--lux-color-2)); background-size: 100% 200%; }
-    .lux-bottom { left: 0; right: 0; bottom: 2px; height: 4px; transform-origin: center; }
-    .lux-left { top: 0; left: 2px; bottom: 0; width: 4px; transform-origin: center; background: linear-gradient(180deg, var(--lux-color-1), transparent 40%, var(--lux-color-2)); background-size: 100% 200%; }
-    @keyframes shimmerX {
-      0% { background-position: 0% 0; }
-      100% { background-position: 200% 0; }
-    }
-    @keyframes shimmerY {
-      0% { background-position: 0 0%; }
-      100% { background-position: 0 200%; }
-    }
-    .lux-top, .lux-bottom { animation: shimmerX var(--lux-speed) linear infinite; }
-    .lux-left, .lux-right { animation: shimmerY var(--lux-speed) linear infinite; }
-
-    /* Footer */
-    footer {
-      background: #1f1f2f;
-      color: #ccc;
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-    }
-  </style>
 </head>
 <body>
   <!-- Luxury Borders -->
@@ -208,7 +16,7 @@
     <div class="lux-seg lux-left"></div>
   </div>
 
-  <!-- Mandala Corners (SVG Placeholders) -->
+  <!-- Mandala Corners -->
   <svg class="mandala-corner mandala-top-left" viewBox="0 0 100 100">
     <circle cx="50" cy="50" r="45" />
   </svg>
@@ -240,119 +48,268 @@
   <!-- Hero Section -->
   <section class="hero">
     <h1>🎮 Stress Relief Games & Websites</h1>
-    <p class="tagline">Explore 100+ resources to reduce stress and enhance focus.</p>
-    <div class="button-grid">
-      <!-- 100 Unique Stress Relief Websites -->
-      <a href="https://www.calm.com/" target="_blank" class="btn">Calm</a>
-      <a href="https://www.headspace.com/" target="_blank" class="btn">Headspace</a>
-      <a href="https://www.smilingmind.com.au/" target="_blank" class="btn">Smiling Mind</a>
-      <a href="https://www.insighttimer.com/" target="_blank" class="btn">Insight Timer</a>
-      <a href="https://www.myrelaxation.com/" target="_blank" class="btn">My Relaxation</a>
-      <a href="https://www.gaiam.com/blogs/discover/meditation-101" target="_blank" class="btn">Gaiam Meditation</a>
-      <a href="https://www.verywellmind.com/stress-relief-games-4692095" target="_blank" class="btn">Verywell Mind Games</a>
-      <a href="https://www.betterhelp.com/advice/stress/10-stress-relief-games-to-help-you-unwind/" target="_blank" class="btn">BetterHelp Games</a>
-      <a href="https://www.helpguide.org/articles/stress/relaxation-techniques-for-stress-relief.htm" target="_blank" class="btn">HelpGuide Relaxation</a>
-      <a href="https://www.mind.org.uk/information-support/types-of-mental-health-problems/stress/" target="_blank" class="btn">Mind Relaxation</a>
-      <a href="https://www.donothingfor2minutes.com/" target="_blank" class="btn">Do Nothing 2 Minutes</a>
-      <a href="https://www.rainymood.com/" target="_blank" class="btn">Rainy Mood</a>
-      <a href="https://www.pixelthoughts.co/" target="_blank" class="btn">Pixel Thoughts</a>
-      <a href="https://weavesilk.com/" target="_blank" class="btn">Weave Silk</a>
-      <a href="https://www.a-soft-murmur.com/" target="_blank" class="btn">A Soft Murmur</a>
-      <a href="https://www.neonflames.com/" target="_blank" class="btn">Neon Flames</a>
-      <a href="https://www.quietkit.com/" target="_blank" class="btn">QuietKit</a>
-      <a href="https://www.coffitivity.com/" target="_blank" class="btn">Coffitivity</a>
-      <a href="https://www.soundrown.com/" target="_blank" class="btn">Soundrown</a>
-      <a href="https://www.blatherapy.com/" target="_blank" class="btn">Bla Therapy</a>
-      <a href="https://www.7cups.com/" target="_blank" class="btn">7 Cups</a>
-      <a href="https://www.getrelaxed.com/" target="_blank" class="btn">Get Relaxed</a>
-      <a href="https://www.dailygood.org/" target="_blank" class="btn">Daily Good</a>
-      <a href="https://www.incredibox.com/" target="_blank" class="btn">Incredibox</a>
-      <a href="https://www.labuat.com/" target="_blank" class="btn">Labuat</a>
-      <a href="https://www.loungev.com/" target="_blank" class="btn">LoungeV Studio</a>
-      <a href="https://www.mindreader.com/" target="_blank" class="btn">Mindreader</a>
-      <a href="https://www.silk.co/" target="_blank" class="btn">Silk</a>
-      <a href="https://www.relaxingsnow.com/" target="_blank" class="btn">Relaxing Snow</a>
-      <a href="https://www.playster.com/" target="_blank" class="btn">Playster</a>
-      <a href="https://www.livekittencams.com/" target="_blank" class="btn">Live Kitten Cams</a>
-      <a href="https://www.simplynoise.com/" target="_blank" class="btn">SimplyNoise</a>
-      <a href="https://www.750words.com/" target="_blank" class="btn">750 Words</a>
-      <a href="https://www.happify.com/" target="_blank" class="btn">Happify</a>
-      <a href="https://www.exhaler.me/" target="_blank" class="btn">Exhaler</a>
-      <a href="https://www.makeeverythingok.com/" target="_blank" class="btn">Make Everything OK</a>
-      <a href="https://www.thethoughtsroom.com/" target="_blank" class="btn">The Thoughts Room</a>
-      <a href="https://www.bubblespop.com/" target="_blank" class="btn">Bubbles Pop</a>
-      <a href="https://www.window-swap.com/" target="_blank" class="btn">Window Swap</a>
-      <a href="https://www.flowstate.fm/" target="_blank" class="btn">Flow State</a>
-      <a href="https://www.calmingmanatee.com/" target="_blank" class="btn">Calming Manatee</a>
-      <a href="https://www.thisissand.com/" target="_blank" class="btn">This is Sand</a>
-      <a href="https://www.virtualpiano.net/" target="_blank" class="btn">Virtual Piano</a>
-      <a href="https://www.zenpen.io/" target="_blank" class="btn">Zen Pen</a>
-      <a href="https://www.lostandtaken.com/" target="_blank" class="btn">Lost and Taken</a>
-      <a href="https://www.wordmark.it/" target="_blank" class="btn">Wordmark.it</a>
-      <a href="https://www.agoodmovietowatch.com/" target="_blank" class="btn">Good Movie to Watch</a>
-      <a href="https://www.tunefind.com/" target="_blank" class="btn">TuneFind</a>
-      <a href="https://www.my90stv.com/" target="_blank" class="btn">My 90s TV</a>
-      <a href="https://www.doesdogdie.com/" target="_blank" class="btn">Does the Dog Die</a>
-      <a href="https://www.tastedive.com/" target="_blank" class="btn">TasteDive</a>
-      <a href="https://www.gnoosic.com/" target="_blank" class="btn">Gnoosic</a>
-      <a href="https://www.radiooooo.com/" target="_blank" class="btn">Radiooooo</a>
-      <a href="https://www.forgotify.com/" target="_blank" class="btn">Forgotify</a>
-      <a href="https://www.themagicipod.com/" target="_blank" class="btn">The Magic iPod</a>
-      <a href="https://www.whatshouldireadnext.com/" target="_blank" class="btn">What Should I Read Next</a>
-      <a href="https://www.gutenberg.org/" target="_blank" class="btn">Project Gutenberg</a>
-      <a href="https://www.z-lib.org/" target="_blank" class="btn">Z Library</a>
-      <a href="https://www.howlongtoread.com/" target="_blank" class="btn">How Long to Read</a>
-      <a href="https://www.tiptoftongue.com/" target="_blank" class="btn">Tip of My Tongue</a>
-      <a href="https://www.instructables.com/" target="_blank" class="btn">Instructables</a>
-      <a href="https://www.darebee.com/" target="_blank" class="btn">Darebee</a>
-      <a href="https://www.mathway.com/" target="_blank" class="btn">Mathway</a>
-      <a href="https://www.factslides.com/" target="_blank" class="btn">Fact Slides</a>
-      <a href="https://www.zooniverse.org/" target="_blank" class="btn">Zooniverse</a>
-      <a href="https://www.sleeptime.com/" target="_blank" class="btn">Sleepy Time</a>
-      <a href="https://www.decisionmaker.com/" target="_blank" class="btn">Decision Maker</a>
-      <a href="https://www.passiveaggressivepassword.com/" target="_blank" class="btn">Passive Aggressive Password</a>
-      <a href="https://www.randomcolour.com/" target="_blank" class="btn">Random Colour Picker</a>
-      <a href="https://www.supercook.com/" target="_blank" class="btn">Super Cook</a>
-      <a href="https://www.randomnamegenerator.com/" target="_blank" class="btn">Random Name Generator</a>
-      <a href="https://haveibeenpwned.com/" target="_blank" class="btn">Have I Been Pwned</a>
-      <a href="https://www.caffeinecalculator.com/" target="_blank" class="btn">Caffeine Calculator</a>
-      <a href="https://www.fakenamegenerator.com/" target="_blank" class="btn">Fake Name Generator</a>
-      <a href="https://www.purrli.com/" target="_blank" class="btn">Purrli</a>
-      <a href="https://www.beesbeesbees.com/" target="_blank" class="btn">Bees Bees Bees</a>
-      <a href="https://www.skribbl.io/" target="_blank" class="btn">Skribbl.io</a>
-      <a href="https://www.pokemonshowdown.com/" target="_blank" class="btn">Pokemon Showdown</a>
-      <a href="https://www.littlealchemy.com/" target="_blank" class="btn">Little Alchemy</a>
-      <a href="https://www.snakegame.com/" target="_blank" class="btn">Snake</a>
-      <a href="https://www.tictactoe.org/" target="_blank" class="btn">Tic Tac Toe</a>
-      <a href="https://www.quickdraw.withgoogle.com/" target="_blank" class="btn">Quick Draw</a>
-      <a href="https://www.akinator.com/" target="_blank" class="btn">Akinator</a>
-      <a href="https://www.timeguesser.com/" target="_blank" class="btn">Time Guesser</a>
-      <a href="https://www.fasttapgame.com/" target="_blank" class="btn">Fast Tap</a>
-      <a href="https://www.gravitypointgame.com/" target="_blank" class="btn">Gravity Point</a>
-      <a href="https://www.adarkroomgame.com/" target="_blank" class="btn">A Dark Room</a>
-      <a href="https://www.memorytoys.com/" target="_blank" class="btn">Memory Toys</a>
-      <a href="https://www.paperclipsgame.com/" target="_blank" class="btn">Paperclips</a>
-      <a href="https://www.pixlr.com/" target="_blank" class="btn">Pixlr</a>
-      <a href="https://www.aggie.io/" target="_blank" class="btn">Aggie.io</a>
-      <a href="https://www.paintwithsloths.com/" target="_blank" class="btn">Paint With Sloths</a>
-      <!-- Placeholder URLs for remaining slots (replace with real sites) -->
-      <a href="https://www.example31.com/relax" target="_blank" class="btn">Relax Site 31</a>
-      <a href="https://www.example32.com/relax" target="_blank" class="btn">Relax Site 32</a>
-      <!-- Continue up to 100 -->
-      <a href="https://www.example100.com/relax" target="_blank" class="btn">Relax Site 100</a>
-    </div>
+    <p class="tagline">Explore resources to reduce stress and enhance focus.</p>
+  </section>
+
+  <!-- Questionnaire Section -->
+  <section id="questionnaire" class="question-section">
+    <h2>How are you feeling today?</h2>
+    <ul class="features" id="q1-options">
+      <li data-value="stressed">Stressed</li>
+      <li data-value="anxious">Anxious</li>
+      <li data-value="tired">Tired</li>
+      <li data-value="bored">Bored</li>
+      <li data-value="sad">Sad</li>
+      <li data-value="relaxed">Relaxed</li>
+    </ul>
+    <div id="q2-container"></div>
+    <div id="q3-container"></div>
+    <div id="q4-container"></div>
+    <div id="q5-container"></div>
+  </section>
+
+  <!-- Recommended Resources Section -->
+  <section id="resources" class="resources-section" style="display:none;">
+    <h2>Your Recommended Resources</h2>
+    <div id="resource-buttons" class="resource-buttons"></div>
   </section>
 
   <footer>
     <p>© 2025 Manoveda | Built with 💜 in India</p>
   </footer>
 
-  <script src="games.js" defer></script>
   <script>
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("manoveda_current");
-      window.location.href = "index.html";
+    // JavaScript for conversation and filtering resources
+    const answers = {};
+    const resources = [
+      {name: "Calm", url: "https://www.calm.com/", categories:["mindfulness","sleep"], premium:true},
+      {name: "Headspace", url: "https://www.headspace.com/", categories:["mindfulness","sleep"], premium:true},
+      {name: "Smiling Mind", url: "https://www.smilingmind.com.au/", categories:["mindfulness","focus"], premium:false},
+      {name: "Insight Timer", url: "https://www.insighttimer.com/", categories:["mindfulness","sleep"], premium:false},
+      {name: "My Relaxation", url: "https://www.myrelaxation.com/", categories:["mindfulness","sleep"], premium:false},
+      {name: "Gaiam Meditation", url: "https://www.gaiam.com/blogs/discover/meditation-101", categories:["mindfulness"], premium:false},
+      {name: "7 Cups", url: "https://www.7cups.com/", categories:["support","mindfulness"], premium:true},
+      {name: "Do Nothing for 2 Minutes", url: "https://www.donothingfor2minutes.com/", categories:["focus","relax"], premium:false},
+      {name: "Rainy Mood", url: "https://www.rainymood.com/", categories:["relax","sleep","sound"], premium:false},
+      {name: "Pixel Thoughts", url: "https://www.pixelthoughts.co/", categories:["focus","relax"], premium:false},
+      {name: "Weavesilk", url: "https://weavesilk.com/", categories:["creativity","relax"], premium:false},
+      {name: "A Soft Murmur", url: "https://asoftmurmur.com/", categories:["sound","relax"], premium:false},
+      {name: "Neon Flames", url: "https://www.neonflames.com/", categories:["visual","relax"], premium:false},
+      {name: "Quiet Kit", url: "https://www.quietkit.com/", categories:["sound","focus"], premium:false},
+      {name: "Coffitivity", url: "https://www.coffitivity.com/", categories:["sound","focus"], premium:false},
+      {name: "Soundrown", url: "https://www.soundrown.com/", categories:["sound","relax"], premium:false},
+      {name: "Bla Therapy", url: "https://www.blatherapy.com/", categories:["audio","relax"], premium:false},
+      {name: "Get Relaxed", url: "https://www.getrelaxed.com/", categories:["relax","mindfulness"], premium:false},
+      {name: "Daily Good", url: "https://www.dailygood.org/", categories:["mindfulness","inspiration"], premium:false},
+      {name: "Incredibox", url: "https://www.incredibox.com/", categories:["creativity","music"], premium:false},
+      {name: "Labuat", url: "https://www.labuat.com/", categories:["visual","relax"], premium:false},
+      {name: "LoungeV Studio", url: "https://www.loungev.com/", categories:["visual","relax"], premium:false},
+      {name: "Mindreader", url: "https://www.mindreader.com/", categories:["games","fun"], premium:false},
+      {name: "Silk Interactive Art", url: "https://www.silk.co/", categories:["visual","creativity"], premium:false},
+      {name: "Relaxing Snow", url: "https://www.relaxingsnow.com/", categories:["visual","relax"], premium:false},
+      {name: "Playster", url: "https://www.playster.com/", categories:["games","movies"], premium:false},
+      {name: "Live Kitten Cams", url: "https://www.lovekittens.org/", categories:["animal","relax"], premium:false},
+      {name: "SimplyNoise", url: "https://www.simplynoise.com/", categories:["sound","focus"], premium:false},
+      {name: "750 Words", url: "https://www.750words.com/", categories:["writing","focus"], premium:false},
+      {name: "Happify", url: "https://www.happify.com/", categories:["mindfulness","fun"], premium:false},
+      {name: "Exhaler Breath Trainer", url: "https://www.exhaler.me/", categories:["mindfulness"], premium:false},
+      {name: "Make Everything OK", url: "https://www.make-everything-ok.com/", categories:["inspiration"], premium:false},
+      {name: "Thoughts Room", url: "https://www.thethoughtsroom.com/", categories:["anxiety"], premium:false},
+      {name: "Bubbles Pop", url: "https://www.bubblespop.com/", categories:["games","relax"], premium:false},
+      {name: "Window Swap", url: "https://www.window-swap.com/", categories:["inspiration","visual"], premium:false},
+      {name: "Flow State Music", url: "https://www.flowstate.fm/", categories:["music","focus"], premium:false},
+      {name: "Calming Manatee", url: "https://www.calmingmanatee.com/", categories:["sound","relax"], premium:false},
+      {name: "This is Sand", url: "https://www.thisissand.com/", categories:["creativity"], premium:false},
+      {name: "Virtual Piano", url: "https://www.virtualpiano.net/", categories:["music","fun"], premium:false},
+      {name: "ZenPen", url: "https://www.zenpen.io/", categories:["writing","focus"], premium:false},
+      {name: "Lost and Taken", url: "https://www.lostandtaken.com/", categories:["inspiration","visual"], premium:false},
+      {name: "Wordmark.it", url: "https://www.wordmark.it/", categories:["creative"], premium:false},
+      {name: "Good Movie to Watch", url: "https://www.agoodmovietowatch.com/", categories:["movies","inspiration"], premium:false},
+      {name: "TuneFind", url: "https://www.tunefind.com/", categories:["music","inspiration"], premium:false},
+      {name: "My 90s TV", url: "https://www.my90stv.com/", categories:["nostalgia","fun"], premium:false},
+      {name: "Does the Dog Die?", url: "https://www.doesdogdie.com/", categories:["movies","fun"], premium:false},
+      {name: "TasteDive", url: "https://www.tastedive.com/", categories:["recommendation"], premium:false},
+      {name: "Gnoosic", url: "https://www.gnoosic.com/", categories:["music"], premium:false},
+      {name: "Radiooooo", url: "https://www.radiooooo.com/", categories:["music","fun"], premium:false},
+      {name: "Forgotify", url: "https://www.forgotify.com/", categories:["music","fun"], premium:false},
+      {name: "Magic iPod", url: "https://www.themagicipod.com/", categories:["music"], premium:false},
+      {name: "What Should I Read Next?", url: "https://www.whatshouldireadnext.com/", categories:["reading","recommendation"], premium:false},
+      {name: "Project Gutenberg", url: "https://www.gutenberg.org/", categories:["reading","learning"], premium:false},
+      {name: "Z-Library", url: "https://z-lib.org/", categories:["reading","learning"], premium:false},
+      {name: "How Long to Read", url: "https://www.howlongtoread.com/", categories:["reading"], premium:false},
+      {name: "Tip of My Tongue", url: "https://www.tiptoftongue.com/", categories:["knowledge"], premium:false},
+      {name: "Instructables", url: "https://www.instructables.com/", categories:["learning","creativity"], premium:false},
+      {name: "Darebee Workout", url: "https://www.darebee.com/", categories:["exercise","health"], premium:false},
+      {name: "Mathway", url: "https://www.mathway.com/", categories:["learning","focus"], premium:false},
+      {name: "Fact Slides", url: "https://www.factslides.com/", categories:["learning","knowledge"], premium:false},
+      {name: "Zooniverse", url: "https://www.zooniverse.org/", categories:["learning","science"], premium:false},
+      {name: "Sleepy Time", url: "https://sleepyti.me/", categories:["sleep"], premium:false},
+      {name: "DecisionMaker.com", url: "https://www.decisionmaker.com/", categories:["decision","fun"], premium:false},
+      {name: "PassiveAggressivePassword", url: "https://www.passiveaggressivepassword.com/", categories:["security","fun"], premium:false},
+      {name: "Random Color Picker", url: "https://www.randomcolour.com/", categories:["fun","design"], premium:false},
+      {name: "SuperCook", url: "https://www.supercook.com/", categories:["cooking"], premium:false},
+      {name: "Random Name Generator", url: "https://www.randomnamegenerator.com/", categories:["fun","utility"], premium:false},
+      {name: "Have I Been Pwned", url: "https://haveibeenpwned.com/", categories:["security"], premium:false},
+      {name: "Caffeine Calculator", url: "https://www.caffeinecalculator.com/", categories:["health"], premium:false},
+      {name: "Fake Name Generator", url: "https://www.fakenamegenerator.com/", categories:["fun"], premium:false},
+      {name: "Purrli", url: "https://purrli.com/", categories:["sound","relax"], premium:false},
+      {name: "Beesbeesbees", url: "https://www.beesbeesbees.com/", categories:["fun"], premium:false},
+      {name: "Skribbl.io", url: "https://skribbl.io/", categories:["games","fun"], premium:false},
+      {name: "Pokemon Showdown", url: "https://pokemonshowdown.com/", categories:["games","fun"], premium:false},
+      {name: "Little Alchemy", url: "https://littlealchemy.com/", categories:["games","fun"], premium:false},
+      {name: "Snake Game", url: "https://www.snakegame.com/", categories:["games","fun"], premium:false},
+      {name: "Tic Tac Toe", url: "https://www.tictactoe.org/", categories:["games","fun"], premium:false},
+      {name: "Quick, Draw!", url: "https://quickdraw.withgoogle.com/", categories:["games","fun"], premium:false},
+      {name: "Akinator", url: "https://en.akinator.com/", categories:["games","fun"], premium:false},
+      {name: "Timeguesser", url: "https://timeguesser.com/", categories:["games","knowledge"], premium:false},
+      {name: "Fast Tap", url: "https://www.fasttapgame.com/", categories:["games","fun"], premium:false},
+      {name: "Gravity Point", url: "https://www.gravitypointgame.com/", categories:["games","fun"], premium:false},
+      {name: "A Dark Room", url: "https://www.adarkroomgame.com/", categories:["games","story"], premium:false},
+      {name: "Memory Toys", url: "https://www.memorytoys.com/", categories:["games","fun"], premium:false},
+      {name: "Universal Paperclips", url: "https://www.decisionproblem.com/paperclips/", categories:["games"], premium:false},
+      {name: "Pixlr", url: "https://www.pixlr.com/", categories:["creativity"], premium:false},
+      {name: "Aggie.io", url: "https://aggie.io/", categories:["creativity"], premium:false},
+      {name: "Paint With Sloths", url: "https://www.paintwithsloths.com/", categories:["creativity"], premium:false}
+    ];
+
+    // question handling
+    document.querySelectorAll('#q1-options li').forEach(item => {
+      item.addEventListener('click', () => {
+        answers.q1 = item.getAttribute('data-value');
+        document.getElementById('q1-options').style.display = 'none';
+        handleQ1(answers.q1);
+      });
     });
+
+    function handleQ1(val) {
+      if (val === 'tired') {
+        document.getElementById('q2-container').innerHTML = `
+          <h2>How did you sleep last night?</h2>
+          <ul class="features" id="q2-options">
+            <li data-value="well">Well</li>
+            <li data-value="okay">Okay</li>
+            <li data-value="poorly">Poorly</li>
+            <li data-value="none">No sleep</li>
+          </ul>`;
+        document.querySelectorAll('#q2-options li').forEach(item => {
+          item.addEventListener('click', () => {
+            answers.q2 = item.getAttribute('data-value');
+            document.getElementById('q2-options').style.display = 'none';
+            handleQ2(answers.q2);
+          });
+        });
+      } else {
+        handleQ2(null);
+      }
+    }
+
+    function handleQ2(val) {
+      if (answers.q1 === 'tired') {
+        document.getElementById('q3-container').innerHTML = `
+          <h2>What is your energy level right now?</h2>
+          <ul class="features" id="q3-options">
+            <li data-value="low">Low</li>
+            <li data-value="medium">Medium</li>
+            <li data-value="high">High</li>
+          </ul>`;
+        document.querySelectorAll('#q3-options li').forEach(item => {
+          item.addEventListener('click', () => {
+            answers.q3 = item.getAttribute('data-value');
+            document.getElementById('q3-options').style.display = 'none';
+            nextQuestion();
+          });
+        });
+      } else {
+        nextQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      document.getElementById('q4-container').innerHTML = `
+        <h2>Which activity sounds best right now?</h2>
+        <ul class="features" id="q4-options">
+          <li data-value="calm">Quiet & calm (e.g., meditation, breathing)</li>
+          <li data-value="music">Listening to music or sounds</li>
+          <li data-value="game">Playing a fun game</li>
+          <li data-value="creative">Doing something creative</li>
+          <li data-value="move">Getting some movement/exercise</li>
+        </ul>`;
+      document.querySelectorAll('#q4-options li').forEach(item => {
+        item.addEventListener('click', () => {
+          answers.q4 = item.getAttribute('data-value');
+          document.getElementById('q4-options').style.display = 'none';
+          finalQuestion();
+        });
+      });
+    }
+
+    function finalQuestion() {
+      document.getElementById('q5-container').innerHTML = `
+        <h2>Anything specific you're looking for?</h2>
+        <input type="text" id="q5-input" placeholder="e.g. sleep, focus, fun, etc" />
+        <button id="q5-submit" class="btn-submit">Get Suggestions</button>`;
+      document.getElementById('q5-submit').addEventListener('click', () => {
+        answers.q5 = document.getElementById('q5-input').value;
+        showResults();
+      });
+    }
+
+    function showResults() {
+      document.getElementById('questionnaire').style.display = 'none';
+      document.getElementById('resources').style.display = 'block';
+      let filtered = resources;
+
+      if (answers.q1 === 'tired') {
+        if (answers.q2 === 'poorly' || answers.q2 === 'none') {
+          filtered = filtered.filter(r => r.categories.includes("sleep") || r.categories.includes("relax") || r.categories.includes("mindfulness"));
+        } else if (answers.q2 === 'okay') {
+          filtered = filtered.filter(r => r.categories.includes("mindfulness") || r.categories.includes("relax") || r.categories.includes("sound"));
+        } else if (answers.q2 === 'well') {
+          filtered = filtered.filter(r => !r.categories.includes("sleep"));
+        }
+        if (answers.q3 === 'high') {
+          const highCats = ["games","fun","creative","exercise"];
+          filtered = filtered.filter(r => highCats.some(c => r.categories.includes(c)) || r.categories.includes("sound") || r.categories.includes("music"));
+        } else if (answers.q3 === 'medium') {
+          filtered = filtered.filter(r => !r.categories.includes("sleep"));
+        } else if (answers.q3 === 'low') {
+          filtered = filtered.filter(r => r.categories.includes("mindfulness") || r.categories.includes("relax") || r.categories.includes("sound") || r.categories.includes("sleep"));
+        }
+      }
+
+      if (answers.q4 === 'calm') {
+        filtered = filtered.filter(r => r.categories.includes("mindfulness") || r.categories.includes("relax"));
+      } else if (answers.q4 === 'music') {
+        filtered = filtered.filter(r => r.categories.includes("music") || r.categories.includes("sound"));
+      } else if (answers.q4 === 'game') {
+        filtered = filtered.filter(r => r.categories.includes("games") || r.categories.includes("fun"));
+      } else if (answers.q4 === 'creative') {
+        filtered = filtered.filter(r => r.categories.includes("creativity") || r.categories.includes("visual") || r.categories.includes("creative"));
+      } else if (answers.q4 === 'move') {
+        filtered = filtered.filter(r => r.categories.includes("exercise") || r.categories.includes("health") || r.categories.includes("fun"));
+      }
+
+      if (answers.q5) {
+        const keyword = answers.q5.toLowerCase();
+        filtered = filtered.filter(r => r.name.toLowerCase().includes(keyword) || (r.categories && r.categories.some(c => c.includes(keyword))));
+      }
+
+      filtered = filtered.slice(0, 10);
+      const container = document.getElementById('resource-buttons');
+      if (filtered.length === 0) {
+        container.innerHTML = "<p>No matching resources found. Try a different approach!</p>";
+      } else {
+        filtered.forEach(res => {
+          const a = document.createElement('a');
+          a.href = res.url;
+          a.target = "_blank";
+          a.className = "resource-btn" + (res.premium ? " premium" : "");
+          a.textContent = res.name;
+          container.appendChild(a);
+        });
+      }
+    }
   </script>
+
 </body>
 </html>
