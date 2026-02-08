@@ -6,6 +6,7 @@
   <title>Manoveda - Stress Relief Games</title>
   <link rel="icon" href="bingo.png" />
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Luxury Borders -->
@@ -16,18 +17,26 @@
     <div class="lux-seg lux-left"></div>
   </div>
 
-  <!-- Mandala Corners -->
+  <!-- Mandala Corners (Improved with more detailed SVG) -->
   <svg class="mandala-corner mandala-top-left" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" />
+    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="2"/>
+    <path d="M50 5 L60 20 L80 20 L65 30 L70 50 L50 40 L30 50 L35 30 L20 20 L40 20 Z" fill="#d4af37" opacity="0.5"/>
+    <circle cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1"/>
   </svg>
   <svg class="mandala-corner mandala-top-right" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" />
+    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="2"/>
+    <path d="M50 5 L60 20 L80 20 L65 30 L70 50 L50 40 L30 50 L35 30 L20 20 L40 20 Z" fill="#d4af37" opacity="0.5"/>
+    <circle cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1"/>
   </svg>
   <svg class="mandala-corner mandala-bottom-left" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" />
+    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="2"/>
+    <path d="M50 5 L60 20 L80 20 L65 30 L70 50 L50 40 L30 50 L35 30 L20 20 L40 20 Z" fill="#d4af37" opacity="0.5"/>
+    <circle cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1"/>
   </svg>
   <svg class="mandala-corner mandala-bottom-right" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" />
+    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="2"/>
+    <path d="M50 5 L60 20 L80 20 L65 30 L70 50 L50 40 L30 50 L35 30 L20 20 L40 20 Z" fill="#d4af37" opacity="0.5"/>
+    <circle cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1"/>
   </svg>
 
   <!-- Navbar -->
@@ -79,7 +88,7 @@
   </footer>
 
   <script>
-    // JavaScript for conversation and filtering resources
+    // JavaScript for conversation and filtering resources (unchanged)
     const answers = {};
     const resources = [
       {name: "Calm", url: "https://www.calm.com/", categories:["mindfulness","sleep"], premium:true},
@@ -258,7 +267,6 @@
       document.getElementById('questionnaire').style.display = 'none';
       document.getElementById('resources').style.display = 'block';
       let filtered = resources;
-
       if (answers.q1 === 'tired') {
         if (answers.q2 === 'poorly' || answers.q2 === 'none') {
           filtered = filtered.filter(r => r.categories.includes("sleep") || r.categories.includes("relax") || r.categories.includes("mindfulness"));
@@ -276,7 +284,6 @@
           filtered = filtered.filter(r => r.categories.includes("mindfulness") || r.categories.includes("relax") || r.categories.includes("sound") || r.categories.includes("sleep"));
         }
       }
-
       if (answers.q4 === 'calm') {
         filtered = filtered.filter(r => r.categories.includes("mindfulness") || r.categories.includes("relax"));
       } else if (answers.q4 === 'music') {
@@ -288,12 +295,10 @@
       } else if (answers.q4 === 'move') {
         filtered = filtered.filter(r => r.categories.includes("exercise") || r.categories.includes("health") || r.categories.includes("fun"));
       }
-
       if (answers.q5) {
         const keyword = answers.q5.toLowerCase();
         filtered = filtered.filter(r => r.name.toLowerCase().includes(keyword) || (r.categories && r.categories.some(c => c.includes(keyword))));
       }
-
       filtered = filtered.slice(0, 10);
       const container = document.getElementById('resource-buttons');
       if (filtered.length === 0) {
@@ -310,6 +315,5 @@
       }
     }
   </script>
-
 </body>
 </html>
