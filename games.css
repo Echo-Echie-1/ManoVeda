@@ -1,6 +1,6 @@
-/* =====================
-   RESET & BASE
-===================== */
+
+You said:
+/* Reset and Base Styles */
 * {
   margin: 0;
   padding: 0;
@@ -8,309 +8,347 @@
 }
 
 body {
-  font-family: 'Nunito', sans-serif;
-  background: radial-gradient(circle at top, #121212, #050505);
-  color: #eaeaea;
-  line-height: 1.7;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #ffffff); /* Calming gradient */
+  color: #333;
+  line-height: 1.6;
   min-height: 100vh;
+  position: relative;
   overflow-x: hidden;
 }
 
-/* =====================
-   LUXURY FRAME
-===================== */
-:root {
-  --lux-color-1: rgba(255, 215, 80, 1);
-  --lux-color-2: rgba(255, 200, 120, 0.7);
-  --lux-speed: 6000ms;
-}
-
+/* Luxury Frame (Borders) */
 .luxury-frame {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  z-index: 60;
+  z-index: -1;
 }
 
 .lux-seg {
   position: absolute;
-  background: linear-gradient(90deg, var(--lux-color-1), transparent 40%, var(--lux-color-2));
-  background-size: 200% 100%;
-  opacity: 0.85;
+  background: linear-gradient(to right, #d4af37, #f9d423); /* Gold gradient */
+  opacity: 0.8;
 }
 
 .lux-top, .lux-bottom {
-  height: 4px;
   left: 0;
+  width: 100%;
+  height: 5px;
+}
+
+.lux-top {
+  top: 0;
+}
+
+.lux-bottom {
+  bottom: 0;
+}
+
+.lux-left, .lux-right {
+  top: 0;
+  width: 5px;
+  height: 100%;
+}
+
+.lux-left {
+  left: 0;
+}
+
+.lux-right {
   right: 0;
 }
 
-.lux-top { top: 2px; }
-.lux-bottom { bottom: 2px; }
-
-.lux-left, .lux-right {
-  width: 4px;
-  top: 0;
-  bottom: 0;
-  background: linear-gradient(180deg, var(--lux-color-1), transparent 40%, var(--lux-color-2));
-  background-size: 100% 200%;
-}
-
-.lux-left { left: 2px; }
-.lux-right { right: 2px; }
-
-@keyframes shimmerX {
-  from { background-position: 0% 0; }
-  to { background-position: 200% 0; }
-}
-
-@keyframes shimmerY {
-  from { background-position: 0 0%; }
-  to { background-position: 0 200%; }
-}
-
-.lux-top, .lux-bottom { animation: shimmerX var(--lux-speed) linear infinite; }
-.lux-left, .lux-right { animation: shimmerY var(--lux-speed) linear infinite; }
-
-/* =====================
-   MANDALA CORNERS
-===================== */
+/* Mandala Corners */
 .mandala-corner {
-  position: fixed;
-  width: 110px;
-  height: 110px;
-  opacity: 0.15;
-  z-index: 30;
-  pointer-events: none;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  z-index: -1;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
 }
 
-.mandala-top-left { top: 14px; left: 14px; }
-.mandala-top-right { top: 14px; right: 14px; transform: rotate(90deg); }
-.mandala-bottom-left { bottom: 14px; left: 14px; transform: rotate(-90deg); }
-.mandala-bottom-right { bottom: 14px; right: 14px; transform: rotate(180deg); }
+.mandala-corner:hover {
+  opacity: 0.5;
+}
 
-/* =====================
-   NAVBAR
-===================== */
+.mandala-top-left {
+  top: 0;
+  left: 0;
+}
+
+.mandala-top-right {
+  top: 0;
+  right: 0;
+  transform: rotate(90deg);
+}
+
+.mandala-bottom-left {
+  bottom: 0;
+  left: 0;
+  transform: rotate(270deg);
+}
+
+.mandala-bottom-right {
+  bottom: 0;
+  right: 0;
+  transform: rotate(180deg);
+}
+
+/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background: rgba(34, 34, 34, 0.45);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
-  z-index: 80;
+  z-index: 10;
 }
 
 .logo {
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-size: 1.8rem;
+  font-weight: 700;
 }
 
 .mano {
-  background: linear-gradient(90deg, #00f0da, #00d2ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #2196f3; /* Blue */
 }
 
 .veda {
-  background: linear-gradient(90deg, #00bfff, #1e90ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #d4af37; /* Gold */
 }
 
 .nav-links {
   display: flex;
-  gap: 22px;
   list-style: none;
 }
 
+.nav-links li {
+  margin-left: 2rem;
+}
+
 .nav-links a {
-  color: #ffffff;
-  font-weight: 600;
   text-decoration: none;
-  transition: color 0.25s ease;
+  color: #333;
+  font-weight: 600;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .nav-links a:hover {
-  color: #a855f7;
+  color: #2196f3;
+  transform: scale(1.05);
 }
 
-/* =====================
-   LOGIN BUTTON
-===================== */
+/* Login Container */
 .login-container {
-  display: flex;
-  justify-content: flex-end;
-  padding: 12px 30px 0;
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
 }
 
 .login-btn {
-  background: #a855f7;
-  color: #fff;
-  padding: 12px 26px;
-  border-radius: 30px;
-  font-weight: 700;
-  box-shadow: 0 8px 28px rgba(168,85,247,0.3);
-  transition: transform .2s ease, box-shadow .2s ease;
+  background: #2196f3;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(33, 150, 243, 0.3);
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .login-btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 48px rgba(168,85,247,0.45);
+  background: #1976d2;
+  transform: translateY(-2px);
 }
 
-/* =====================
-   HERO
-===================== */
+/* Hero Section */
 .hero {
   text-align: center;
-  padding: 60px 20px 20px;
+  padding: 4rem 2rem;
+  animation: fadeIn 1s ease-in-out;
 }
 
 .hero h1 {
-  font-size: 2.6rem;
-  margin-bottom: 12px;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #333;
 }
 
 .tagline {
-  color: #bdbdbd;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
+  color: #666;
 }
 
-/* =====================
-   QUESTION SECTION
-===================== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Question Section */
 .question-section {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 40px;
-  background: rgba(18,18,18,0.85);
-  border-radius: 18px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-in-out;
 }
 
 .question-section h2 {
   text-align: center;
-  margin-bottom: 26px;
-  background: linear-gradient(90deg, #00f0da, #00bfff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+  color: #2196f3;
 }
 
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
   list-style: none;
 }
 
 .features li {
-  background: #1f1f2f;
-  padding: 16px;
-  border-radius: 14px;
+  background: #f0f8ff;
+  padding: 1rem;
   text-align: center;
-  font-weight: 600;
-  color: #e6e6ff;
+  border-radius: 10px;
   cursor: pointer;
-  transition: transform .25s ease, box-shadow .25s ease;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  font-weight: 500;
+  color: #333;
 }
 
 .features li:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 12px 30px rgba(168,85,247,0.45);
+  background: #e3f2fd;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(33, 150, 243, 0.2);
 }
 
-/* =====================
-   INPUT + BUTTON
-===================== */
+/* Q5 Input and Button */
 #q5-input {
   width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  background: #0f0f18;
-  border: 1px solid rgba(255,255,255,0.1);
-  color: #fff;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
   font-size: 1rem;
-  margin-bottom: 18px;
 }
 
 .btn-submit {
-  background: #a855f7;
-  color: #fff;
-  padding: 14px 36px;
-  border-radius: 30px;
+  background: #2196f3;
+  color: white;
+  padding: 0.8rem 1.5rem;
   border: none;
-  font-weight: 700;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
   display: block;
-  margin: auto;
-  box-shadow: 0 10px 30px rgba(168,85,247,0.35);
+  margin: 0 auto;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .btn-submit:hover {
-  transform: translateY(-3px);
+  background: #1976d2;
+  transform: translateY(-2px);
 }
 
-/* =====================
-   RESOURCES
-===================== */
+/* Resources Section */
 .resources-section {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 40px;
-  background: rgba(18,18,18,0.85);
-  border-radius: 18px;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-in-out;
+}
+
+.resources-section h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #2196f3;
 }
 
 .resource-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
 .resource-btn {
-  background: linear-gradient(135deg, #00f0da, #00bfff);
-  padding: 16px;
-  border-radius: 14px;
-  color: #000;
-  font-weight: 800;
+  background: #4caf50;
+  color: white;
+  padding: 1rem;
   text-align: center;
-  transition: transform .25s ease;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .resource-btn:hover {
+  background: #43a047;
   transform: scale(1.05);
 }
 
 .resource-btn.premium {
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
-  color: white;
+  background: #ff9800;
 }
 
-/* =====================
-   FOOTER
-===================== */
+.resource-btn.premium:hover {
+  background: #f57c00;
+}
+
+/* Footer */
 footer {
-  background: #1f1f2f;
-  color: #aaa;
   text-align: center;
-  padding: 22px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #666;
   font-size: 0.9rem;
+  position: relative;
+  bottom: 0;
+  width: 100%;
 }
 
-/* =====================
-   RESPONSIVE
-===================== */
+/* Responsiveness */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
-    gap: 12px;
+    padding: 1rem;
+  }
+
+  .nav-links {
+    margin-top: 1rem;
+  }
+
+  .nav-links li {
+    margin: 0.5rem 1rem;
+  }
+
+  .login-container {
+    position: static;
+    margin-top: 1rem;
   }
 
   .hero h1 {
-    font-size: 2.1rem;
+    font-size: 2rem;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-buttons {
+    grid-template-columns: 1fr;
   }
 }
