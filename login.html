@@ -107,87 +107,88 @@
 
   <!-- Supabase -->
   <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    /* 🔧 CONFIG — replace with your values */
-    const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
+  /* 🔧 SUPABASE CONFIG */
+  const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
+  const SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const messageBox = document.getElementById("message");
+  /* 🔹 DOM ELEMENTS */
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const messageBox = document.getElementById("message");
 
-    function showMessage(msg, type) {
-      messageBox.textContent = msg;
-      messageBox.className = "msg " + type;
+  function showMessage(text, type = "info") {
+    messageBox.textContent = text;
+    messageBox.className = `msg ${type}`;
+  }
+
+  /* =========================
+     ✅ SIGN UP (NO EMAIL FLOW)
+     ========================= */
+  window.signUp = async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!email || !password) {
+      showMessage("⚠️ Email and password required", "error");
+      return;
     }
 
-    /* ✅ SIGN UP (sends verification email) */
-    window.signUp = async () => {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
+    const { error } = await supabase.auth.signUp({
+      email,
+      password
+    });
 
-      if (!email || !password) {
-        showMessage("Email and password required", "error");
-        return;
-      }
+    if (error) {
+      showMessage("❌ " + error.message, "error");
+      return;
+    }
 
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: window.location.href
-        }
-      });
+    showMessage("✅ Account created! You can now log in.", "success");
+  };
 
-      if (error) {
-        showMessage(error.message, "error");
-      } else {
-        showMessage("Verification email sent 📧 Check your inbox.", "success");
-      }
-    };
+  /* =========================
+     ✅ LOGIN
+     ========================= */
+  window.login = async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
 
-    /* ✅ LOGIN (only works after email verification) */
-    window.login = async () => {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
+    if (!email || !password) {
+      showMessage("⚠️ Email and password required", "error");
+      return;
+    }
 
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
 
-      if (error) {
-        showMessage(error.message, "error");
-      } else {
-        showMessage("Login successful 🎉 Redirecting...", "success");
-        setTimeout(() => {
-          window.location.href = "index.html"; // change to dashboard/chat page
-        }, 1000);
-      }
-    };
+    if (error) {
+      showMessage("❌ " + error.message, "error");
+      return;
+    }
 
-    /* 🔐 FORGOT PASSWORD */
-    window.forgotPassword = async () => {
-      const email = emailInput.value.trim();
-      if (!email) {
-        showMessage("Enter your email first", "error");
-        return;
-      }
+    showMessage("🎉 Login successful! Redirecting...", "success");
 
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.href
-      });
+    setTimeout(() => {
+      window.location.href = "index.html"; // change if needed
+    }, 1000);
+  };
 
-      if (error) {
-        showMessage(error.message, "error");
-      } else {
-        showMessage("Password reset email sent 📩", "success");
-      }
-    };
-  </script>
+  /* =========================
+     🚫 PASSWORD RESET (DISABLED)
+     ========================= */
+  window.forgotPassword = () => {
+    showMessage("🔒 Password reset is disabled for now.", "error");
+  };
+</script>
+
 
 </body>
 </html>
+
