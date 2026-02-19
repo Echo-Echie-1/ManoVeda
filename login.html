@@ -10,89 +10,126 @@
 
   <style>
     * {
-      box-sizing: border-box;
-      font-family: 'Nunito', sans-serif;
-    }
+  box-sizing: border-box;
+  font-family: 'Nunito', sans-serif;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #00f0da, #7c3aed);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0b0b0f 0%, #0f1220 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f1f1f1;
+}
 
-    .auth-box {
-      background: #fff;
-      padding: 32px;
-      width: 100%;
-      max-width: 400px;
-      border-radius: 18px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    }
+/* Auth Card */
+.auth-box {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  padding: 36px;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.05);
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 8px;
-      font-weight: 800;
-      color: #4c1d95;
-    }
+/* Heading */
+h1 {
+  text-align: center;
+  margin-bottom: 8px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #00f0da, #00bfff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-    p {
-      text-align: center;
-      color: #555;
-      margin-bottom: 24px;
-    }
+p {
+  text-align: center;
+  color: #bdbdbd;
+  margin-bottom: 24px;
+}
 
-    input {
-      width: 100%;
-      padding: 12px 14px;
-      margin-bottom: 14px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      font-size: 15px;
-    }
+/* Inputs */
+input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
 
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #7c3aed;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
+input:focus {
+  outline: none;
+  border-color: #a855f7;
+  box-shadow: 0 0 0 2px rgba(168,85,247,0.3);
+}
 
-    button.secondary {
-      background: #ede9fe;
-      color: #5b21b6;
-    }
+/* Buttons */
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: #a855f7;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 28px rgba(168,85,247,0.35);
+}
 
-    button.link {
-      background: none;
-      color: #7c3aed;
-      font-weight: 600;
-    }
+button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px rgba(168,85,247,0.5);
+}
 
-    .msg {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 14px;
-    }
+button.secondary {
+  background: rgba(168,85,247,0.15);
+  color: #a855f7;
+  box-shadow: none;
+}
 
-    .error { color: #dc2626; }
-    .success { color: #16a34a; }
+button.link {
+  background: none;
+  color: #00d2ff;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+/* Messages */
+.msg {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.error { color: #ef4444; }
+.success { color: #22c55e; }
+
   </style>
 </head>
 
 <body>
+  <div class="luxury-frame">
+  <div class="lux-seg lux-top"></div>
+  <div class="lux-seg lux-right"></div>
+  <div class="lux-seg lux-bottom"></div>
+  <div class="lux-seg lux-left"></div>
+</div>
+
 
   <div class="auth-box">
-    <h1>ManoVeda 🌱</h1>
+    <h1>ManoVeda </h1>
     <p>Login or create your account</p>
 
     <input type="email" id="email" placeholder="Email" />
@@ -191,4 +228,5 @@
 
 </body>
 </html>
+
 
