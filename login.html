@@ -174,7 +174,8 @@ function showMessage(text, type = "info") {
    ========================= */
 window.signUp = async () => {
   const fullName = (fullNameInput?.value || "").trim();
-  const phone = (phoneInput?.value || "").trim();
+  const phone = document.getElementById("phone")?.value?.trim() || null;
+
   const email = (emailInput?.value || "").trim();
   const password = (passwordInput?.value || "").trim();
 
@@ -257,6 +258,7 @@ window.forgotPassword = () => {
 
 </body>
 </html>
+
 
 
 
