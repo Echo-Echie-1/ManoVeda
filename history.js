@@ -31,7 +31,8 @@ async function loadHistory() {
       crisis,
       created_at
     `)
-    .eq("user_id", user.id)
+    .eq("user_id", user.email)
+
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -105,3 +106,4 @@ function formatDate(timestamp) {
     timeStyle: "short"
   });
 }
+
