@@ -131,6 +131,9 @@ button.link {
   <div class="auth-box">
     <h1>ManoVeda </h1>
     <p>Login or create your account</p>
+<input type="text" id="full_name" placeholder="Full Name" required />
+
+<input type="tel" id="phone" placeholder="Phone Number" />
 
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Password" />
@@ -144,89 +147,116 @@ button.link {
 
   <!-- Supabase -->
   <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  // login.js (paste into your login.html <script type="module"> or external file)
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  /* 🔧 SUPABASE CONFIG */
-  const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
-  const SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
+/* 🔧 SUPABASE CONFIG */
+const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  /* 🔹 DOM ELEMENTS */
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
-  const messageBox = document.getElementById("message");
+/* 🔹 DOM ELEMENTS */
+const fullNameInput = document.getElementById("full_name");
+const phoneInput = document.getElementById("phone");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const messageBox = document.getElementById("message");
 
-  function showMessage(text, type = "info") {
-    messageBox.textContent = text;
-    messageBox.className = `msg ${type}`;
+function showMessage(text, type = "info") {
+  messageBox.textContent = text;
+  messageBox.className = `msg ${type}`;
+}
+
+/* =========================
+   ✅ SIGN UP (with name + phone saved to user metadata)
+   ========================= */
+window.signUp = async () => {
+  const fullName = (fullNameInput?.value || "").trim();
+  const phone = (phoneInput?.value || "").trim();
+  const email = (emailInput?.value || "").trim();
+  const password = (passwordInput?.value || "").trim();
+
+  if (!email || !password) {
+    showMessage("⚠️ Email and password required", "error");
+    return;
   }
 
-  /* =========================
-     ✅ SIGN UP (NO EMAIL FLOW)
-     ========================= */
-  window.signUp = async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
+  // optional: basic phone validation (10 digits) — adjust to your locale
+  if (phone && !/^\d{7,15}$/.test(phone)) {
+    showMessage("⚠️ Enter a valid phone number (digits only).", "error");
+    return;
+  }
 
-    if (!email || !password) {
-      showMessage("⚠️ Email and password required", "error");
-      return;
+  // Use Supabase signUp and store name + phone in user_metadata
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        full_name: fullName || null,
+        phone: phone || null
+      }
     }
+  });
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password
-    });
+  if (error) {
+    showMessage("❌ " + error.message, "error");
+    return;
+  }
 
-    if (error) {
-      showMessage("❌ " + error.message, "error");
-      return;
-    }
+  // Success (may require email confirmation depending on your Supabase settings)
+  showMessage("✅ Account created! Check email to confirm if required.", "success");
 
-    showMessage("✅ Account created! You can now log in.", "success");
-  };
+  // Optional: also store locally for immediate UX (not required)
+  localStorage.setItem(
+    "manoveda_current",
+    JSON.stringify({ name: fullName || "Guest", email: email, phone: phone || null })
+  );
+};
 
-  /* =========================
-     ✅ LOGIN
-     ========================= */
-  window.login = async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
+/* =========================
+   ✅ LOGIN
+   ========================= */
+window.login = async () => {
+  const email = (emailInput?.value || "").trim();
+  const password = (passwordInput?.value || "").trim();
 
-    if (!email || !password) {
-      showMessage("⚠️ Email and password required", "error");
-      return;
-    }
+  if (!email || !password) {
+    showMessage("⚠️ Email and password required", "error");
+    return;
+  }
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
 
-    if (error) {
-      showMessage("❌ " + error.message, "error");
-      return;
-    }
+  if (error) {
+    showMessage("❌ " + error.message, "error");
+    return;
+  }
 
-    showMessage("🎉 Login successful! Redirecting...", "success");
+  showMessage("🎉 Login successful! Redirecting...", "success");
 
-    setTimeout(() => {
-      window.location.href = "index.html"; // change if needed
-    }, 1000);
-  };
+  setTimeout(() => {
+    window.location.href = "index.html"; // change target if needed
+  }, 900);
+};
 
-  /* =========================
-     🚫 PASSWORD RESET (DISABLED)
-     ========================= */
-  window.forgotPassword = () => {
-    showMessage("🔒 Password reset is disabled for now.", "error");
-  };
+/* =========================
+   🚫 PASSWORD RESET (simple placeholder)
+   ========================= */
+window.forgotPassword = () => {
+  showMessage("🔒 Password reset is disabled for now.", "error");
+};
+
 </script>
 
 
 </body>
 </html>
+
 
 
