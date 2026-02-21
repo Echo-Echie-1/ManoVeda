@@ -292,16 +292,13 @@ window.googleLogin = async () => {
     showMessage("❌ " + error.message, "error");
   }
 };
-    const { data: { session } } = await supabase.auth.getSession();
-
-if (!session) {
-  window.location.href = "login.html";
-}
+   
 </script>
 
 
 </body>
 </html>
+
 
 
 
