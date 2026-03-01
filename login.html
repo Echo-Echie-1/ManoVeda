@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>ManoVeda — Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<title>ManoVeda — Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <style>
-    * {
+<style>
+* {
   box-sizing: border-box;
   font-family: 'Nunito', sans-serif;
 }
@@ -24,11 +23,44 @@ body {
   color: #f1f1f1;
 }
 
-/* Auth Card */
+/* Luxury Border Frame */
+.luxury-frame {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.lux-seg {
+  position: absolute;
+  background: linear-gradient(90deg,#00f0da,#a855f7,#00f0da);
+  background-size: 200% 200%;
+  animation: borderMove 6s linear infinite;
+}
+
+.lux-top, .lux-bottom {
+  height: 2px;
+  width: 100%;
+}
+
+.lux-left, .lux-right {
+  width: 2px;
+  height: 100%;
+}
+
+.lux-top { top:0; left:0; }
+.lux-bottom { bottom:0; left:0; }
+.lux-left { left:0; top:0; }
+.lux-right { right:0; top:0; }
+
+@keyframes borderMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* Auth Box */
 .auth-box {
   background: rgba(255,255,255,0.03);
   backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
   padding: 36px;
   width: 100%;
   max-width: 420px;
@@ -36,32 +68,7 @@ body {
   box-shadow: 0 20px 60px rgba(0,0,0,0.6);
   border: 1px solid rgba(255,255,255,0.05);
 }
-.google-btn-dark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  padding: 13px;
-  background: linear-gradient(135deg, #111, #1f1f1f);
-  color: #fff;
-  font-weight: 600;
-  border-radius: 10px;
-  border: 1px solid #333;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
 
-.google-btn-dark img {
-  width: 18px;
-  filter: brightness(0) invert(1);
-}
-
-.google-btn-dark:hover {
-  background: linear-gradient(135deg, #1f1f1f, #2b2b2b);
-  transform: translateY(-2px);
-}
-/* Heading */
 h1 {
   text-align: center;
   margin-bottom: 8px;
@@ -87,7 +94,6 @@ input {
   background: rgba(255,255,255,0.05);
   color: #fff;
   font-size: 15px;
-  transition: 0.2s ease;
 }
 
 input:focus {
@@ -108,13 +114,13 @@ button {
   font-weight: 700;
   cursor: pointer;
   margin-bottom: 12px;
-  transition: all 0.25s ease;
+  transition: 0.25s ease;
   box-shadow: 0 8px 28px rgba(168,85,247,0.35);
 }
 
 button:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 50px rgba(168,85,247,0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 45px rgba(168,85,247,0.5);
 }
 
 button.secondary {
@@ -126,8 +132,22 @@ button.secondary {
 button.link {
   background: none;
   color: #00d2ff;
-  font-weight: 600;
   box-shadow: none;
+}
+
+/* Google Button */
+.google-btn-dark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(135deg,#111,#1f1f1f);
+  border: 1px solid #333;
+}
+
+.google-btn-dark img {
+  width: 18px;
+  filter: brightness(0) invert(1);
 }
 
 /* Messages */
@@ -140,49 +160,47 @@ button.link {
 .error { color: #ef4444; }
 .success { color: #22c55e; }
 
-  </style>
+</style>
 </head>
 
 <body>
-  <div class="luxury-frame">
+
+<div class="luxury-frame">
   <div class="lux-seg lux-top"></div>
   <div class="lux-seg lux-right"></div>
   <div class="lux-seg lux-bottom"></div>
   <div class="lux-seg lux-left"></div>
 </div>
 
+<div class="auth-box">
+  <h1>ManoVeda</h1>
+  <p>Login or create your account</p>
 
-  <div class="auth-box">
-    <h1>ManoVeda </h1>
-    <p>Login or create your account</p>
-<input type="text" id="full_name" placeholder="Full Name" required />
+  <input type="text" id="full_name" placeholder="Full Name" />
+  <input type="tel" id="phone" placeholder="Phone Number" />
+  <input type="email" id="email" placeholder="Email" />
+  <input type="password" id="password" placeholder="Password" />
 
-<input type="tel" id="phone" placeholder="Phone Number" />
+  <button onclick="signUp()">Sign Up</button>
+  <button class="secondary" onclick="login()">Login</button>
+  <button class="link" onclick="forgotPassword()">Forgot password?</button>
 
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
+  <button class="google-btn-dark" onclick="googleLogin()">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+    Continue with Google
+  </button>
 
-    <button onclick="signUp()">Sign Up</button>
-    <button class="secondary" onclick="login()">Login</button>
-    <button class="link" onclick="forgotPassword()">Forgot password?</button>
+  <div id="message" class="msg"></div>
+</div>
 
-   <button class="google-btn" onclick="googleLogin()">
-  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-  Continue with Google
-</button>
-  <!-- Supabase -->
-  <script type="module">
-  // login.js (paste into your login.html <script type="module"> or external file)
+<script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-/* 🔧 SUPABASE CONFIG */
 const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* 🔹 DOM ELEMENTS */
 const fullNameInput = document.getElementById("full_name");
 const phoneInput = document.getElementById("phone");
 const emailInput = document.getElementById("email");
@@ -194,113 +212,45 @@ function showMessage(text, type = "info") {
   messageBox.className = `msg ${type}`;
 }
 
-/* =========================
-   ✅ SIGN UP (with name + phone saved to user metadata)
-   ========================= */
 window.signUp = async () => {
-  const fullName = (fullNameInput?.value || "").trim();
-  const phone = document.getElementById("phone")?.value?.trim() || null;
-
-  const email = (emailInput?.value || "").trim();
-  const password = (passwordInput?.value || "").trim();
-
-  if (!email || !password) {
-    showMessage("⚠️ Email and password required", "error");
-    return;
-  }
-
-  // optional: basic phone validation (10 digits) — adjust to your locale
-  if (phone && !/^\d{7,15}$/.test(phone)) {
-    showMessage("⚠️ Enter a valid phone number (digits only).", "error");
-    return;
-  }
-
-  // Use Supabase signUp and store name + phone in user_metadata
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
+  const { error } = await supabase.auth.signUp({
+    email: emailInput.value,
+    password: passwordInput.value,
     options: {
       data: {
-        full_name: fullName || null,
-        phone: phone || null
+        full_name: fullNameInput.value,
+        phone: phoneInput.value
       }
     }
   });
 
-  if (error) {
-    showMessage("❌ " + error.message, "error");
-    return;
-  }
-
-  // Success (may require email confirmation depending on your Supabase settings)
-  showMessage("✅ Account created! Check email to confirm if required.", "success");
-
-  // Optional: also store locally for immediate UX (not required)
-  localStorage.setItem(
-    "manoveda_current",
-    JSON.stringify({ name: fullName || "Guest", email: email, phone: phone || null })
-  );
+  if (error) return showMessage(error.message, "error");
+  showMessage("Account created! Check email.", "success");
 };
 
-/* =========================
-   ✅ LOGIN
-   ========================= */
 window.login = async () => {
-  const email = (emailInput?.value || "").trim();
-  const password = (passwordInput?.value || "").trim();
-
-  if (!email || !password) {
-    showMessage("⚠️ Email and password required", "error");
-    return;
-  }
-
   const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password
+    email: emailInput.value,
+    password: passwordInput.value
   });
 
-  if (error) {
-    showMessage("❌ " + error.message, "error");
-    return;
-  }
+  if (error) return showMessage(error.message, "error");
 
-  showMessage("🎉 Login successful! Redirecting...", "success");
-
-  setTimeout(() => {
-    window.location.href = "index.html"; // change target if needed
-  }, 900);
+  showMessage("Login successful!", "success");
+  setTimeout(() => window.location.href="index.html", 1000);
 };
 
-/* =========================
-   🚫 PASSWORD RESET (simple placeholder)
-   ========================= */
 window.forgotPassword = () => {
-  showMessage("🔒 Password reset is disabled for now.", "error");
+  showMessage("Password reset disabled.", "error");
 };
-/* =========================
-   ✅ GOOGLE LOGIN
-   ========================= */
+
 window.googleLogin = async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
+  await supabase.auth.signInWithOAuth({
     provider: "google",
-    options: {
-      redirectTo: "https://manoveda.netlify.app/index.html"
-    }
+    options: { redirectTo: window.location.origin }
   });
-
-  if (error) {
-    showMessage("❌ " + error.message, "error");
-  }
 };
-   
 </script>
-
 
 </body>
 </html>
-
-
-
-
-
-
