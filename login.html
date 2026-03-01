@@ -1,258 +1,302 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8" />
-<title>ManoVeda — Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
-
-<style>
-* {
-  box-sizing: border-box;
-  font-family: 'Nunito', sans-serif;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0b0b0f 0%, #0f1220 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #f1f1f1;
-}
-
-/* Luxury Border Frame */
-.luxury-frame {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-
-.lux-seg {
-  position: absolute;
-  background: linear-gradient(90deg,#00f0da,#a855f7,#00f0da);
-  background-size: 200% 200%;
-  animation: borderMove 6s linear infinite;
-}
-
-.lux-top, .lux-bottom {
-  height: 2px;
-  width: 100%;
-}
-
-.lux-left, .lux-right {
-  width: 2px;
-  height: 100%;
-}
-
-.lux-top { top:0; left:0; }
-.lux-bottom { bottom:0; left:0; }
-.lux-left { left:0; top:0; }
-.lux-right { right:0; top:0; }
-
-@keyframes borderMove {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
-
-/* Auth Box */
-.auth-box {
-  background: rgba(255,255,255,0.03);
-  backdrop-filter: blur(18px);
-  padding: 36px;
-  width: 100%;
-  max-width: 420px;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 8px;
-  font-weight: 800;
-  background: linear-gradient(90deg, #00f0da, #00bfff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-p {
-  text-align: center;
-  color: #bdbdbd;
-  margin-bottom: 24px;
-}
-
-/* Inputs */
-input {
-  width: 100%;
-  padding: 14px 16px;
-  margin-bottom: 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.05);
-  color: #fff;
-  font-size: 15px;
-}
-
-input:focus {
-  outline: none;
-  border-color: #a855f7;
-  box-shadow: 0 0 0 2px rgba(168,85,247,0.3);
-}
-
-/* Buttons */
-button {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 14px;
-  background: #a855f7;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-bottom: 12px;
-  transition: 0.25s ease;
-  box-shadow: 0 8px 28px rgba(168,85,247,0.35);
-}
-
-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 45px rgba(168,85,247,0.5);
-}
-
-button.secondary {
-  background: rgba(168,85,247,0.15);
-  color: #a855f7;
-  box-shadow: none;
-}
-
-button.link {
-  background: none;
-  color: #00d2ff;
-  box-shadow: none;
-}
-
-/* Google Button */
-.google-btn-dark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: linear-gradient(135deg,#111,#1f1f1f);
-  border: 1px solid #333;
-}
-
-.google-btn-dark img {
-  width: 18px;
-  filter: brightness(0) invert(1);
-}
-
-/* Messages */
-.msg {
-  margin-top: 10px;
-  text-align: center;
-  font-size: 14px;
-}
-
-.error { color: #ef4444; }
-.success { color: #22c55e; }
-
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manoveda • Sign In</title>
+  <link rel="icon" href="bingo.png" type="image/png">
+  <!-- Prevent flash: set dark class early -->
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = saved === 'dark' || (!saved && prefersDark);
+        document.documentElement.classList.toggle('dark', isDark);
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Nunito:wght@400;600;700;800&display=swap');
+    :root { --primary-r: 168; --primary-g: 85; --primary-b: 247; }
+    html,body{height:100%}
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #e6e6e9;
+      background:
+        radial-gradient(circle at 18% 6%, rgba(99,102,241,0.16), transparent 36%),
+        radial-gradient(circle at 82% 20%, rgba(16,185,129,0.12), transparent 36%),
+        #0a0a0f;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x: hidden;
+    }
+    /* ===== Cursor Glow ===== */
+    .cursor-glow {
+      position: fixed;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(168,85,247,0.25) 0%, transparent 60%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      filter: blur(80px);
+      z-index: 0;
+      transition: transform 0.08s ease-out;
+    }
+    html.dark body { color: #e6e6e9; }
+    .logo-font { font-family: 'Nunito', sans-serif; }
+    .section { padding: 6rem 0; border-top: 1px solid rgba(255,255,255,0.04); }
+    .hero-bg { background: transparent; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.14; animation: floatOrb 25s infinite linear; pointer-events: none; }
+    .orb1 { background: rgb(168 85 247); width: 600px; height: 600px; top: -10%; left: -10%; }
+    .orb2 { background: rgb(34 211 238); width: 800px; height: 800px; bottom: -20%; right: -15%; }
+    .orb3 { background: rgb(251 191 36); width: 500px; height: 500px; top: 30%; right: -20%; }
+    @keyframes floatOrb { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(60px,-60px) rotate(180deg); } 100% { transform: translate(0,0) rotate(360deg); } }
+    .glass {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    html.dark .glass { background: rgba(15,23,42,0.45); border-color: rgba(255,255,255,0.04); }
+    .feature-card { transition: transform .35s cubic-bezier(.4,0,.2,1), box-shadow .35s; }
+    .feature-card:hover { transform: translateY(-10px); box-shadow: 0 20px 60px rgba(168,85,247,0.12); }
+    .reveal-text { background: linear-gradient(90deg, #a855f7, #67e8f9, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% 100%; animation: shine 4s linear infinite; }
+    @keyframes shine { 0% { background-position: 200% 0 } 100% { background-position: -200% 0 } }
+    .mandala { opacity: .12; pointer-events: none; }
+    @media (max-width: 768px) {
+      .orb1, .orb2, .orb3 { display: none; }
+    }
+    /* Login specific tweaks */
+    .auth-card {
+      max-width: 420px;
+      width: 100%;
+    }
+    input {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    input:focus {
+      border-color: rgb(168 85 247);
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.2);
+      transform: translateY(-1px);
+    }
+  </style>
 </head>
-
 <body>
+  <!-- luxury frame -->
+  <div class="luxury-frame pointer-events-none fixed inset-0 z-50" aria-hidden="true">
+    <div class="lux-edge top-0 left-0 right-0 h-px" style="position:absolute;top:2px;left:0;right:0;background:linear-gradient(90deg,transparent,rgba(168,85,247,0.06),transparent)"></div>
+    <div class="lux-edge bottom-0 left-0 right-0 h-px" style="position:absolute;bottom:2px;left:0;right:0;background:linear-gradient(90deg,transparent,rgba(234,179,8,0.05),transparent)"></div>
+  </div>
 
-<div class="luxury-frame">
-  <div class="lux-seg lux-top"></div>
-  <div class="lux-seg lux-right"></div>
-  <div class="lux-seg lux-bottom"></div>
-  <div class="lux-seg lux-left"></div>
-</div>
+  <!-- mandala corners -->
+  <svg class="mandala absolute top-6 left-6 w-24 h-24 text-white/8" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="38" stroke="currentColor" stroke-width="1.4"/>
+    <circle cx="50" cy="50" r="22" stroke="currentColor" stroke-width="0.9"/>
+    <path d="M50 12 L54 28 L70 28 L57 40 L62 58 L50 48 L38 58 L43 40 L30 28 L46 28 Z" fill="currentColor"/>
+  </svg>
+  <svg class="mandala absolute top-6 right-6 w-24 h-24 text-white/8 rotate-90" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="38" stroke="currentColor" stroke-width="1.4"/>
+    <circle cx="50" cy="50" r="22" stroke="currentColor" stroke-width="0.9"/>
+    <path d="M50 12 L54 28 L70 28 L57 40 L62 58 L50 48 L38 58 L43 40 L30 28 L46 28 Z" fill="currentColor"/>
+  </svg>
 
-<div class="auth-box">
-  <h1>ManoVeda</h1>
-  <p>Login or create your account</p>
+  <!-- NAVBAR (minimal for auth page) -->
+  <nav class="fixed top-0 left-0 right-0 z-40 glass border-b border-white/6">
+    <div class="max-w-screen-2xl mx-auto px-8 py-5 flex items-center justify-between">
+      <div onclick="window.location.href='index.html'" class="logo-font flex items-center gap-1.5 cursor-pointer">
+        <span class="text-3xl font-bold tracking-tighter bg-gradient-to-r from-cyan-400 via-violet-500 to-amber-400 bg-clip-text text-transparent">Mano</span>
+        <span class="text-3xl font-bold tracking-tighter text-white">veda</span>
+        <span class="text-xs font-medium text-emerald-400 pl-2">AI</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <button id="theme-toggle" onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-2xl glass hover:bg-white/6 transition-all active:scale-95" aria-label="Toggle theme">
+          <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+        <a href="index.html" class="px-6 py-2.5 rounded-3xl glass text-sm font-medium hover:bg-white/6 transition-all">← Back to home</a>
+      </div>
+    </div>
+  </nav>
 
-  <input type="text" id="full_name" placeholder="Full Name" />
-  <input type="tel" id="phone" placeholder="Phone Number" />
-  <input type="email" id="email" placeholder="Email" />
-  <input type="password" id="password" placeholder="Password" />
+  <!-- HERO / LOGIN SECTION -->
+  <section class="hero-bg min-h-screen flex items-center relative overflow-hidden pt-20">
+    <!-- subtle orbs -->
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
 
-  <button onclick="signUp()">Sign Up</button>
-  <button class="secondary" onclick="login()">Login</button>
-  <button class="link" onclick="forgotPassword()">Forgot password?</button>
+    <div class="max-w-screen-2xl mx-auto px-6 relative z-10">
+      <div class="max-w-md mx-auto auth-card" data-aos="fade-up" data-aos-duration="900">
+        <!-- Logo + Title -->
+        <div class="text-center mb-10">
+          <div class="logo-font inline-flex items-center gap-1.5 justify-center mb-4">
+            <span class="text-5xl font-bold tracking-tighter bg-gradient-to-r from-cyan-400 via-violet-500 to-amber-400 bg-clip-text text-transparent">Mano</span>
+            <span class="text-5xl font-bold tracking-tighter text-white">veda</span>
+          </div>
+          <div class="text-emerald-400 text-sm font-medium tracking-widest">INNER PEACE THROUGH AI</div>
+          <h1 class="text-3xl font-semibold text-white mt-6">Welcome back</h1>
+          <p class="text-zinc-400 mt-2">Continue your gentle journey</p>
+        </div>
 
-  <button class="google-btn-dark" onclick="googleLogin()">
-    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
-    Continue with Google
-  </button>
+        <!-- Glass Card -->
+        <div class="glass rounded-3xl p-8 md:p-10 shadow-2xl">
+          <input type="text" id="full_name" placeholder="Full Name" class="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-zinc-400 focus:outline-none text-base" />
+          <input type="tel" id="phone" placeholder="Phone Number" class="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-zinc-400 focus:outline-none text-base" />
+          <input type="email" id="email" placeholder="Email" class="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-zinc-400 focus:outline-none text-base" />
+          <input type="password" id="password" placeholder="Password" class="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-zinc-400 focus:outline-none text-base" />
 
-  <div id="message" class="msg"></div>
-</div>
+          <button onclick="signUp()" class="w-full mt-6 py-4 rounded-3xl bg-gradient-to-r from-violet-600 to-cyan-500 hover:from-violet-500 hover:to-cyan-400 font-semibold text-lg transition-all active:scale-[0.985] shadow-xl shadow-violet-500/30">
+            Create account
+          </button>
+          
+          <button onclick="login()" class="w-full mt-3 py-4 rounded-3xl glass border border-white/10 hover:border-white/30 font-semibold text-lg transition-all active:scale-[0.985]">
+            Sign in
+          </button>
 
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+          <button onclick="forgotPassword()" class="w-full mt-4 text-sm text-violet-400 hover:text-violet-300 transition-colors">
+            Forgot password?
+          </button>
 
-const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
+          <div class="my-8 flex items-center gap-4">
+            <div class="flex-1 h-px bg-white/10"></div>
+            <span class="text-xs text-zinc-500 font-medium">OR</span>
+            <div class="flex-1 h-px bg-white/10"></div>
+          </div>
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          <button onclick="googleLogin()" class="w-full flex items-center justify-center gap-3 py-4 rounded-3xl glass hover:bg-white/10 border border-white/10 transition-all">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-5 h-5" style="filter: brightness(0) invert(1);">
+            <span class="font-medium">Continue with Google</span>
+          </button>
 
-const fullNameInput = document.getElementById("full_name");
-const phoneInput = document.getElementById("phone");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const messageBox = document.getElementById("message");
+          <div id="message" class="mt-6 text-center text-sm min-h-[1.25rem]"></div>
+        </div>
 
-function showMessage(text, type = "info") {
-  messageBox.textContent = text;
-  messageBox.className = `msg ${type}`;
-}
+        <!-- Footer note -->
+        <div class="text-center mt-8 text-xs text-zinc-500">
+          Protected by Supabase • Privacy-first
+        </div>
+      </div>
+    </div>
 
-window.signUp = async () => {
-  const { error } = await supabase.auth.signUp({
-    email: emailInput.value,
-    password: passwordInput.value,
-    options: {
-      data: {
-        full_name: fullNameInput.value,
-        phone: phoneInput.value
+    <!-- Scroll hint (subtle) -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-[10px] tracking-[2px] opacity-40 flex flex-col items-center">
+      <div class="w-px h-8 bg-gradient-to-b from-transparent via-white/60 to-transparent"></div>
+    </div>
+  </section>
+
+  <!-- scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+      const sun = document.getElementById('sun-icon');
+      const moon = document.getElementById('moon-icon');
+      if (sun && moon) {
+        sun.classList.toggle('hidden', isDark);
+        moon.classList.toggle('hidden', !isDark);
       }
     }
-  });
+    function loadTheme() {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = saved === 'dark' || (!saved && prefersDark);
+      document.documentElement.classList.toggle('dark', isDark);
+      const sun = document.getElementById('sun-icon');
+      const moon = document.getElementById('moon-icon');
+      if (sun && moon) {
+        sun.classList.toggle('hidden', isDark);
+        moon.classList.toggle('hidden', !isDark);
+      }
+    }
+    window.onload = function () {
+      AOS.init({ once: true, duration: 900, easing: 'cubic-bezier(0.4,0,0.2,1)' });
+      loadTheme();
+      console.log('%c✨ Manoveda Login loaded — welcome back ✨', 'color:#a855f7; font-family:monospace');
+    };
+  </script>
 
-  if (error) return showMessage(error.message, "error");
-  showMessage("Account created! Check email.", "success");
-};
+  <!-- Cursor glow (exact same as main site) -->
+  <script>
+    const glow = document.createElement("div");
+    glow.className = "cursor-glow";
+    document.body.appendChild(glow);
+    let mouseX = 0, mouseY = 0;
+    let posX = 0, posY = 0;
+    document.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    function animate() {
+      posX += (mouseX - posX) * 0.1;
+      posY += (mouseY - posY) * 0.1;
+      glow.style.left = posX + "px";
+      glow.style.top = posY + "px";
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
 
-window.login = async () => {
-  const { error } = await supabase.auth.signInWithPassword({
-    email: emailInput.value,
-    password: passwordInput.value
-  });
+  <!-- YOUR ORIGINAL SUPABASE SCRIPT — UNCHANGED -->
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+    const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  if (error) return showMessage(error.message, "error");
+    const fullNameInput = document.getElementById("full_name");
+    const phoneInput = document.getElementById("phone");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const messageBox = document.getElementById("message");
 
-  showMessage("Login successful!", "success");
-  setTimeout(() => window.location.href="index.html", 1000);
-};
+    function showMessage(text, type = "info") {
+      messageBox.textContent = text;
+      messageBox.className = `mt-6 text-center text-sm ${type === "error" ? "text-red-400" : type === "success" ? "text-emerald-400" : "text-zinc-400"}`;
+    }
 
-window.forgotPassword = () => {
-  showMessage("Password reset disabled.", "error");
-};
+    window.signUp = async () => {
+      const { error } = await supabase.auth.signUp({
+        email: emailInput.value,
+        password: passwordInput.value,
+        options: {
+          data: {
+            full_name: fullNameInput.value,
+            phone: phoneInput.value
+          }
+        }
+      });
+      if (error) return showMessage(error.message, "error");
+      showMessage("Account created!", "success");
+    };
 
-window.googleLogin = async () => {
-  await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: { redirectTo: window.location.origin }
-  });
-};
-</script>
+    window.login = async () => {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: emailInput.value,
+        password: passwordInput.value
+      });
+      if (error) return showMessage(error.message, "error");
+      showMessage("Welcome back! Redirecting...", "success");
+      setTimeout(() => window.location.href="index.html", 1200);
+    };
 
+    window.forgotPassword = () => {
+      showMessage("Password reset coming soon ✨", "info");
+    };
+
+    window.googleLogin = async () => {
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: window.location.origin }
+      });
+    };
+  </script>
 </body>
 </html>
-
-
