@@ -1,3 +1,4 @@
+
   <!DOCTYPE html>
   <html lang="en" class="scroll-smooth">
   <head>
@@ -102,6 +103,39 @@
     .orb1, .orb2, .orb3 { display: none; }
     .logo-font .small { display: none; }
   }
+  /* ===== Testimonial Marquee ===== */
+
+.marquee-wrapper {
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  gap: 2rem;
+  width: max-content;
+  animation: scrollLeft 40s linear infinite;
+}
+
+.marquee-wrapper:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.testimonial-card {
+  min-width: 320px;
+  max-width: 380px;
+}
   </style>
   </head>
 
@@ -148,7 +182,7 @@
             <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
           </button>
 
-          <a href="login.html" class="px-6 py-2.5 rounded-3xl bg-white text-zinc-900 font-semibold text-sm hover:bg-amber-300 transition-all flex items-center gap-2">Sign in</a>
+          <a class='px-6 py-2.5 rounded-3xl bg-white text-zinc-900 font-semibold text-sm hover:bg-amber-300 transition-all flex items-center gap-2' href='/login'>Sign in</a>
 
           <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 flex items-center justify-center text-2xl">☰</button>
         </div>
@@ -164,7 +198,7 @@
         <a href="#features" onclick="smoothScrollTo('features');toggleMobileMenu()" class="py-2">Features</a>
         <a href="#community" onclick="smoothScrollTo('community');toggleMobileMenu()" class="py-2">Community</a>
         <a href="#contact" onclick="smoothScrollTo('contact');toggleMobileMenu()" class="py-2">Contact</a>
-        <a href="login.html" class="mt-8 inline-block text-center py-6 rounded-3xl bg-violet-600 text-white text-xl">Sign in to begin</a>
+        <a class='mt-8 inline-block text-center py-6 rounded-3xl bg-violet-600 text-white text-xl' href='/login'>Sign in to begin</a>
       </div>
     </div>
 
@@ -192,7 +226,7 @@
           </p>
 
           <div data-aos="fade-up" data-aos-delay="600" class="flex flex-wrap justify-center gap-4">
-            <a href="chat.html" class="group px-8 md:px-10 py-4 md:py-6 rounded-3xl bg-gradient-to-r from-violet-600 to-cyan-500 hover:from-violet-500 hover:to-cyan-400 font-semibold text-lg md:text-xl flex items-center gap-3 transition-all hover:scale-105 shadow-2xl shadow-violet-500/20">
+            <a class='group px-8 md:px-10 py-4 md:py-6 rounded-3xl bg-gradient-to-r from-violet-600 to-cyan-500 hover:from-violet-500 hover:to-cyan-400 font-semibold text-lg md:text-xl flex items-center gap-3 transition-all hover:scale-105 shadow-2xl shadow-violet-500/20' href='/chat'>
               <span>Talk to your AI guide</span>
               <span class="text-2xl md:text-3xl">🪷</span>
             </a>
@@ -376,51 +410,94 @@
           <h2 class="text-3xl md:text-5xl font-bold logo-font mt-4">Hearts transformed</h2>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="glass p-6 rounded-3xl">
-            <div class="italic text-lg">"Using ManoVeda helped me build a small daily habit of journaling — that made a big difference."</div>
-            <div class="mt-6 flex items-center gap-3">
-              <img 
-                src="Screenshot 2026-03-01 162114.png" 
-                class="w-10 h-10 rounded-2xl object-cover" 
-                alt="User profile picture">
-              <div>
-                <div class="font-medium">Darsh Tyagi</div>
-                <div class="text-xs text-zinc-400">Early user</div>
-              </div>
-            </div>
-          </div>
+        <div class="marquee-wrapper mt-12">
+  <div class="marquee-track">
 
-          <div class="glass p-6 rounded-3xl">
-            <div class="italic text-lg">"Short practices I could do between meetings — truly helpful and doable."</div>
-            <div class="mt-6 flex items-center gap-3">
-              <img 
-                src="Screenshot 2026-03-01 162140.png" 
-                class="w-10 h-10 rounded-2xl object-cover" 
-                alt="User profile picture">
-              <div>
-                <div class="font-medium">Aarav Lamba</div>
-                <div class="text-xs text-zinc-400">Advisor</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="glass p-6 rounded-3xl">
-            <div class="italic text-lg">"I like that it doesn't shame you for missing days — it just encourages the next step."</div>
-            <div class="mt-6 flex items-center gap-3">
-              
-              <img 
-                src="Screenshot 2026-03-01 162058.png" 
-                class="w-10 h-10 rounded-2xl object-cover" 
-                alt="User profile picture">
-              <div>
-                <div class="font-medium">Naman Chauhan</div>
-                <div class="text-xs text-zinc-400">Beta tester</div>
-              </div>
-            </div>
-          </div>
+    <!-- Card 1 -->
+    <div class="testimonial-card glass p-6 rounded-3xl">
+      <div class="italic text-lg">
+        "I started using ManoVeda during exam time. Honestly it helped me calm down before sleeping. The small breathing prompts actually worked."
+      </div>
+      <div class="mt-6 flex items-center gap-3">
+        <img src="Screenshot 2026-03-01 162058.png" class="w-10 h-10 rounded-2xl object-cover">
+        <div>
+          <div class="font-medium">Naman Chauhan</div>
+          <div class="text-xs text-zinc-400">Class 11 Student</div>
         </div>
       </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="testimonial-card glass p-6 rounded-3xl">
+      <div class="italic text-lg">
+        "I’m not into meditation much but the short 2–3 minute exercises fit between my classes. It feels practical, not preachy."
+      </div>
+      <div class="mt-6 flex items-center gap-3">
+        <img src="Screenshot 2026-03-01 162140.png" class="w-10 h-10 rounded-2xl object-cover">
+        <div>
+          <div class="font-medium">Aarav Lamba</div>
+          <div class="text-xs text-zinc-400">Undergraduate Student</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="testimonial-card glass p-6 rounded-3xl">
+      <div class="italic text-lg">
+        "The journaling feature made me realise patterns in my mood. It feels private and safe which matters a lot."
+      </div>
+      <div class="mt-6 flex items-center gap-3">
+        <img src="Screenshot 2026-03-01 162114.png" class="w-10 h-10 rounded-2xl object-cover">
+        <div>
+          <div class="font-medium">Darsh Tyagi</div>
+          <div class="text-xs text-zinc-400">Commerce Student</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="testimonial-card glass p-6 rounded-3xl">
+      <div class="italic text-lg">
+        "It doesn’t judge you if you skip days. That part genuinely makes it easier to come back."
+      </div>
+      <div class="mt-6 flex items-center gap-3">
+        <img src="Screenshot 2026-03-02 120939.png" class="w-10 h-10 rounded-2xl object-cover">
+        <div>
+          <div class="font-medium">Arjun Vardhan</div>
+          <div class="text-xs text-zinc-400">High School Student</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Duplicate set for smooth infinite scroll -->
+    <div class="testimonial-card glass p-6 rounded-3xl">
+      <div class="italic text-lg">
+        "I started using ManoVeda during exam time. Honestly it helped me calm down before sleeping. The small breathing prompts actually worked."
+      </div>
+      <div class="mt-6 flex items-center gap-3">
+        <img src="Screenshot 2026-03-01 162058.png" class="w-10 h-10 rounded-2xl object-cover">
+        <div>
+          <div class="font-medium">Naman Chauhan</div>
+          <div class="text-xs text-zinc-400">Class 11 Student</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card glass p-6 rounded-3xl">
+      <div class="italic text-lg">
+        "I’m not into meditation much but the short 2–3 minute exercises fit between my classes. It feels practical, not preachy."
+      </div>
+      <div class="mt-6 flex items-center gap-3">
+        <img src="Screenshot 2026-03-01 162140.png" class="w-10 h-10 rounded-2xl object-cover">
+        <div>
+          <div class="font-medium">Aarav Lamba</div>
+          <div class="text-xs text-zinc-400">Undergraduate Student</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
     </section>
 
     <!-- CTA -->
@@ -430,7 +507,7 @@
         <h2 data-aos="fade-up" class="text-3xl md:text-5xl font-bold logo-font">Your healing begins the moment you say yes.</h2>
         <p data-aos="fade-up" data-aos-delay="200" class="mt-6 text-lg text-zinc-300">Free tier and paid plans; designed to respect your privacy — see our Privacy Policy for details.</p>
 
-        <a href="chat.html" data-aos="fade-up" data-aos-delay="400" class="mt-8 inline-block px-10 md:px-16 py-4 md:py-6 rounded-3xl bg-white text-black font-bold text-lg md:text-2xl hover:bg-amber-300 transition-all active:scale-95 shadow-2xl">Begin my journey</a>
+        <a class='mt-8 inline-block px-10 md:px-16 py-4 md:py-6 rounded-3xl bg-white text-black font-bold text-lg md:text-2xl hover:bg-amber-300 transition-all active:scale-95 shadow-2xl' data-aos-delay='400' data-aos='fade-up' href='/chat'>Begin my journey</a>
 
         <div class="mt-6 text-xs text-zinc-400">Available features: Chat, Guided Meditations, Journal, Music, Mood Tracker, Gentle Games</div>
       </div>
@@ -504,7 +581,7 @@
         <div class="md:col-span-4">
           <div class="glass p-6 rounded-3xl">
             <div class="text-sm font-medium mb-4">Ready to meet your future self?</div>
-            <a href="login.html" class="block w-full py-3 text-center bg-white text-black rounded-3xl font-semibold text-lg">Join now</a>
+            <a class='block w-full py-3 text-center bg-white text-black rounded-3xl font-semibold text-lg' href='/login'>Join now</a>
             <div class="mt-4 text-xs text-zinc-400">Security & auth powered by Supabase • Conversational stack: Open Ai: GPT 4o-Mini + Noupe AI chatbot</div>
           </div>
         </div>
@@ -518,7 +595,7 @@
     <div class="absolute inset-0 rounded-full bg-gradient-to-r from-amber-400/10 via-transparent to-violet-500/10 blur-xl opacity-60"></div>
 
     <div class="relative text-center">
-      <p class="text-xl md:text-2xl tracking-[0.35em] font-light text-amber-400 drop-shadow-[0_0_25px_rgba(251,191,36,0.6)]">
+      <p class="text-xl md:text-xl tracking-[0.005em] font-light text-amber-400 drop-shadow-[0_0_25px_rgba(251,191,36,0.6)]">
         HARDIK MISHRA
       </p>
       <p class="text-[11px] md:text-xs text-zinc-400 tracking-widest mt-2">
