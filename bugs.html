@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report a Bug • ManoVeda</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+body { font-family: 'Poppins', sans-serif; }
+.glass {
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+</style>
+</head>
+
+<body class="bg-gradient-to-br from-black via-purple-900 to-indigo-900 text-white min-h-screen flex items-center justify-center p-6">
+
+<div class="glass w-full max-w-2xl rounded-2xl p-8 shadow-2xl">
+
+<!-- Header -->
+<div class="flex flex-col items-center mb-6">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-purple-400 mb-3" viewBox="0 0 640 640">
+    <path fill="currentColor" d="M224 160C224 107 267 64 320 64C373 64 416 107 416 160L416 163.6C416 179.3 403.3 192 387.6 192L252.5 192C236.8 192 224.1 179.3 224.1 163.6L224.1 160zM569.6 172.8C580.2 186.9 577.3 207 563.2 217.6L465.4 290.9C470.7 299.8 474.7 309.6 477.2 320L576 320C593.7 320 608 334.3 608 352C608 369.7 593.7 384 576 384L480 384L480 416C480 418.6 479.9 421.3 479.8 423.9L563.2 486.4C577.3 497 580.2 517.1 569.6 531.2C559 545.3 538.9 548.2 524.8 537.6L461.7 490.3C438.5 534.5 395.2 566.5 344 574.2L344 344C344 330.7 333.3 320 320 320C306.7 320 296 330.7 296 344L296 574.2C244.8 566.5 201.5 534.5 178.3 490.3L115.2 537.6C101.1 548.2 81 545.3 70.4 531.2C59.8 517.1 62.7 497 76.8 486.4L160.2 423.9C160.1 421.3 160 418.7 160 416L160 384L64 384C46.3 384 32 369.7 32 352C32 334.3 46.3 320 64 320L162.8 320C165.3 309.6 169.3 299.8 174.6 290.9L76.8 217.6C62.7 207 59.8 186.9 70.4 172.8C81 158.7 101.1 155.8 115.2 166.4L224 248C236.3 242.9 249.8 240 264 240L376 240C390.2 240 403.7 242.8 416 248L524.8 166.4C538.9 155.8 559 158.7 569.6 172.8z"/>
+  </svg>
+  <h2 class="text-3xl font-bold">Report a Bug</h2>
+  <p class="text-gray-300 text-sm mt-1">Help us improve ManoVeda</p>
+</div>
+
+<form id="bugForm" class="space-y-4">
+
+<input id="name" type="text" placeholder="Your Name"
+class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
+
+<input id="phone" type="text" placeholder="Phone Number"
+class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
+
+<input id="email" type="email" placeholder="Email"
+class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
+
+<textarea id="message" placeholder="Describe the issue..."
+class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500 h-32"></textarea>
+
+<input id="file" type="file" accept="image/*,video/*,audio/*"
+class="w-full text-sm text-gray-300">
+
+<button type="submit"
+class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-semibold transition">
+Submit Report
+</button>
+
+</form>
+
+<p id="status" class="text-center mt-4 text-sm"></p>
+
+</div>
+
+<script>
+(function () {
+
+const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_ANON_KEY_HERE";
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+let sessionId = localStorage.getItem("manoveda_bug_session");
+if (!sessionId) {
+  sessionId = crypto.randomUUID();
+  localStorage.setItem("manoveda_bug_session", sessionId);
+}
+
+const form = document.getElementById("bugForm");
+const statusEl = document.getElementById("status");
+
+async function autoFill() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    document.getElementById("email").value = user.email || "";
+  }
+}
+autoFill();
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  statusEl.innerText = "Submitting...";
+
+  const name = name.value.trim();
+  const phone = phone.value.trim();
+  const email = email.value.trim();
+  const message = message.value.trim();
+  const file = document.getElementById("file").files[0];
+
+  if (!message) {
+    statusEl.innerText = "Message is required.";
+    return;
+  }
+
+  let filePath = null;
+  let fileType = null;
+
+  if (file) {
+    const uniquePath = `bugs/${sessionId}-${Date.now()}-${file.name}`;
+    const { error: uploadError } = await supabase.storage
+      .from("bug-uploads")
+      .upload(uniquePath, file);
+
+    if (uploadError) {
+      statusEl.innerText = "File upload failed.";
+      return;
+    }
+
+    filePath = uniquePath;
+    fileType = file.type;
+  }
+
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const { error } = await supabase.from("bug_reports").insert({
+    session_id: sessionId,
+    user_id: user?.id || null,
+    name,
+    phone,
+    email,
+    message,
+    file_url: filePath,
+    file_type: fileType,
+    user_agent: navigator.userAgent,
+    page_url: window.location.href
+  });
+
+  if (error) {
+    statusEl.innerText = "Error submitting bug.";
+    return;
+  }
+
+  statusEl.innerText = "✅ Bug report submitted successfully.";
+  form.reset();
+});
+
+})();
+</script>
+
+</body>
+</html>
