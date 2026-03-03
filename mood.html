@@ -55,6 +55,9 @@
       overflow-x: hidden;
     }
 
+    /* Defensive: ensure .hidden behaves even if Tailwind isn't available */
+    .hidden { display: none !important; }
+
     .cursor-glow { 
       position: fixed; 
       width: 350px; 
@@ -141,6 +144,9 @@
       font-weight: 700;
     }
 
+    /* make result visible above other layers */
+    #resultBox { z-index: 40; position: relative; }
+
     @media (max-width: 768px) {
       .orb1, .orb2, .orb3 { display: none; }
     }
@@ -217,6 +223,14 @@
             <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
             Gentle • Private • Always here for you
           </div>
+
+          <!-- ADDED: username span so mood.js never crashes -->
+          <div class="mb-4">
+            <span class="text-sm text-zinc-300">Hello,</span>
+            <span id="username" class="text-lg font-semibold ml-2">Friend</span>
+            <span class="ml-2">👋</span>
+          </div>
+
           <h1 data-aos="fade-up" data-aos-delay="100" class="text-5xl md:text-6xl font-bold leading-none tracking-tighter logo-font">
             How are you feeling<br>right now?
           </h1>
