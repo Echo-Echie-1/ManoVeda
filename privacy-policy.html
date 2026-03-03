@@ -1,174 +1,302 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Privacy Policy | ManoVeda</title>
+  <link rel="icon" href="bingo.png" type="image/png">
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Prevent flash: set dark class early -->
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = saved === 'dark' || (!saved && prefersDark);
+        document.documentElement.classList.toggle('dark', isDark);
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Nunito:wght@400;600;700;800&display=swap');
+
+    :root {
+      --primary-r: 168;
+      --primary-g: 85;
+      --primary-b: 247;
     }
 
+    html { min-height: 100%; }
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #eef6ff, #ffffff);
-      color: #333;
-      line-height: 1.8;
-      padding: 30px;
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #e6e6e9;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 6%, rgba(99,102,241,0.16), transparent 36%),
+        radial-gradient(circle at 82% 20%, rgba(16,185,129,0.12), transparent 36%),
+        #0a0a0f;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center center;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: #fff;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    .glass {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    html.dark .glass {
+      background: rgba(15,23,42,0.45);
+      border-color: rgba(255,255,255,0.04);
     }
 
-    h1 {
-      font-size: 2.4rem;
-      color: #4f46e5;
-      margin-bottom: 10px;
-    }
+    .logo-font { font-family: 'Nunito', sans-serif; }
+    .section { padding: 6rem 0; border-top: 1px solid rgba(255,255,255,0.04); }
+    .cursor-glow { position: fixed; width: 350px; height: 350px; background: radial-gradient(circle, rgba(168,85,247,0.25) 0%, transparent 60%); pointer-events: none; transform: translate(-50%, -50%); filter: blur(80px); z-index: 0; transition: transform 0.08s ease-out; }
 
-    .updated {
-      font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 30px;
-    }
+    h1.policy-title { font-size: 2.25rem; line-height:1.05; }
+    .policy-updated { color: #9ca3af; font-size: .95rem; }
 
-    h2 {
-      margin-top: 30px;
-      font-size: 1.4rem;
-      color: #111827;
-    }
+    .policy-body { color: #d1d5db; line-height:1.8; }
+    .policy-body h2 { color: #e6e6e9; margin-top:1.25rem; font-size:1.05rem; }
+    .policy-body p, .policy-body li { color: #cbd5e1; }
 
-    p {
-      margin-top: 12px;
-      color: #374151;
-    }
+    .container-lg { max-width: 900px; margin: 0 auto; }
 
-    ul {
-      margin-top: 12px;
-      margin-left: 20px;
-    }
-
-    ul li {
-      margin-bottom: 8px;
-    }
-
-    a {
-      color: #4f46e5;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      margin-top: 40px;
-      font-size: 0.85rem;
-      color: #6b7280;
-      text-align: center;
+    @media (max-width:768px){
+      .policy-grid { padding: 1.25rem; }
+      h1.policy-title { font-size: 1.6rem; }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: February 2026</p>
+  <!-- glow -->
+  <div class="cursor-glow" aria-hidden="true"></div>
 
-    <p>
-      ManoVeda ("we", "our", or "us") values your privacy and is committed to
-      protecting your personal information. This Privacy Policy explains how
-      we collect, use, store, and protect your data when you use the ManoVeda
-      website and services.
-    </p>
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 left-0 right-0 z-40 glass border-b border-white/6">
+    <div class="max-w-screen-2xl mx-auto px-6 md:px-8 py-4 flex items-center justify-between">
+      <div onclick="window.location='/'" class="logo-font flex items-center gap-1.5 cursor-pointer">
+        <span class="text-2xl md:text-3xl font-bold tracking-tighter bg-gradient-to-r from-cyan-400 via-violet-500 to-amber-400 bg-clip-text text-transparent">Mano</span>
+        <span class="text-2xl md:text-3xl font-bold tracking-tighter text-white">Veda</span>
+        <span class="text-xs md:text-sm font-medium text-emerald-400 pl-2">AI</span>
+      </div>
 
-    <h2>1. Information We Collect</h2>
-    <p>We may collect the following types of information:</p>
-    <ul>
-      <li><strong>Personal Information:</strong> Name, email address, phone number, age, and location details (state, district, city).</li>
-      <li><strong>Account Information:</strong> Login credentials provided via secure authentication services.</li>
-      <li><strong>Mood & Emotional Data:</strong> Mood logs, emotional journal entries, and interaction data you voluntarily provide.</li>
-      <li><strong>Chat Data:</strong> Messages and interactions with the ManoVeda chatbot.</li>
-      <li><strong>Technical Data:</strong> Device type, browser information, and basic usage analytics.</li>
-    </ul>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="/" class="hover:text-violet-400 transition-colors">Home</a>
+        <a href="/chat" class="hover:text-violet-400 transition-colors">Talk to AI</a>
+        <a href="/mood" class="hover:text-violet-400 transition-colors">Mood Tracker</a>
+        <a href="/privacy.html" class="text-violet-400 font-semibold">Privacy Policy</a>
+      </div>
 
-    <h2>2. How We Use Your Information</h2>
-    <p>Your data is used to:</p>
-    <ul>
-      <li>Provide and personalize ManoVeda’s mental wellness features</li>
-      <li>Store mood history and emotional journal records</li>
-      <li>Improve chatbot responses and user experience</li>
-      <li>Maintain security and prevent misuse</li>
-      <li>Communicate important updates or service-related information</li>
-    </ul>
+      <div class="flex items-center gap-3">
+        <button id="theme-toggle" onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-2xl glass hover:bg-white/6 transition-all" aria-label="Toggle theme">
+          <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
 
-    <h2>3. Data Storage & Security</h2>
-    <p>
-      ManoVeda uses secure third-party services (such as Supabase) to store and
-      manage your data. We implement industry-standard security measures to
-      protect your information from unauthorized access, alteration, or loss.
-    </p>
+        <a class='px-4 md:px-6 py-2 md:py-2.5 rounded-3xl bg-white text-zinc-900 font-semibold text-sm hover:bg-amber-300 transition-all' href='/login'>Sign in</a>
 
-    <h2>4. Data Sharing</h2>
-    <p>
-      We do <strong>not</strong> sell, rent, or trade your personal data.
-      Your information is only shared:
-    </p>
-    <ul>
-      <li>When required by law or legal process</li>
-      <li>With trusted infrastructure providers strictly for app functionality</li>
-    </ul>
+        <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 flex items-center justify-center text-2xl">☰</button>
+      </div>
+    </div>
+  </nav>
 
-    <h2>5. Your Rights</h2>
-    <p>You have the right to:</p>
-    <ul>
-      <li>Access and review your personal data</li>
-      <li>Request corrections or updates</li>
-      <li>Request deletion of your account and associated data</li>
-      <li>Withdraw consent where applicable</li>
-    </ul>
-
-    <h2>6. Cookies & Tracking</h2>
-    <p>
-      ManoVeda may use minimal cookies or local storage to maintain sessions
-      and improve usability. We do not use intrusive tracking or advertising cookies.
-    </p>
-
-    <h2>7. Children’s Privacy</h2>
-    <p>
-      ManoVeda is not intended for children under the age of 13.
-      We do not knowingly collect personal data from minors.
-    </p>
-
-    <h2>8. Changes to This Policy</h2>
-    <p>
-      We may update this Privacy Policy from time to time.
-      Any changes will be reflected on this page with an updated revision date.
-    </p>
-
-    <h2>9. Contact Us</h2>
-    <p>
-      If you have any questions or concerns about this Privacy Policy,
-      please contact us at:
-      <br />
-      📧 <strong>support@manoveda.app</strong>
-    </p>
-
-    <footer>
-      © 2026 ManoVeda. All rights reserved.
-    </footer>
+  <!-- mobile menu -->
+  <div id="mobile-menu" class="hidden fixed inset-0 bg-black/90 z-50 pt-20 px-6">
+    <div class="flex flex-col gap-6 text-2xl font-medium">
+      <a href="/" onclick="toggleMobileMenu()" class="py-2">Home</a>
+      <a href="/chat" onclick="toggleMobileMenu()" class="py-2">Talk to AI</a>
+      <a href="/mood" onclick="toggleMobileMenu()" class="py-2">Mood Tracker</a>
+      <a href="/privacy.html" onclick="toggleMobileMenu()" class="py-2 text-violet-400">Privacy Policy</a>
+      <a class='mt-8 inline-block text-center py-4 rounded-3xl bg-violet-600 text-white text-xl' href='/login'>Sign in</a>
+    </div>
   </div>
+
+  <!-- PAGE HERO -->
+  <header class="min-h-[28vh] flex items-end pt-28 pb-10">
+    <div class="max-w-screen-2xl mx-auto px-6 w-full">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-3xl glass text-sm font-medium mb-6">
+          <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+          Private • Secure • Trustworthy
+        </div>
+
+        <h1 class="policy-title logo-font font-bold text-4xl md:text-5xl">Privacy Policy</h1>
+        <p class="policy-updated mt-3">Last updated: February 2026</p>
+        <p class="mt-6 text-zinc-300">ManoVeda ("we", "our", or "us") values your privacy and is committed to protecting your personal information.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- POLICY CONTENT -->
+  <main class="section">
+    <div class="max-w-screen-2xl mx-auto px-6">
+      <div class="container-lg glass rounded-3xl policy-grid p-8 md:p-12 mx-auto">
+
+        <div data-aos="fade-up" class="policy-body">
+          <p>
+            ManoVeda ("we", "our", or "us") values your privacy and is committed to protecting your personal information. This Privacy Policy explains how we collect, use, store, and protect your data when you use the ManoVeda website and services.
+          </p>
+
+          <h2 class="mt-6">1. Information We Collect</h2>
+          <p>We may collect the following types of information:</p>
+          <ul class="list-disc pl-6 mt-2">
+            <li><strong>Personal Information:</strong> Name, email address, phone number, age, and location details (state, district, city).</li>
+            <li><strong>Account Information:</strong> Login credentials provided via secure authentication services.</li>
+            <li><strong>Mood & Emotional Data:</strong> Mood logs, emotional journal entries, and interaction data you voluntarily provide.</li>
+            <li><strong>Chat Data:</strong> Messages and interactions with the ManoVeda chatbot.</li>
+            <li><strong>Technical Data:</strong> Device type, browser information, and basic usage analytics.</li>
+          </ul>
+
+          <h2>2. How We Use Your Information</h2>
+          <p>Your data is used to:</p>
+          <ul class="list-disc pl-6 mt-2">
+            <li>Provide and personalize ManoVeda’s mental wellness features</li>
+            <li>Store mood history and emotional journal records</li>
+            <li>Improve chatbot responses and user experience</li>
+            <li>Maintain security and prevent misuse</li>
+            <li>Communicate important updates or service-related information</li>
+          </ul>
+
+          <h2>3. Data Storage & Security</h2>
+          <p>
+            ManoVeda uses secure third-party services (such as Supabase) to store and manage your data. We implement industry-standard security measures to protect your information from unauthorized access, alteration, or loss.
+          </p>
+
+          <h2>4. Data Sharing</h2>
+          <p>
+            We do <strong>not</strong> sell, rent, or trade your personal data. Your information is only shared:
+          </p>
+          <ul class="list-disc pl-6 mt-2">
+            <li>When required by law or legal process</li>
+            <li>With trusted infrastructure providers strictly for app functionality</li>
+          </ul>
+
+          <h2>5. Your Rights</h2>
+          <p>You have the right to:</p>
+          <ul class="list-disc pl-6 mt-2">
+            <li>Access and review your personal data</li>
+            <li>Request corrections or updates</li>
+            <li>Request deletion of your account and associated data</li>
+            <li>Withdraw consent where applicable</li>
+          </ul>
+
+          <h2>6. Cookies & Tracking</h2>
+          <p>
+            ManoVeda may use minimal cookies or local storage to maintain sessions and improve usability. We do not use intrusive tracking or advertising cookies.
+          </p>
+
+          <h2>7. Children’s Privacy</h2>
+          <p>
+            ManoVeda is not intended for children under the age of 13. We do not knowingly collect personal data from minors.
+          </p>
+
+          <h2>8. Changes to This Policy</h2>
+          <p>
+            We may update this Privacy Policy from time to time. Any changes will be reflected on this page with an updated revision date.
+          </p>
+
+          <h2>9. Contact Us</h2>
+          <p>
+            If you have any questions or concerns about this Privacy Policy, please contact us at:
+            <br />
+            📧 <strong>support@manoveda.app</strong>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-12 border-t border-white/6">
+    <div class="max-w-screen-2xl mx-auto px-6 text-center text-xs text-zinc-500">
+      © 2026 ManoVeda Technologies Pvt Ltd • Privacy-first • Built with ❤️ for real peace
+      <div class="mt-3">
+        <a href="/terms.html" class="text-zinc-400 hover:text-violet-400 mr-4">Terms</a>
+        <a href="/privacy.html" class="text-violet-400 font-medium">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+      const sun = document.getElementById('sun-icon');
+      const moon = document.getElementById('moon-icon');
+      if (sun && moon) {
+        sun.classList.toggle('hidden', isDark);
+        moon.classList.toggle('hidden', !isDark);
+      }
+    }
+    function loadTheme() {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = saved === 'dark' || (!saved && prefersDark);
+      document.documentElement.classList.toggle('dark', isDark);
+      const sun = document.getElementById('sun-icon');
+      const moon = document.getElementById('moon-icon');
+      if (sun && moon) {
+        sun.classList.toggle('hidden', isDark);
+        moon.classList.toggle('hidden', !isDark);
+      }
+    }
+    function smoothScrollTo(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      if (menu) menu.classList.toggle('hidden');
+    }
+
+    window.onload = function () {
+      AOS.init({ once: true, duration: 700, easing: 'cubic-bezier(0.4,0,0.2,1)' });
+      loadTheme();
+      console.log('%c✨ ManoVeda — Privacy loaded ✨', 'color:#a855f7; font-family:monospace');
+    };
+  </script>
+
+  <!-- cursor glow movement -->
+  <script>
+    const glow = document.querySelector('.cursor-glow');
+    let mouseX = 0, mouseY = 0;
+    let posX = 0, posY = 0;
+    document.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    function animate() {
+      posX += (mouseX - posX) * 0.12;
+      posY += (mouseY - posY) * 0.12;
+      if (glow) {
+        glow.style.left = posX + "px";
+        glow.style.top = posY + "px";
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
 </body>
 </html>
