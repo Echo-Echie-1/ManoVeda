@@ -1,95 +1,261 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manoveda - Stress Relief Games</title>
-  <link rel="icon" href="bingo.png" />
-  <link rel="stylesheet" href="games.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ManoVeda • Gentle Games</title>
+  <link rel="icon" href="bingo.png" type="image/png">
+
+  <!-- Prevent flash: set dark class early (reads localStorage) -->
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = saved === 'dark' || (!saved && prefersDark);
+        document.documentElement.classList.toggle('dark', isDark);
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Nunito:wght@400;600;700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Nunito:wght@400;600;700;800&family=Poppins:wght@300;400;600;700&display=swap');
+
+    :root {
+      --primary-r: 168;
+      --primary-g: 85;
+      --primary-b: 247;
+    }
+
+    html { min-height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #e6e6e9;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 6%, rgba(99,102,241,0.16), transparent 36%),
+        radial-gradient(circle at 82% 20%, rgba(16,185,129,0.12), transparent 36%),
+        #0a0a0f;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center center;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* shared visual system from main */
+    .glass { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    html.dark .glass { background: rgba(15,23,42,0.45); border-color: rgba(255,255,255,0.04); }
+    .logo-font { font-family: 'Nunito', sans-serif; }
+
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.14; animation: floatOrb 25s infinite linear; pointer-events: none; z-index: 0; }
+    .orb1 { background: rgb(168 85 247); width: 600px; height: 600px; top: -10%; left: -10%; }
+    .orb2 { background: rgb(34 211 238); width: 800px; height: 800px; bottom: -20%; right: -15%; }
+    .orb3 { background: rgb(251 191 36); width: 500px; height: 500px; top: 30%; right: -20%; }
+    @keyframes floatOrb { 0%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(60px,-60px) rotate(180deg)}100%{transform:translate(0,0) rotate(360deg)} }
+
+    .cursor-glow { position: fixed; width: 350px; height: 350px; background: radial-gradient(circle, rgba(168,85,247,0.18) 0%, transparent 60%); pointer-events: none; transform: translate(-50%, -50%); filter: blur(80px); z-index: 0; transition: transform 0.08s ease-out; }
+
+    /* page-specific */
+    .page-max { max-width: 1320px; margin-left:auto; margin-right:auto; padding-left:24px; padding-right:24px; }
+    .section { padding: 3rem 0; }
+    .hero-small { min-height:32vh; display:flex; align-items:center; padding-top:80px; padding-bottom:36px; }
+    .filters { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
+    .filter-btn { padding:.45rem .75rem; border-radius:999px; border:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); cursor:pointer; transition: all .12s; font-weight:600 }
+    .filter-btn.active { background: linear-gradient(90deg,#7c3aed,#06b6d4); color:white; box-shadow: 0 10px 30px rgba(124,58,237,0.12); transform: translateY(-4px); }
+
+    /* library grid */
+    .library-grid { display:grid; grid-template-columns:repeat(1,1fr); gap:1rem; }
+    @media(min-width:640px){ .library-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(min-width:1024px){ .library-grid { grid-template-columns:repeat(3,1fr); } }
+    @media(min-width:1400px){ .library-grid { grid-template-columns:repeat(4,1fr); } }
+
+    .lib-card { padding:1.25rem; border-radius:1rem; display:flex; flex-direction:column; gap:.75rem; min-height:140px; justify-content:space-between; }
+    .lib-title { font-weight:700; font-size:1rem; }
+    .lib-meta { font-size:.85rem; color:#c9c9cf; }
+    .lib-actions { display:flex; gap:.5rem; align-items:center; }
+    .btn-primary { padding:.5rem .75rem; border-radius:10px; background:linear-gradient(90deg,#7c3aed,#06b6d4); color:white; font-weight:700; text-decoration:none; display:inline-block; }
+    .btn-link { font-size:.82rem; color:#cfcfe0; text-decoration:underline; }
+
+    .show-more { display:block; margin:1.25rem auto 0; padding:.6rem 1rem; border-radius:999px; background:transparent; border:1px solid rgba(255,255,255,0.06); color:#e6e6e9; cursor:pointer; }
+
+    .empty { padding:2rem; text-align:center; color:#c9c9cf; }
+
+    /* small util */
+    .tag { font-size: .72rem; padding:.25rem .5rem; border-radius:999px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); }
+
+    /* modal */
+    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:80; }
+    .modal { width:min(920px,95%); background:rgba(8,10,14,0.98); border-radius:14px; padding:1rem; border:1px solid rgba(255,255,255,0.04); }
+    .modal iframe { width:100%; height:520px; border-radius:8px; border:0; }
+
+    @media (max-width: 768px) {
+      .hero-small { padding-top:88px; }
+      .page-max { padding-left:16px; padding-right:16px; }
+    }
+  </style>
 </head>
+
 <body>
-  <!-- Luxury Borders -->
-  <div class="luxury-frame">
-    <div class="lux-seg lux-top"></div>
-    <div class="lux-seg lux-right"></div>
-    <div class="lux-seg lux-bottom"></div>
-    <div class="lux-seg lux-left"></div>
+  <!-- luxury frame -->
+  <div class="luxury-frame pointer-events-none fixed inset-0 z-50" aria-hidden="true">
+    <div class="lux-edge top-0 left-0 right-0 h-px" style="position:absolute;top:2px;left:0;right:0;background:linear-gradient(90deg,transparent,rgba(168,85,247,0.06),transparent)"></div>
   </div>
 
-  <!-- Mandala Corners (Improved with more detailed SVG) -->
-  <svg class="mandala-corner mandala-top-left" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="2"/>
-    <path d="M50 5 L60 20 L80 20 L65 30 L70 50 L50 40 L30 50 L35 30 L20 20 L40 20 Z" fill="#d4af37" opacity="0.5"/>
-    <circle cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1"/>
+  <!-- mandala corners -->
+  <svg class="mandala absolute top-6 left-6 w-24 h-24 text-white/8" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="38" stroke="currentColor" stroke-width="1.4"/>
+    <circle cx="50" cy="50" r="22" stroke="currentColor" stroke-width="0.9"/>
+    <path d="M50 12 L54 28 L70 28 L57 40 L62 58 L50 48 L38 58 L43 40 L30 28 L46 28 Z" fill="currentColor"/>
   </svg>
-  <svg class="mandala-corner mandala-top-right" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="2"/>
-    <path d="M50 5 L60 20 L80 20 L65 30 L70 50 L50 40 L30 50 L35 30 L20 20 L40 20 Z" fill="#d4af37" opacity="0.5"/>
-    <circle cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1"/>
-  </svg>
-  <svg class="mandala-corner mandala-bottom-left" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="2"/>
-    <path d="M50 5 L60 20 L80 20 L65 30 L70 50 L50 40 L30 50 L35 30 L20 20 L40 20 Z" fill="#d4af37" opacity="0.5"/>
-    <circle cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1"/>
-  </svg>
-  <svg class="mandala-corner mandala-bottom-right" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="2"/>
-    <path d="M50 5 L60 20 L80 20 L65 30 L70 50 L50 40 L30 50 L35 30 L20 20 L40 20 Z" fill="#d4af37" opacity="0.5"/>
-    <circle cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1"/>
+  <svg class="mandala absolute top-6 right-6 w-24 h-24 text-white/8 rotate-90" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="38" stroke="currentColor" stroke-width="1.4"/>
+    <circle cx="50" cy="50" r="22" stroke="currentColor" stroke-width="0.9"/>
+    <path d="M50 12 L54 28 L70 28 L57 40 L62 58 L50 48 L38 58 L43 40 L30 28 L46 28 Z" fill="currentColor"/>
   </svg>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo"><span class="mano">Mano</span><span class="veda">Veda</span></div>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="games.html">Games</a></li>
-      <li><a href="profile.html">Profile</a></li>
-    </ul>
+  <!-- orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <!-- NAVBAR (same as main) -->
+  <nav class="fixed top-0 left-0 right-0 z-40 glass border-b border-white/6">
+    <div class="page-max mx-auto px-6 py-4 flex items-center justify-between">
+      <div onclick="window.location='/'" class="logo-font flex items-center gap-1.5 cursor-pointer">
+        <span class="text-2xl font-bold tracking-tighter bg-gradient-to-r from-cyan-400 via-violet-500 to-amber-400 bg-clip-text text-transparent">Mano</span>
+        <span class="text-2xl font-bold tracking-tighter text-white">Veda</span>
+      </div>
+
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="/" class="hover:text-violet-400 transition-colors">Home</a>
+        <a href="/music" class="hover:text-violet-400 transition-colors">Music</a>
+        <a href="/profile.html" class="hover:text-violet-400 transition-colors">Profile</a>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button id="theme-toggle" onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-2xl glass hover:bg-white/6 transition-all active:scale-95" aria-label="Toggle theme">
+          <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+
+        <a class='px-6 py-2.5 rounded-3xl bg-white text-zinc-900 font-semibold text-sm hover:bg-amber-300 transition-all flex items-center gap-2' href='/login'>Sign in</a>
+
+        <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 flex items-center justify-center text-2xl">☰</button>
+      </div>
+    </div>
   </nav>
 
-  <!-- Login Button -->
-  <div class="login-container">
-    <a href="#" class="login-btn">Login</a>
-  </div>
+  <div style="height:72px"></div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <h1>🎮 Stress Relief Games & Websites</h1>
-    <p class="tagline">Explore resources to reduce stress and enhance focus.</p>
+  <!-- PAGE HERO -->
+  <section class="hero-small">
+    <div class="page-max mx-auto px-6">
+      <div class="text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-3xl glass text-sm font-medium mb-4">
+          <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+          Gentle micro-games & calming websites
+        </div>
+
+        <h1 class="text-4xl md:text-5xl font-bold logo-font mb-2">Gentle Games</h1>
+        <p class="text-zinc-300 max-w-2xl mx-auto">Short playful exercises, interactive visual tools and calming micro-sites — curated to help you reset quickly.</p>
+      </div>
+    </div>
   </section>
 
-  <!-- Questionnaire Section -->
-  <section id="questionnaire" class="question-section">
-    <h2>How are you feeling today?</h2>
-    <ul class="features" id="q1-options">
-      <li data-value="stressed">Stressed</li>
-      <li data-value="anxious">Anxious</li>
-      <li data-value="tired">Tired</li>
-      <li data-value="bored">Bored</li>
-      <li data-value="sad">Sad</li>
-      <li data-value="relaxed">Relaxed</li>
-    </ul>
-    <div id="q2-container"></div>
-    <div id="q3-container"></div>
-    <div id="q4-container"></div>
-    <div id="q5-container"></div>
-  </section>
+  <!-- MAIN CONTENT -->
+  <main class="page-max mx-auto px-6 pb-20">
+    <!-- Controls: filters + search -->
+    <section class="glass p-6 md:p-8 rounded-3xl" data-aos="fade-up">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <div class="text-sm text-amber-400 font-medium mb-2">GAMES & INTERACTIVES</div>
+          <h2 class="text-2xl font-semibold">Browse the library</h2>
+          <p class="small-muted mt-1">Filter by mood or search keywords — then press "Show more" to expand the library.</p>
+        </div>
 
-  <!-- Recommended Resources Section -->
-  <section id="resources" class="resources-section" style="display:none;">
-    <h2>Your Recommended Resources</h2>
-    <div id="resource-buttons" class="resource-buttons"></div>
-  </section>
+        <div class="flex items-center gap-3">
+          <div class="filters" id="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="relax">Relax</button>
+            <button class="filter-btn" data-filter="music">Music</button>
+            <button class="filter-btn" data-filter="games">Games</button>
+            <button class="filter-btn" data-filter="creative">Creative</button>
+            <button class="filter-btn" data-filter="focus">Focus</button>
+          </div>
 
-  <footer>
-    <p>© 2025 Manoveda | Built with 💜 in India</p>
+          <div class="ml-2">
+            <input id="search-input" type="search" placeholder="Search (e.g., piano, rain, quick game)" class="p-3 rounded-2xl bg-black/40 border border-white/10">
+          </div>
+
+          <button id="search-btn" class="px-4 py-2 rounded-2xl bg-gradient-to-r from-violet-600 to-cyan-500 text-white">Search</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- library -->
+    <section class="mt-6" data-aos="fade-up">
+      <div id="library-grid" class="library-grid"></div>
+      <div id="library-empty" class="empty hidden">No items match your filters — try another mood or keyword.</div>
+
+      <button id="show-more-btn" class="show-more hidden">Show more</button>
+    </section>
+
+    <!-- questionnaire (keeps your flow) -->
+    <section id="questionnaire" class="mt-8 glass p-6 rounded-3xl" data-aos="fade-up">
+      <h2 class="text-xl font-semibold mb-4">Quick check-in</h2>
+      <div class="small-muted mb-3">Answer a few quick questions if you'd like recommendations tailored to your current state.</div>
+      <div>
+        <h3 class="text-lg font-medium mb-2">How are you feeling today?</h3>
+        <ul class="flex flex-wrap gap-3" id="q1-options">
+          <li class="filter-btn" data-value="stressed">Stressed</li>
+          <li class="filter-btn" data-value="anxious">Anxious</li>
+          <li class="filter-btn" data-value="tired">Tired</li>
+          <li class="filter-btn" data-value="bored">Bored</li>
+          <li class="filter-btn" data-value="sad">Sad</li>
+          <li class="filter-btn" data-value="relaxed">Relaxed</li>
+        </ul>
+
+        <div id="q2-container" class="mt-4"></div>
+        <div id="q3-container" class="mt-4"></div>
+        <div id="q4-container" class="mt-4"></div>
+        <div id="q5-container" class="mt-4"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (same feel) -->
+  <footer class="section border-t border-white/6">
+    <div class="page-max mx-auto px-6 text-center small-muted">
+      © 2025 ManoVeda | Built with 💜 in India
+    </div>
   </footer>
 
+  <!-- cursor glow -->
+  <div class="cursor-glow" id="glow"></div>
+
+  <!-- modal placeholder -->
+  <div id="modal-root" style="display:none"></div>
+
+  <!-- scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // JavaScript for conversation and filtering resources (unchanged)
-    const answers = {};
+    AOS.init({ once: true, duration: 700, easing: 'cubic-bezier(0.4,0,0.2,1)' });
+  </script>
+
+  <script>
+    /***** Resources (your full list preserved) *****/
     const resources = [
       {name: "Calm", url: "https://www.calm.com/", categories:["mindfulness","sleep"], premium:true},
       {name: "Headspace", url: "https://www.headspace.com/", categories:["mindfulness","sleep"], premium:true},
@@ -181,7 +347,139 @@
       {name: "Paint With Sloths", url: "https://www.paintwithsloths.com/", categories:["creativity"], premium:false}
     ];
 
-    // question handling
+    /***** Helpers & rendering *****/
+    const gridEl = document.getElementById('library-grid');
+    const emptyEl = document.getElementById('library-empty');
+    const showMoreBtn = document.getElementById('show-more-btn');
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-btn');
+    const filtersEl = document.getElementById('filters');
+
+    let activeFilter = 'all';
+    let query = '';
+    let showAll = false; // toggled by "Show more"
+
+    function getDomain(url) {
+      try { return new URL(url).hostname.replace('www.',''); } catch(e) { return url; }
+    }
+
+    function chooseEmoji(res) {
+      const cats = (res.categories||[]).join(' ');
+      if (cats.includes('sound')) return '🌊';
+      if (cats.includes('games')) return '🕹️';
+      if (cats.includes('music')) return '🎶';
+      if (cats.includes('creativity')) return '✨';
+      if (cats.includes('relax')) return '🌿';
+      if (cats.includes('mindfulness')) return '🧘';
+      return '🔹';
+    }
+
+    function filterResources() {
+      let filtered = resources.slice();
+
+      if (activeFilter !== 'all') {
+        filtered = filtered.filter(r => (r.categories || []).includes(activeFilter));
+      }
+
+      if (query && query.trim() !== '') {
+        const q = query.trim().toLowerCase();
+        filtered = filtered.filter(r =>
+          r.name.toLowerCase().includes(q) ||
+          (r.categories && r.categories.some(c => c.toLowerCase().includes(q)))
+        );
+      }
+
+      return filtered;
+    }
+
+    function renderLibrary() {
+      const list = filterResources();
+      gridEl.innerHTML = '';
+
+      if (!list || list.length === 0) {
+        emptyEl.classList.remove('hidden');
+        showMoreBtn.classList.add('hidden');
+        return;
+      } else {
+        emptyEl.classList.add('hidden');
+      }
+
+      // control paging: initial show 12, showAll reveals the rest
+      const initialCount = 12;
+      const toShow = showAll ? list.length : Math.min(initialCount, list.length);
+
+      for (let i = 0; i < toShow; i++) {
+        const r = list[i];
+        const card = document.createElement('div');
+        card.className = 'lib-card glass';
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="lib-title">${r.name}</div>
+                <div class="lib-meta mt-1">${(r.categories||[]).slice(0,3).join(' • ')}</div>
+                <div class="lib-meta mt-1 text-xs">Source: ${getDomain(r.url)}</div>
+              </div>
+              <div class="text-3xl">${chooseEmoji(r)}</div>
+            </div>
+          </div>
+          <div class="lib-actions mt-3">
+            <a class="btn-primary" href="#" data-url="${r.url}">Open</a>
+            <a class="btn-link ml-2" href="${r.url}" target="_blank" rel="noreferrer">Open in new tab</a>
+            ${r.premium ? `<div class="tag ml-auto">Premium</div>` : ''}
+          </div>
+        `;
+        gridEl.appendChild(card);
+      }
+
+      // Show more logic
+      if (!showAll && list.length > initialCount) {
+        showMoreBtn.classList.remove('hidden');
+        showMoreBtn.textContent = `Show more (${list.length - initialCount} more)`;
+      } else {
+        showMoreBtn.classList.add('hidden');
+      }
+
+      // attach click handlers for open buttons
+      gridEl.querySelectorAll('[data-url]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = btn.getAttribute('data-url');
+          window.open(url, '_blank');
+        });
+      });
+    }
+
+    // Wire filters UI (main-like)
+    filtersEl.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        filtersEl.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.getAttribute('data-filter');
+        renderLibrary();
+      });
+    });
+
+    // Search
+    searchBtn.addEventListener('click', () => {
+      query = searchInput.value || '';
+      renderLibrary();
+    });
+    searchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { query = searchInput.value || ''; renderLibrary(); } });
+
+    // Show more button
+    showMoreBtn.addEventListener('click', () => {
+      showAll = true;
+      renderLibrary();
+      // scroll slightly so user sees added content
+      showMoreBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // initial render
+    renderLibrary();
+
+    /***** Questionnaire behavior (kept from your original) *****/
+    const answers = {};
     document.querySelectorAll('#q1-options li').forEach(item => {
       item.addEventListener('click', () => {
         answers.q1 = item.getAttribute('data-value');
@@ -193,12 +491,12 @@
     function handleQ1(val) {
       if (val === 'tired') {
         document.getElementById('q2-container').innerHTML = `
-          <h2>How did you sleep last night?</h2>
-          <ul class="features" id="q2-options">
-            <li data-value="well">Well</li>
-            <li data-value="okay">Okay</li>
-            <li data-value="poorly">Poorly</li>
-            <li data-value="none">No sleep</li>
+          <h3 class="text-md font-medium mb-2">How did you sleep last night?</h3>
+          <ul class="flex gap-3" id="q2-options">
+            <li class="filter-btn" data-value="well">Well</li>
+            <li class="filter-btn" data-value="okay">Okay</li>
+            <li class="filter-btn" data-value="poorly">Poorly</li>
+            <li class="filter-btn" data-value="none">No sleep</li>
           </ul>`;
         document.querySelectorAll('#q2-options li').forEach(item => {
           item.addEventListener('click', () => {
@@ -215,11 +513,11 @@
     function handleQ2(val) {
       if (answers.q1 === 'tired') {
         document.getElementById('q3-container').innerHTML = `
-          <h2>What is your energy level right now?</h2>
-          <ul class="features" id="q3-options">
-            <li data-value="low">Low</li>
-            <li data-value="medium">Medium</li>
-            <li data-value="high">High</li>
+          <h3 class="text-md font-medium mb-2">What is your energy level right now?</h3>
+          <ul class="flex gap-3" id="q3-options">
+            <li class="filter-btn" data-value="low">Low</li>
+            <li class="filter-btn" data-value="medium">Medium</li>
+            <li class="filter-btn" data-value="high">High</li>
           </ul>`;
         document.querySelectorAll('#q3-options li').forEach(item => {
           item.addEventListener('click', () => {
@@ -235,13 +533,13 @@
 
     function nextQuestion() {
       document.getElementById('q4-container').innerHTML = `
-        <h2>Which activity sounds best right now?</h2>
-        <ul class="features" id="q4-options">
-          <li data-value="calm">Quiet & calm (e.g., meditation, breathing)</li>
-          <li data-value="music">Listening to music or sounds</li>
-          <li data-value="game">Playing a fun game</li>
-          <li data-value="creative">Doing something creative</li>
-          <li data-value="move">Getting some movement/exercise</li>
+        <h3 class="text-md font-medium mb-2">Which activity sounds best right now?</h3>
+        <ul class="flex flex-col md:flex-row gap-3" id="q4-options">
+          <li class="filter-btn" data-value="calm">Quiet & calm (e.g., meditation, breathing)</li>
+          <li class="filter-btn" data-value="music">Listening to music or sounds</li>
+          <li class="filter-btn" data-value="game">Playing a fun game</li>
+          <li class="filter-btn" data-value="creative">Doing something creative</li>
+          <li class="filter-btn" data-value="move">Getting some movement/exercise</li>
         </ul>`;
       document.querySelectorAll('#q4-options li').forEach(item => {
         item.addEventListener('click', () => {
@@ -254,9 +552,9 @@
 
     function finalQuestion() {
       document.getElementById('q5-container').innerHTML = `
-        <h2>Anything specific you're looking for?</h2>
-        <input type="text" id="q5-input" placeholder="e.g. sleep, focus, fun, etc" />
-        <button id="q5-submit" class="btn-submit">Get Suggestions</button>`;
+        <h3 class="text-md font-medium mb-2">Anything specific you're looking for?</h3>
+        <input type="text" id="q5-input" placeholder="e.g. sleep, focus, fun, piano" />
+        <button id="q5-submit" class="btn-primary mt-2">Get Suggestions</button>`;
       document.getElementById('q5-submit').addEventListener('click', () => {
         answers.q5 = document.getElementById('q5-input').value;
         showResults();
@@ -264,9 +562,10 @@
     }
 
     function showResults() {
+      // (keeps your same recommendation algorithm)
       document.getElementById('questionnaire').style.display = 'none';
-      document.getElementById('resources').style.display = 'block';
-      let filtered = resources;
+      // apply filters to resources and show up to 12 by default; user can Show more
+      let filtered = resources.slice();
       if (answers.q1 === 'tired') {
         if (answers.q2 === 'poorly' || answers.q2 === 'none') {
           filtered = filtered.filter(r => r.categories.includes("sleep") || r.categories.includes("relax") || r.categories.includes("mindfulness"));
@@ -299,22 +598,120 @@
         const keyword = answers.q5.toLowerCase();
         filtered = filtered.filter(r => r.name.toLowerCase().includes(keyword) || (r.categories && r.categories.some(c => c.includes(keyword))));
       }
-      filtered = filtered.slice(0, 10);
-      const container = document.getElementById('resource-buttons');
-      if (filtered.length === 0) {
-        container.innerHTML = "<p>No matching resources found. Try a different approach!</p>";
-      } else {
-        filtered.forEach(res => {
-          const a = document.createElement('a');
-          a.href = res.url;
-          a.target = "_blank";
-          a.className = "resource-btn" + (res.premium ? " premium" : "");
-          a.textContent = res.name;
-          container.appendChild(a);
-        });
+
+      // replace resources array temporarily for rendering
+      // (we'll render filtered set directly)
+      // show first page then allow Show more
+      gridEl.innerHTML = '';
+      emptyEl.classList.add('hidden');
+
+      if (!filtered || filtered.length === 0) {
+        emptyEl.classList.remove('hidden');
+        return;
       }
+
+      // show top 12, and show more if > 12
+      const initialCount = 12;
+      const toShow = Math.min(initialCount, filtered.length);
+      for (let i=0;i<toShow;i++){
+        const r = filtered[i];
+        const card = document.createElement('div');
+        card.className = 'lib-card glass';
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="lib-title">${r.name}</div>
+                <div class="lib-meta mt-1">${(r.categories||[]).slice(0,3).join(' • ')}</div>
+                <div class="lib-meta mt-1 text-xs">Source: ${getDomain(r.url)}</div>
+              </div>
+              <div class="text-3xl">${chooseEmoji(r)}</div>
+            </div>
+          </div>
+          <div class="lib-actions mt-3">
+            <a class="btn-primary" href="#" data-url="${r.url}">Open</a>
+            <a class="btn-link ml-2" href="${r.url}" target="_blank" rel="noreferrer">Open in new tab</a>
+            ${r.premium ? `<div class="tag ml-auto">Premium</div>` : ''}
+          </div>
+        `;
+        gridEl.appendChild(card);
+      }
+
+      if (filtered.length > initialCount) {
+        showMoreBtn.classList.remove('hidden');
+        showMoreBtn.textContent = `Show more (${filtered.length - initialCount} more)`;
+        // on show more, replace grid with full filtered
+        showMoreBtn.onclick = () => {
+          showAll = true;
+          gridEl.innerHTML = '';
+          filtered.forEach(r => {
+            const card = document.createElement('div');
+            card.className = 'lib-card glass';
+            card.innerHTML = `
+              <div>
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="lib-title">${r.name}</div>
+                    <div class="lib-meta mt-1">${(r.categories||[]).slice(0,3).join(' • ')}</div>
+                    <div class="lib-meta mt-1 text-xs">Source: ${getDomain(r.url)}</div>
+                  </div>
+                  <div class="text-3xl">${chooseEmoji(r)}</div>
+                </div>
+              </div>
+              <div class="lib-actions mt-3">
+                <a class="btn-primary" href="#" data-url="${r.url}">Open</a>
+                <a class="btn-link ml-2" href="${r.url}" target="_blank" rel="noreferrer">Open in new tab</a>
+                ${r.premium ? `<div class="tag ml-auto">Premium</div>` : ''}
+              </div>
+            `;
+            gridEl.appendChild(card);
+          });
+          showMoreBtn.classList.add('hidden');
+        };
+      } else {
+        showMoreBtn.classList.add('hidden');
+      }
+
+      // attach opens
+      gridEl.querySelectorAll('[data-url]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = btn.getAttribute('data-url');
+          window.open(url, '_blank');
+        });
+      });
+      // scroll to library
+      document.getElementById('library-grid')?.scrollIntoView({behavior:'smooth'});
     }
+
+    /***** Theme toggle & glow (same behavior as main) *****/
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+      const sun = document.getElementById('sun-icon'), moon = document.getElementById('moon-icon');
+      if (sun && moon) { sun.classList.toggle('hidden', isDark); moon.classList.toggle('hidden', !isDark); }
+    }
+    function loadTheme() {
+      const saved = localStorage.getItem('theme'); const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = saved === 'dark' || (!saved && prefersDark);
+      document.documentElement.classList.toggle('dark', isDark);
+      const sun = document.getElementById('sun-icon'), moon = document.getElementById('moon-icon');
+      if (sun && moon) { sun.classList.toggle('hidden', isDark); moon.classList.toggle('hidden', !isDark); }
+    }
+    loadTheme();
+
+    // cursor glow follow
+    (function(){
+      const glow = document.getElementById('glow');
+      let mouseX=0, mouseY=0, posX=0, posY=0;
+      document.addEventListener('mousemove', (e)=>{ mouseX=e.clientX; mouseY=e.clientY; });
+      function animate(){ posX+=(mouseX-posX)*0.12; posY+=(mouseY-posY)*0.12; glow.style.left=posX+'px'; glow.style.top=posY+'px'; requestAnimationFrame(animate); }
+      animate();
+    })();
+
+    // mobile menu
+    function toggleMobileMenu(){ const menu = document.getElementById('mobile-menu'); if(menu) menu.classList.toggle('hidden'); }
+    window.toggleMobileMenu = toggleMobileMenu;
   </script>
 </body>
 </html>
-
