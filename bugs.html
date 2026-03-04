@@ -172,11 +172,26 @@
       }
 
       // 2) upload file using a short predictable filename that includes reportId
-      const rnd = shortId();
-      const ext = extFromFile(file);
-      const safeFilename = `report-${reportId}-${rnd}.${ext}`;
-      const storagePath = `bugs/${safeFilename}`;
+      // Convert title into safe slug
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')   // remove special chars
+    .trim()
+    .replace(/\s+/g, '-')           // spaces → hyphen
+    .replace(/-+/g, '-');           // remove duplicate hyphens
+}
 
+const ext = extFromFile(file);
+
+// If no title, fallback
+const baseTitle = title ? slugify(title) : 'bug-report';
+
+// short unique suffix
+const unique = Math.random().toString(36).substring(2, 7);
+
+const safeFilename = `${baseTitle}-${unique}.${ext}`;
+const storagePath = `bugs/${safeFilename}`;
       // upload
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("bug_uploads")   // your bucket
