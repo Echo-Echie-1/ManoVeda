@@ -172,15 +172,44 @@
       }
 
       // 2) upload file using a short predictable filename that includes reportId
-      // Convert title into safe slug
 function slugify(text) {
+  if (!text) return "";
+
   return text
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')   // remove special chars
     .trim()
     .replace(/\s+/g, '-')           // spaces → hyphen
-    .replace(/-+/g, '-');           // remove duplicate hyphens
+    .replace(/-+/g, '-');           // collapse multiple hyphens
 }
+
+// Extract extension safely
+function extFromFile(file) {
+  const match = file.name.match(/\.([^.]+)$/);
+  return match ? match[1].toLowerCase() : "bin";
+}
+
+const ext = extFromFile(file);
+
+// 1️⃣ Try slug from title
+let base = slugify(title);
+
+// 2️⃣ If title becomes empty, fallback to original filename (without extension)
+if (!base) {
+  const originalNameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+  base = slugify(originalNameWithoutExt);
+}
+
+// 3️⃣ If still empty, final fallback
+if (!base) {
+  base = "bug-report";
+}
+
+// small unique suffix
+const unique = Math.random().toString(36).substring(2, 7);
+
+const safeFilename = `${base}-${unique}.${ext}`;
+const storagePath = `bugs/${safeFilename}`;
 
 const ext = extFromFile(file);
 
