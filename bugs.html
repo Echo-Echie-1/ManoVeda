@@ -10,12 +10,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body { font-family: 'Poppins', sans-serif; }
-.glass {
-  background: rgba(255,255,255,0.07);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255,255,255,0.1);
-}
+  body { font-family: 'Poppins', sans-serif; }
+  .glass {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
 </style>
 </head>
 
@@ -23,133 +23,212 @@ body { font-family: 'Poppins', sans-serif; }
 
 <div class="glass w-full max-w-2xl rounded-2xl p-8 shadow-2xl">
 
-<div class="flex flex-col items-center mb-6">
-  <h2 class="text-3xl font-bold">Report a Bug</h2>
-  <p class="text-gray-300 text-sm mt-1">Help us improve ManoVeda</p>
-</div>
+  <div class="flex flex-col items-center mb-6">
+    <h2 class="text-3xl font-bold">Report a Bug</h2>
+    <p class="text-gray-300 text-sm mt-1">Help us improve ManoVeda</p>
+  </div>
 
-<form id="bugForm" class="space-y-4">
+  <form id="bugForm" class="space-y-4">
 
-<input id="name" type="text" placeholder="Your Name"
-class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
+    <!-- NEW: Title field so user can name issue (used to create friendly filename / display) -->
+    <input id="title" type="text" placeholder="Short title (eg. Contact page not working)"
+      class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500" />
 
-<input id="phone" type="text" placeholder="Phone Number"
-class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
+    <input id="name" type="text" placeholder="Your Name"
+      class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
 
-<input id="email" type="email" placeholder="Email"
-class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
+    <input id="phone" type="text" placeholder="Phone Number"
+      class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
 
-<textarea id="message" placeholder="Describe the issue..."
-class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500 h-32"></textarea>
+    <input id="email" type="email" placeholder="Email"
+      class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
 
-<input id="file" type="file" accept="image/*,video/*,audio/*"
-class="w-full text-sm text-gray-300">
+    <textarea id="message" placeholder="Describe the issue..."
+      class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500 h-32"></textarea>
 
-<button type="submit"
-class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-semibold transition">
-Submit Report
-</button>
+    <input id="file" type="file" accept="image/*,video/*,audio/*"
+      class="w-full text-sm text-gray-300">
 
-</form>
+    <button type="submit"
+      class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-semibold transition">
+      Submit Report
+    </button>
 
-<p id="status" class="text-center mt-4 text-sm"></p>
+  </form>
+
+  <p id="status" class="text-center mt-4 text-sm"></p>
 
 </div>
 
 <script>
-(function () {
+(async function () {
+  // CONFIG - replace keys if needed
+  const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
 
-const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4"; // keep yours here
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
-// Session ID
-let sessionId = localStorage.getItem("manoveda_bug_session");
-if (!sessionId) {
-  sessionId = crypto.randomUUID();
-  localStorage.setItem("manoveda_bug_session", sessionId);
-}
-
-const form = document.getElementById("bugForm");
-const statusEl = document.getElementById("status");
-
-// Autofill email if logged in
-async function autoFill() {
-  const { data } = await supabase.auth.getUser();
-  if (data?.user?.email) {
-    document.getElementById("email").value = data.user.email;
-  }
-}
-autoFill();
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  statusEl.innerText = "Submitting...";
-
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const message = document.getElementById("message").value.trim();
-  const fileInput = document.getElementById("file");
-  const file = fileInput.files[0];
-
-  if (!message) {
-    statusEl.innerText = "Message is required.";
-    return;
+  // Session ID (persisted) - used for anonymous session tracing
+  let sessionId = localStorage.getItem("manoveda_bug_session");
+  if (!sessionId) {
+    sessionId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).slice(2);
+    localStorage.setItem("manoveda_bug_session", sessionId);
   }
 
-  let filePath = null;
-  let fileType = null;
+  // Elements
+  const form = document.getElementById("bugForm");
+  const statusEl = document.getElementById("status");
 
-  // Upload file if exists
-  if (file) {
-    const uniquePath = `bugs/${sessionId}-${Date.now()}-${file.name}`;
+  // Try autofill email if user is logged in
+  try {
+    const userResp = await supabase.auth.getUser();
+    const user = userResp?.data?.user || null;
+    if (user?.email) document.getElementById("email").value = user.email;
+  } catch (err) {
+    console.log("auth getUser error (non-fatal):", err);
+  }
 
-    const { error: uploadError } = await supabase.storage
-      .from("bug_uploads") // IMPORTANT: underscore
-      .upload(uniquePath, file);
+  // Helper: short id
+  function shortId() {
+    // small readable id
+    return Math.random().toString(36).slice(2,9);
+  }
 
-    if (uploadError) {
-      console.error("Upload error:", uploadError);
-      statusEl.innerText = "File upload failed.";
+  // Helper: file extension from name or mime
+  function extFromFile(file) {
+    if (!file) return 'bin';
+    const m = file.name.match(/\.([^.?#]+)(?:[?#].*)?$/);
+    if (m) return m[1].toLowerCase();
+    const mimeExt = (file.type || '').split('/').pop();
+    return mimeExt || 'bin';
+  }
+
+  // Submit flow:
+  // 1) Insert a bug_reports row (title, message, user fields) → returns id
+  // 2) If file present: upload to storage path that includes report id:
+  //      bug_uploads/bugs/report-<id>-<short>.<ext>
+  //    then get public URL and update row with file fields
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    statusEl.innerText = "";
+
+    const title = (document.getElementById("title").value || "").trim();
+    const name = (document.getElementById("name").value || "").trim();
+    const phone = (document.getElementById("phone").value || "").trim();
+    const email = (document.getElementById("email").value || "").trim();
+    const message = (document.getElementById("message").value || "").trim();
+    const fileInput = document.getElementById("file");
+    const file = fileInput.files[0];
+
+    if (!message) {
+      statusEl.innerText = "Please describe the issue.";
       return;
     }
 
-    filePath = uniquePath;
-    fileType = file.type;
-  }
+    statusEl.innerText = "Submitting…";
 
-  const { data } = await supabase.auth.getUser();
+    // get current user (if any)
+    let user = null;
+    try {
+      const userResp = await supabase.auth.getUser();
+      user = userResp?.data?.user || null;
+    } catch (err) {
+      console.warn("auth.getUser error:", err);
+      user = null;
+    }
 
-  const { error } = await supabase
-    .from("bug_reports")
-    .insert({
+    // 1) insert bug row (no file yet)
+    const insertPayload = {
       session_id: sessionId,
-      user_id: data?.user?.id || null,
-      name,
-      phone,
-      email,
+      user_id: user?.id || null,
+      title: title || null,
+      name: name || null,
+      phone: phone || null,
+      email: email || null,
       message,
-      file_url: filePath,
-      file_type: fileType,
       user_agent: navigator.userAgent,
       page_url: window.location.href
-    });
+    };
 
-  if (error) {
-    console.error("Insert error:", error);
-    statusEl.innerText = "Error submitting bug.";
-    return;
-  }
+    try {
+      const { data: insertData, error: insertError } = await supabase
+        .from("bug_reports")
+        .insert([insertPayload])
+        .select()  // return inserted row(s)
+        .single();
 
-  statusEl.innerText = "✅ Bug report submitted successfully.";
-  form.reset();
-});
+      if (insertError) {
+        console.error("Insert error:", insertError);
+        statusEl.innerText = "Error saving report to DB.";
+        return;
+      }
+
+      const reportId = insertData.id;
+      // If no file, we're done
+      if (!file) {
+        statusEl.innerText = `✅ Report submitted (id ${reportId}).`;
+        form.reset();
+        return;
+      }
+
+      // 2) upload file using a short predictable filename that includes reportId
+      const rnd = shortId();
+      const ext = extFromFile(file);
+      const safeFilename = `report-${reportId}-${rnd}.${ext}`;
+      const storagePath = `bugs/${safeFilename}`;
+
+      // upload
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("bug_uploads")   // your bucket
+        .upload(storagePath, file, { cacheControl: '3600', upsert: false });
+
+      if (uploadError) {
+        console.error("Upload error:", uploadError);
+        // update DB to mark upload failed (optional)
+        await supabase
+          .from("bug_reports")
+          .update({ upload_error: true })
+          .eq("id", reportId);
+        statusEl.innerText = "File upload failed — report saved without attachment.";
+        form.reset();
+        return;
+      }
+
+      // get a public url for the uploaded file
+      const { data: publicUrlData } = supabase.storage
+        .from("bug_uploads")
+        .getPublicUrl(storagePath); // v2 returns { data: { publicUrl } }
+
+      const publicUrl = publicUrlData?.publicUrl || null;
+
+      // Update the bug row with file info
+      const updatePayload = {
+        file_path: storagePath,
+        file_name: safeFilename,
+        file_url: publicUrl,
+        file_type: file.type || null
+      };
+
+      const { error: updateError } = await supabase
+        .from("bug_reports")
+        .update(updatePayload)
+        .eq("id", reportId);
+
+      if (updateError) {
+        console.warn("Could not update bug row with file info:", updateError);
+        statusEl.innerText = "Report saved but failed to attach file to DB record.";
+        form.reset();
+        return;
+      }
+
+      statusEl.innerText = `✅ Report submitted (id ${reportId}). File uploaded as ${safeFilename}`;
+      form.reset();
+
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      statusEl.innerText = "Unexpected error — check console.";
+    }
+  });
 
 })();
 </script>
