@@ -1,281 +1,387 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Report a Bug • ManoVeda</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Report a Bug • ManoVeda</title>
+  <link rel="icon" href="bingo.png" type="image/png">
+  
+  <!-- Prevent flash + theme -->
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = saved === 'dark' || (!saved && prefersDark);
+        document.documentElement.classList.toggle('dark', isDark);
+      } catch (e) {}
+    })();
+  </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-<style>
-  body { font-family: 'Poppins', sans-serif; }
-  .glass {
-    background: rgba(255,255,255,0.07);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-</style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Nunito:wght@400;600;700;800&display=swap');
+    
+    :root {
+      --primary-r: 168;
+      --primary-g: 85;
+      --primary-b: 247;
+    }
+
+    /* ULTRA ULTIMATE BACKGROUND - same as main site */
+    html { min-height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #e6e6e9;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 6%, rgba(99,102,241,0.18), transparent 40%),
+        radial-gradient(circle at 82% 20%, rgba(16,185,129,0.14), transparent 40%),
+        radial-gradient(circle at 35% 85%, rgba(251,191,36,0.10), transparent 40%),
+        #0a0a0f;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center center;
+      overflow-x: hidden;
+    }
+
+    /* Luxury elements from main site */
+    .cursor-glow { 
+      position: fixed; width: 420px; height: 420px; 
+      background: radial-gradient(circle, rgba(168,85,247,0.22) 0%, transparent 65%); 
+      pointer-events: none; transform: translate(-50%, -50%); 
+      filter: blur(90px); z-index: 0; transition: transform 0.1s ease-out; 
+    }
+    .glass { 
+      background: rgba(255,255,255,0.05); 
+      border: 1px solid rgba(255,255,255,0.08); 
+      backdrop-filter: blur(20px); 
+      -webkit-backdrop-filter: blur(20px); 
+      box-shadow: 0 25px 70px -15px rgba(0,0,0,0.6);
+    }
+    html.dark .glass { background: rgba(15,23,42,0.55); border-color: rgba(255,255,255,0.06); }
+
+    .orb { 
+      position: absolute; border-radius: 50%; filter: blur(90px); 
+      opacity: 0.16; animation: floatOrb 28s infinite linear; pointer-events: none; 
+    }
+    .orb1 { background: rgb(168 85 247); width: 720px; height: 720px; top: -15%; left: -15%; }
+    .orb2 { background: rgb(34 211 238); width: 920px; height: 920px; bottom: -25%; right: -20%; }
+    .orb3 { background: rgb(251 191 36); width: 580px; height: 580px; top: 40%; left: 60%; }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0,0) rotate(0deg); }
+      50% { transform: translate(80px,-70px) rotate(180deg); }
+      100% { transform: translate(0,0) rotate(360deg); }
+    }
+
+    .mandala { opacity: .09; pointer-events: none; }
+
+    .input-luxury {
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .input-luxury:focus {
+      border-color: rgb(168 85 247);
+      box-shadow: 0 0 0 4px rgba(168,85,247,0.15);
+      background: rgba(0,0,0,0.45);
+    }
+
+    .reveal-text {
+      background: linear-gradient(90deg, #a855f7, #67e8f9, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% 100%;
+      animation: shine 4s linear infinite;
+    }
+    @keyframes shine { 0% { background-position: 200% 0 } 100% { background-position: -200% 0 } }
+
+    .submit-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 40%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: 0.7s;
+    }
+    .submit-btn:hover::before { left: 200%; }
+  </style>
 </head>
+<body class="relative">
 
-<body class="bg-gradient-to-br from-black via-purple-900 to-indigo-900 text-white min-h-screen flex items-center justify-center p-6">
+  <!-- ORBS (ultra cosmic feel) -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
 
-<div class="glass w-full max-w-2xl rounded-2xl p-8 shadow-2xl">
+  <!-- Mandala corners -->
+  <svg class="mandala absolute top-8 left-8 w-28 h-28 text-white/10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="38" stroke="currentColor" stroke-width="1.4"/>
+    <circle cx="50" cy="50" r="22" stroke="currentColor" stroke-width="0.9"/>
+    <path d="M50 12 L54 28 L70 28 L57 40 L62 58 L50 48 L38 58 L43 40 L30 28 L46 28 Z" fill="currentColor"/>
+  </svg>
+  <svg class="mandala absolute top-8 right-8 w-28 h-28 text-white/10 rotate-90" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="38" stroke="currentColor" stroke-width="1.4"/>
+    <circle cx="50" cy="50" r="22" stroke="currentColor" stroke-width="0.9"/>
+    <path d="M50 12 L54 28 L70 28 L57 40 L62 58 L50 48 L38 58 L43 40 L30 28 L46 28 Z" fill="currentColor"/>
+  </svg>
 
-  <div class="flex flex-col items-center mb-6">
-    <h2 class="text-3xl font-bold">Report a Bug</h2>
-    <p class="text-gray-300 text-sm mt-1">Help us improve ManoVeda</p>
+  <!-- Mini Luxury Navbar -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
+    <div class="max-w-screen-2xl mx-auto px-8 py-5 flex items-center justify-between">
+      <div onclick="window.location.href='/'" class="logo-font flex items-center gap-1.5 cursor-pointer">
+        <span class="text-3xl font-bold tracking-tighter bg-gradient-to-r from-cyan-400 via-violet-500 to-amber-400 bg-clip-text text-transparent">Mano</span>
+        <span class="text-3xl font-bold tracking-tighter text-white">Veda</span>
+        <span class="text-xs font-medium text-emerald-400 pl-2">AI</span>
+      </div>
+      <a href="/" class="text-sm font-medium flex items-center gap-2 text-zinc-400 hover:text-white transition-colors">
+        ← Back to Inner Peace
+      </a>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="min-h-screen flex items-center justify-center pt-20 pb-12 px-6 relative z-10">
+    <div class="max-w-2xl w-full" data-aos="fade-up">
+      
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-3 px-6 py-3 rounded-3xl glass mb-6">
+          <span class="text-4xl">🐞</span>
+          <div>
+            <div class="text-amber-400 font-medium text-sm tracking-[2px]">HELP US GROW</div>
+            <div class="text-2xl font-bold logo-font tracking-tighter">Report a Bug</div>
+          </div>
+        </div>
+        <p class="text-zinc-400 max-w-md mx-auto">
+          Your feedback helps us create even deeper peace. Every report is treated with care.
+        </p>
+      </div>
+
+      <!-- ULTRA GLASS FORM -->
+      <div class="glass rounded-3xl p-10 md:p-12 shadow-2xl">
+        <form id="bugForm" class="space-y-8">
+          
+          <!-- Title -->
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-violet-300 mb-2 font-medium">Issue Title</label>
+            <input id="title" type="text" placeholder="e.g. Chat window freezes on mobile" 
+              class="input-luxury w-full px-7 py-5 rounded-2xl text-lg placeholder-zinc-500 focus:outline-none">
+          </div>
+
+          <!-- Name + Phone -->
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-violet-300 mb-2 font-medium">Your Name</label>
+              <input id="name" type="text" placeholder="Naman Chauhan" 
+                class="input-luxury w-full px-7 py-5 rounded-2xl text-lg placeholder-zinc-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-violet-300 mb-2 font-medium">Phone (optional)</label>
+              <input id="phone" type="text" placeholder="+91 98765 43210" 
+                class="input-luxury w-full px-7 py-5 rounded-2xl text-lg placeholder-zinc-500 focus:outline-none">
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-violet-300 mb-2 font-medium">Email</label>
+            <input id="email" type="email" placeholder="you@email.com" 
+              class="input-luxury w-full px-7 py-5 rounded-2xl text-lg placeholder-zinc-500 focus:outline-none">
+          </div>
+
+          <!-- Message -->
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-violet-300 mb-2 font-medium">Describe the issue</label>
+            <textarea id="message" rows="6" placeholder="When I click 'Talk to your AI guide' on mobile,the chatbot doesn't give any response..." 
+              class="input-luxury w-full px-7 py-5 rounded-3xl text-lg placeholder-zinc-500 focus:outline-none resize-none"></textarea>
+          </div>
+
+          <!-- File Upload -->
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-violet-300 mb-2 font-medium">Screenshot / Recording (optional)</label>
+            <div id="upload-area" 
+              class="border border-dashed border-white/30 hover:border-violet-400 transition-all rounded-3xl p-8 text-center cursor-pointer">
+              <div class="text-5xl mb-3">📸</div>
+              <div class="text-sm text-zinc-400">Drop image/video or</div>
+              <div class="text-violet-400 font-medium mt-1">click to browse</div>
+              <input id="file" type="file" accept="image/*,video/*" class="hidden">
+            </div>
+            <div id="file-name" class="mt-3 text-xs text-emerald-400 text-center"></div>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" 
+            class="submit-btn w-full py-7 rounded-3xl bg-gradient-to-r from-violet-600 via-cyan-500 to-amber-400 font-semibold text-xl tracking-wider flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-violet-500/30">
+            <span>Send Report with Love</span>
+            <span class="text-2xl">🪷</span>
+          </button>
+        </form>
+
+        <div id="status" class="text-center mt-6 text-sm font-medium"></div>
+      </div>
+
+      <div class="text-center mt-8 text-[10px] text-zinc-500 tracking-widest">
+        Every report is private • Thank you for helping us create deeper peace
+      </div>
+    </div>
   </div>
 
-  <form id="bugForm" class="space-y-4">
+  <!-- Footer badge -->
+  <div class="fixed bottom-8 left-1/2 -translate-x-1/2 text-xs text-zinc-500 flex items-center gap-2">
+    <span class="w-2 h-px bg-white/30"></span>
+    MANOVEDA • BUILT WITH COMPASSION
+    <span class="w-2 h-px bg-white/30"></span>
+  </div>
 
-    <!-- NEW: Title field so user can name issue (used to create friendly filename / display) -->
-    <input id="title" type="text" placeholder="Short title (eg. Contact page not working)"
-      class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500" />
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <script>
+    // Tailwind script already loaded via CDN
+    AOS.init({ once: true, duration: 1000, easing: 'cubic-bezier(0.4,0,0.2,1)' });
 
-    <input id="name" type="text" placeholder="Your Name"
-      class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
-
-    <input id="phone" type="text" placeholder="Phone Number"
-      class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
-
-    <input id="email" type="email" placeholder="Email"
-      class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500">
-
-    <textarea id="message" placeholder="Describe the issue..."
-      class="w-full p-3 rounded-lg bg-white/10 outline-none focus:ring-2 focus:ring-purple-500 h-32"></textarea>
-
-    <input id="file" type="file" accept="image/*,video/*,audio/*"
-      class="w-full text-sm text-gray-300">
-
-    <button type="submit"
-      class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-semibold transition">
-      Submit Report
-    </button>
-
-  </form>
-
-  <p id="status" class="text-center mt-4 text-sm"></p>
-
-</div>
-
-<script>
-(async function () {
-  // CONFIG - replace keys if needed
-  const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
-
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // Session ID (persisted) - used for anonymous session tracing
-  let sessionId = localStorage.getItem("manoveda_bug_session");
-  if (!sessionId) {
-    sessionId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).slice(2);
-    localStorage.setItem("manoveda_bug_session", sessionId);
-  }
-
-  // Elements
-  const form = document.getElementById("bugForm");
-  const statusEl = document.getElementById("status");
-
-  // Try autofill email if user is logged in
-  try {
-    const userResp = await supabase.auth.getUser();
-    const user = userResp?.data?.user || null;
-    if (user?.email) document.getElementById("email").value = user.email;
-  } catch (err) {
-    console.log("auth getUser error (non-fatal):", err);
-  }
-
-  // Helper: short id
-  function shortId() {
-    // small readable id
-    return Math.random().toString(36).slice(2,9);
-  }
-
-  // Helper: file extension from name or mime
-  function extFromFile(file) {
-    if (!file) return 'bin';
-    const m = file.name.match(/\.([^.?#]+)(?:[?#].*)?$/);
-    if (m) return m[1].toLowerCase();
-    const mimeExt = (file.type || '').split('/').pop();
-    return mimeExt || 'bin';
-  }
-
-  // Submit flow:
-  // 1) Insert a bug_reports row (title, message, user fields) → returns id
-  // 2) If file present: upload to storage path that includes report id:
-  //      bug_uploads/bugs/report-<id>-<short>.<ext>
-  //    then get public URL and update row with file fields
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    statusEl.innerText = "";
-
-    const title = (document.getElementById("title").value || "").trim();
-    const name = (document.getElementById("name").value || "").trim();
-    const phone = (document.getElementById("phone").value || "").trim();
-    const email = (document.getElementById("email").value || "").trim();
-    const message = (document.getElementById("message").value || "").trim();
-    const fileInput = document.getElementById("file");
-    const file = fileInput.files[0];
-
-    if (!message) {
-      statusEl.innerText = "Please describe the issue.";
-      return;
+    // Cursor glow (ultra touch)
+    const glow = document.createElement("div");
+    glow.className = "cursor-glow";
+    document.body.appendChild(glow);
+    let mouseX = 0, mouseY = 0, posX = 0, posY = 0;
+    document.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    function animateGlow() {
+      posX += (mouseX - posX) * 0.12;
+      posY += (mouseY - posY) * 0.12;
+      glow.style.left = posX + "px";
+      glow.style.top = posY + "px";
+      requestAnimationFrame(animateGlow);
     }
+    animateGlow();
 
-    statusEl.innerText = "Submitting…";
+    // Form handling - SUPABASE (same as before but cleaner)
+    (async function () {
+      const SUPABASE_URL = "https://vxknarwomlejxksmjinx.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4a25hcndvbWxlanhrc21qaW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTAzMjcsImV4cCI6MjA4NTgyNjMyN30.EG9iRbnR98roL18qEL6zmJLKbbROc0mSPmNh1MZnBZ4";
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // get current user (if any)
-    let user = null;
-    try {
-      const userResp = await supabase.auth.getUser();
-      user = userResp?.data?.user || null;
-    } catch (err) {
-      console.warn("auth.getUser error:", err);
-      user = null;
-    }
-
-    // 1) insert bug row (no file yet)
-    const insertPayload = {
-      session_id: sessionId,
-      user_id: user?.id || null,
-      title: title || null,
-      name: name || null,
-      phone: phone || null,
-      email: email || null,
-      message,
-      user_agent: navigator.userAgent,
-      page_url: window.location.href
-    };
-
-    try {
-      const { data: insertData, error: insertError } = await supabase
-        .from("bug_reports")
-        .insert([insertPayload])
-        .select()  // return inserted row(s)
-        .single();
-
-      if (insertError) {
-        console.error("Insert error:", insertError);
-        statusEl.innerText = "Error saving report to DB.";
-        return;
+      let sessionId = localStorage.getItem("manoveda_bug_session");
+      if (!sessionId) {
+        sessionId = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2);
+        localStorage.setItem("manoveda_bug_session", sessionId);
       }
 
-      const reportId = insertData.id;
-      // If no file, we're done
-      if (!file) {
-        statusEl.innerText = `✅ Report submitted (id ${reportId}).`;
-        form.reset();
-        return;
-      }
+      const form = document.getElementById("bugForm");
+      const statusEl = document.getElementById("status");
+      const fileInput = document.getElementById("file");
+      const uploadArea = document.getElementById("upload-area");
+      const fileNameEl = document.getElementById("file-name");
 
-      // 2) upload file using a short predictable filename that includes reportId
-function slugify(text) {
-  if (!text) return "";
+      // Autofill email if logged in
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.email) document.getElementById("email").value = user.email;
+      } catch(e) {}
 
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')   // remove special chars
-    .trim()
-    .replace(/\s+/g, '-')           // spaces → hyphen
-    .replace(/-+/g, '-');           // collapse multiple hyphens
-}
+      // File preview
+      uploadArea.addEventListener("click", () => fileInput.click());
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files[0]) {
+          fileNameEl.textContent = "✓ " + fileInput.files[0].name;
+          uploadArea.classList.add("border-emerald-400");
+        }
+      });
 
-// Extract extension safely
-function extFromFile(file) {
-  const match = file.name.match(/\.([^.]+)$/);
-  return match ? match[1].toLowerCase() : "bin";
-}
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        statusEl.innerHTML = `<span class="text-violet-400">Sending your report to the universe...</span>`;
 
-const ext = extFromFile(file);
+        const title = document.getElementById("title").value.trim();
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const message = document.getElementById("message").value.trim();
+        const file = fileInput.files[0];
 
-// 1️⃣ Try slug from title
-let base = slugify(title);
+        if (!message) {
+          statusEl.innerHTML = `<span class="text-red-400">Please describe the bug</span>`;
+          return;
+        }
 
-// 2️⃣ If title becomes empty, fallback to original filename (without extension)
-if (!base) {
-  const originalNameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
-  base = slugify(originalNameWithoutExt);
-}
+        // Get user
+        let user = null;
+        try {
+          const { data } = await supabase.auth.getUser();
+          user = data.user;
+        } catch(e) {}
 
-// 3️⃣ If still empty, final fallback
-if (!base) {
-  base = "bug-report";
-}
-
-// small unique suffix
-const unique = Math.random().toString(36).substring(2, 7);
-
-const safeFilename = `${base}-${unique}.${ext}`;
-const storagePath = `bugs/${safeFilename}`;
-
-const ext = extFromFile(file);
-
-// If no title, fallback
-const baseTitle = title ? slugify(title) : 'bug-report';
-
-// short unique suffix
-const unique = Math.random().toString(36).substring(2, 7);
-
-const safeFilename = `${baseTitle}-${unique}.${ext}`;
-const storagePath = `bugs/${safeFilename}`;
-      // upload
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("bug_uploads")   // your bucket
-        .upload(storagePath, file, { cacheControl: '3600', upsert: false });
-
-      if (uploadError) {
-        console.error("Upload error:", uploadError);
-        // update DB to mark upload failed (optional)
-        await supabase
+        // Insert report
+        const { data: report, error } = await supabase
           .from("bug_reports")
-          .update({ upload_error: true })
-          .eq("id", reportId);
-        statusEl.innerText = "File upload failed — report saved without attachment.";
+          .insert([{
+            session_id: sessionId,
+            user_id: user?.id || null,
+            title: title || null,
+            name: name || null,
+            phone: phone || null,
+            email: email || null,
+            message,
+            user_agent: navigator.userAgent,
+            page_url: window.location.href
+          }])
+          .select()
+          .single();
+
+        if (error) {
+          statusEl.innerHTML = `<span class="text-red-400">Something went wrong. Try again.</span>`;
+          console.error(error);
+          return;
+        }
+
+        const reportId = report.id;
+
+        // File upload (cleaned logic)
+        if (file) {
+          const ext = file.name.split('.').pop().toLowerCase();
+          const safeName = (title ? title.toLowerCase().replace(/[^a-z0-9]/g,'-') : 'bug') + '-' + Date.now().toString(36) + '.' + ext;
+          const path = `bugs/${safeName}`;
+
+          const { error: uploadErr } = await supabase.storage
+            .from("bug_uploads")
+            .upload(path, file, { cacheControl: '3600', upsert: false });
+
+          if (!uploadErr) {
+            const { data: urlData } = supabase.storage.from("bug_uploads").getPublicUrl(path);
+            await supabase.from("bug_reports").update({
+              file_path: path,
+              file_name: safeName,
+              file_url: urlData.publicUrl,
+              file_type: file.type
+            }).eq("id", reportId);
+          }
+        }
+
+        statusEl.innerHTML = `
+          <span class="text-emerald-400 text-lg">✅ Thank you. Your report #${reportId} has been received, We'll contact you soon with updates.</span>
+        `;
         form.reset();
-        return;
-      }
-
-      // get a public url for the uploaded file
-      const { data: publicUrlData } = supabase.storage
-        .from("bug_uploads")
-        .getPublicUrl(storagePath); // v2 returns { data: { publicUrl } }
-
-      const publicUrl = publicUrlData?.publicUrl || null;
-
-      // Update the bug row with file info
-      const updatePayload = {
-        file_path: storagePath,
-        file_name: safeFilename,
-        file_url: publicUrl,
-        file_type: file.type || null
-      };
-
-      const { error: updateError } = await supabase
-        .from("bug_reports")
-        .update(updatePayload)
-        .eq("id", reportId);
-
-      if (updateError) {
-        console.warn("Could not update bug row with file info:", updateError);
-        statusEl.innerText = "Report saved but failed to attach file to DB record.";
-        form.reset();
-        return;
-      }
-
-      statusEl.innerText = `✅ Report submitted (id ${reportId}). File uploaded as ${safeFilename}`;
-      form.reset();
-
-    } catch (err) {
-      console.error("Unexpected error:", err);
-      statusEl.innerText = "Unexpected error — check console.";
-    }
-  });
-
-})();
-</script>
-
+        fileNameEl.textContent = "";
+      });
+    })();
+  </script>
 </body>
 </html>
